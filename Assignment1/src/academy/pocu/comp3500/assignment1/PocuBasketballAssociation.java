@@ -32,18 +32,18 @@ public final class PocuBasketballAssociation {
                 ++count;
                 continue;
             }
-            
+
             for (int i = 0; i < gameStats.length; i++) {
                 if (gameStats[i] != null) {
                     if (gameStats[i].getPlayerName().equals(str)) {
                         ++strCount;
-    
+
                         points2 += gameStats[i].getPoints();
                         assists2 += gameStats[i].getAssists();
                         numPasses2 += gameStats[i].getNumPasses();
                         goals2 += gameStats[i].getGoals();
                         goalAttempts2 += gameStats[i].getGoalAttempts();
-    
+
                         gameStats[i] = null;
                     }
                 }
@@ -51,7 +51,7 @@ public final class PocuBasketballAssociation {
 
             outPlayers[playerCount].setName(str);
             outPlayers[playerCount].setPointsPerGame(points2 / strCount);
-            outPlayers[playerCount].setAssistsPerGame(assists2/ strCount);
+            outPlayers[playerCount].setAssistsPerGame(assists2 / strCount);
             outPlayers[playerCount].setPassesPerGame(numPasses2 / strCount);
             goalsRate = 100 * goals2 / goalAttempts2;
             outPlayers[playerCount].setShootingPercentage(goalsRate);
@@ -70,7 +70,24 @@ public final class PocuBasketballAssociation {
     }
 
     public static Player findPlayerPointsPerGame(final Player[] players, int targetPoints) {
-        return null;
+        // players[0].getPointsPerGame();
+        Player p1 = null;
+
+        int min = players[0].getPointsPerGame() - targetPoints;
+        int minAbs = Math.abs(players[0].getPointsPerGame() - targetPoints);
+        p1 = players[0];
+        for (int i = 1; i < players.length; i++) {
+            if (minAbs > Math.abs(players[i].getPointsPerGame() - targetPoints)) {
+                minAbs = Math.abs(players[i].getPointsPerGame() - targetPoints);
+                p1 = players[i];
+            }
+
+            if (minAbs == Math.abs(players[i].getPointsPerGame() - targetPoints)) {
+                p1 = players[i];
+            }
+        }
+
+        return p1;
     }
 
     public static Player findPlayerShootingPercentage(final Player[] players, int targetShootingPercentage) {
