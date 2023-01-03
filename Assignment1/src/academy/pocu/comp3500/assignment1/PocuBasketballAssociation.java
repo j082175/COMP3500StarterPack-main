@@ -1,15 +1,16 @@
 package academy.pocu.comp3500.assignment1;
-
 import academy.pocu.comp3500.assignment1.pba.Player;
 import academy.pocu.comp3500.assignment1.pba.GameStat;
 
+
 public final class PocuBasketballAssociation {
-    private static int teamwork = 0;
-    private static int playerCount = 0;
+    //private static int teamwork = 0;
+    //private static int playerCount = 0;
 
-    private static void Combination(Player[] players, Player[] scratch, int r, int index, int depth,
-            Player[] outPlayers, int length) {
 
+    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
+            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+                
         if (r == 0) {
             int min = scratch[0].getAssistsPerGame();
             int sum = 0;
@@ -19,37 +20,41 @@ public final class PocuBasketballAssociation {
                     break;
                 }
 
-                System.out.print(scratch[i].getName());
-                System.out.print(" ");
+                //System.out.print(scratch[i].getName());
+                //System.out.print(" ");
                 if (min > scratch[i].getAssistsPerGame()) {
                     min = scratch[i].getAssistsPerGame();
                 }
                 sum += scratch[i].getPassesPerGame();
             }
 
-            if (teamwork < sum * min) {
-                teamwork = sum * min;
-                playerCount = length;
+            if (teamwork != null) {
+                if (teamwork[0] < sum * min) {
+                    teamwork[0] = (sum * min);
 
-                if (outPlayers != null) {
-                    for (int i = 0; i < length; i++) {
-                        outPlayers[i] = scratch[i];
+                    if (playerCount != null) {
+                        playerCount[0] = length;
+                    }
+    
+                    if (outPlayers != null) {
+                        for (int i = 0; i < length; i++) {
+                            outPlayers[i] = scratch[i];
+                        }
                     }
                 }
-
             }
 
-            System.out.println();
+            //System.out.println();
         } else if (depth == players.length) // depth == n // 계속 안뽑다가 r 개를 채우지 못한 경우는 이 곳에 걸려야 한다.
         {
             return;
         } else {
             // arr[depth] 를 뽑은 경우
             scratch[index] = players[depth];
-            Combination(players, scratch, r - 1, index + 1, depth + 1, outPlayers, length);
+            combination(players, scratch, r - 1, index + 1, depth + 1, outPlayers, length, teamwork, playerCount);
 
             // arr[depth] 를 뽑지 않은 경우
-            Combination(players, scratch, r, index, depth + 1, outPlayers, length);
+            combination(players, scratch, r, index, depth + 1, outPlayers, length, teamwork, playerCount);
         }
     }
 
@@ -170,33 +175,31 @@ public final class PocuBasketballAssociation {
         // outPlayers 와 scratch 의 크기는 항상 3이라고 가정
         // 총 35가지
 
-        Combination(players, scratch, 3, 0, 0, outPlayers, 3);
+        int[] teamwork = { 0 };
 
-        int result = teamwork;
-        teamwork = 0;
+        combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
 
-        return result;
+        return teamwork[0];
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
-        Combination(players, scratch, k, 0, 0, outPlayers, k);
 
-        int result = teamwork;
-        teamwork = 0;
+        int[] teamwork = { 0 };
+        
+        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
 
-        return result;
+        return teamwork[0];
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
 
+        int[] teamwork = { 0 };
+        int[] playerCount = { 0 };
+
         for (int i = 1; i < players.length; i++) {
-            Combination(players, scratch, i, 0, 0, null, i);
+            combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
         }
 
-        int result = playerCount;
-        playerCount = 0;
-        teamwork = 0;
-
-        return result;
+        return playerCount[0];
     }
 }
