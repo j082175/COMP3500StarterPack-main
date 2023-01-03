@@ -1,27 +1,23 @@
 package academy.pocu.comp3500.assignment1;
+
 import academy.pocu.comp3500.assignment1.pba.Player;
 import academy.pocu.comp3500.assignment1.pba.GameStat;
 
-
 public final class PocuBasketballAssociation {
-    //private static int teamwork = 0;
-    //private static int playerCount = 0;
+    // private static int teamwork = 0;
+    // private static int playerCount = 0;
 
-
-    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
-            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
-                
-        if (r == 0) {
+    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+        if (depth == scratch.length) {
             int min = scratch[0].getAssistsPerGame();
             int sum = 0;
             for (int i = 0; i < scratch.length; i++) {
-
                 if (scratch[i] == null) {
                     break;
                 }
 
-                //System.out.print(scratch[i].getName());
-                //System.out.print(" ");
+                // System.out.print(scratch[i].getName());
+                // System.out.print(" ");
                 if (min > scratch[i].getAssistsPerGame()) {
                     min = scratch[i].getAssistsPerGame();
                 }
@@ -35,7 +31,7 @@ public final class PocuBasketballAssociation {
                     if (playerCount != null) {
                         playerCount[0] = length;
                     }
-    
+
                     if (outPlayers != null) {
                         for (int i = 0; i < length; i++) {
                             outPlayers[i] = scratch[i];
@@ -44,7 +40,51 @@ public final class PocuBasketballAssociation {
                 }
             }
 
-            //System.out.println();
+            return;
+        } else {
+            for (int i = index; i < players.length; i++) {
+                scratch[depth] = players[i];
+                combination2(players, scratch, i + 1, depth + 1, outPlayers, length, teamwork, playerCount);
+            }
+        }
+    }
+
+    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+
+        if (r == 0) {
+            int min = scratch[0].getAssistsPerGame();
+            int sum = 0;
+            for (int i = 0; i < scratch.length; i++) {
+
+                if (scratch[i] == null) {
+                    break;
+                }
+
+                // System.out.print(scratch[i].getName());
+                // System.out.print(" ");
+                if (min > scratch[i].getAssistsPerGame()) {
+                    min = scratch[i].getAssistsPerGame();
+                }
+                sum += scratch[i].getPassesPerGame();
+            }
+
+            if (teamwork != null) {
+                if (teamwork[0] < sum * min) {
+                    teamwork[0] = (sum * min);
+
+                    if (playerCount != null) {
+                        playerCount[0] = length;
+                    }
+
+                    if (outPlayers != null) {
+                        for (int i = 0; i < length; i++) {
+                            outPlayers[i] = scratch[i];
+                        }
+                    }
+                }
+            }
+
+            // System.out.println();
         } else if (depth == players.length) // depth == n // 계속 안뽑다가 r 개를 채우지 못한 경우는 이 곳에 걸려야 한다.
         {
             return;
@@ -177,7 +217,8 @@ public final class PocuBasketballAssociation {
 
         int[] teamwork = { 0 };
 
-        combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
+        // combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
+        combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
 
         return teamwork[0];
     }
@@ -185,8 +226,9 @@ public final class PocuBasketballAssociation {
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
         int[] teamwork = { 0 };
-        
-        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+
+        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
         return teamwork[0];
     }
@@ -197,7 +239,8 @@ public final class PocuBasketballAssociation {
         int[] playerCount = { 0 };
 
         for (int i = 1; i < players.length; i++) {
-            combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
+            // combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
+            combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
         }
 
         return playerCount[0];

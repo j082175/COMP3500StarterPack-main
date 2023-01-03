@@ -42,7 +42,7 @@ public class Program {
     Player[] scratch = new Player[players.length];
     
     int k = PocuBasketballAssociation.findDreamTeamSize(players, scratch); // k: 6
-    
+
         int a = 1;
     }
 }
