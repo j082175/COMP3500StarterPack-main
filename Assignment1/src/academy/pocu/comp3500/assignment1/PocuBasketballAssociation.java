@@ -315,41 +315,37 @@ public final class PocuBasketballAssociation {
         // outPlayers 와 scratch 의 크기는 항상 3이라고 가정
         // 총 35가지
 
-        int[] teamwork = {};
+        int[] teamwork = {0};
+        boolean[] visit = {false, false, false , false};
 
-        // combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
+         combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
 
-        boolean[] visit = {};
-        combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork, null);
+        //combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork, null);
 
         return teamwork[0];
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        int[] teamwork = {};
+        int[] teamwork = {0};
 
-        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
-        combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
+         combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        //combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
         return teamwork[0];
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
 
-        int[] teamwork = {};
-        int[] playerCount = {};
+        int[] teamwork = {0};
+        int[] playerCount = {0};
 
         for (int i = 1; i < players.length; i++) {
-            // combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
-            combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
+             combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
+            //combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
         }
 
         return playerCount[0];
-    }
-
-    private static double baseLog(int x, int base) {
-        return Math.log10(x) / Math.log10(base);
     }
 }
