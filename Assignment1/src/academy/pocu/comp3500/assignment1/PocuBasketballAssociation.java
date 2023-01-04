@@ -22,9 +22,7 @@ public final class PocuBasketballAssociation {
             if (Math.abs(players[s].getPointsPerGame() - targetPoints) != min) {
                 min = Math.abs(players[s].getPointsPerGame() - targetPoints);
                 index = s;
-            }
-
-            else if (players[s].getPointsPerGame() - targetPoints > 0) {
+            } else if (players[s].getPointsPerGame() - targetPoints > 0) {
                 min = Math.abs(players[s].getPointsPerGame() - targetPoints);
                 index = s;
             }
@@ -40,7 +38,39 @@ public final class PocuBasketballAssociation {
         }
 
         return null;
+    }
 
+    private static Player findPlayerShootingPercentageRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
+        int s = (start + end) / 2; // 중간 값 (middle)
+
+        if (s >= players.length) {
+            return players[s - 1];
+        }
+
+        if (players[s].getShootingPercentage() == targetPoints) {
+            return players[s];
+        }
+
+        if (min >= Math.abs(players[s].getShootingPercentage() - targetPoints)) {
+            if (Math.abs(players[s].getShootingPercentage() - targetPoints) != min) {
+                min = Math.abs(players[s].getShootingPercentage() - targetPoints);
+                index = s;
+            } else if (players[s].getShootingPercentage() - targetPoints > 0) {
+                min = Math.abs(players[s].getShootingPercentage() - targetPoints);
+                index = s;
+            }
+        } // 같으면 해당 인덱스 리턴
+
+        if (start >= end) // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
+            return players[index]; // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
+
+        else if (targetPoints < players[s].getShootingPercentage()) {
+            return findPlayerShootingPercentageRecursive(players, targetPoints, 0, s - 1, min, index);
+        } else if (targetPoints > players[s].getShootingPercentage()) {
+            return findPlayerShootingPercentageRecursive(players, targetPoints, s + 1, end, min, index);
+        }
+
+        return null;
     }
 
     private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
@@ -275,7 +305,9 @@ public final class PocuBasketballAssociation {
 
     public static Player findPlayerShootingPercentage(final Player[] players, int targetShootingPercentage) {
         // players[0].getShootingPercentage();
-        return null;
+
+        Player p1 = findPlayerShootingPercentageRecursive(players, targetShootingPercentage, 0, players.length, Math.abs(players[players.length - 1].getShootingPercentage() - targetShootingPercentage), players.length - 1);
+        return p1;
     }
 
     public static long find3ManDreamTeam(final Player[] players, final Player[] outPlayers, final Player[] scratch) {
