@@ -7,37 +7,38 @@ public final class PocuBasketballAssociation {
     // private static int teamwork = 0;
     // private static int playerCount = 0;
 
-
     private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
-        int s = (start + end) / 2;  // 중간 값 (middle)
+        int s = (start + end) / 2; // 중간 값 (middle)
+
+        if (s >= players.length) {
+            return players[s - 1];
+        }
 
         if (players[s].getPointsPerGame() == targetPoints) {
             return players[s];
         }
 
-        if (min > Math.abs(players[s].getPointsPerGame() - targetPoints)) {
-            min = Math.abs(players[s].getPointsPerGame() - targetPoints);
-            index = s;
-        }  // 같으면 해당 인덱스 리턴
+        if (min >= Math.abs(players[s].getPointsPerGame() - targetPoints)) {
+            if (players[s].getPointsPerGame() - targetPoints > 0) {
+                min = Math.abs(players[s].getPointsPerGame() - targetPoints);
+                index = s;
+            }
+        } // 같으면 해당 인덱스 리턴
 
-    
-        if (start >= end)  // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
-            return players[index];  // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
-    
+        if (start >= end) // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
+            return players[index]; // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
+
         else if (targetPoints < players[s].getPointsPerGame()) {
             return findPlayerPointsPerGameRecursive(players, targetPoints, 0, s - 1, min, index);
-        }
-        else if (targetPoints > players[s].getPointsPerGame()) {
+        } else if (targetPoints > players[s].getPointsPerGame()) {
             return findPlayerPointsPerGameRecursive(players, targetPoints, s + 1, end, min, index);
         }
 
-        
         return null;
 
     }
 
-    private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit,
-            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
+    private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
         int min = players[0].getAssistsPerGame();
         int sum = 0;
 
@@ -87,8 +88,7 @@ public final class PocuBasketballAssociation {
         }
     }
 
-    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers,
-            int length, int[] teamwork, int[] playerCount) {
+    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
         if (depth == scratch.length) {
             int min = scratch[0].getAssistsPerGame();
             int sum = 0;
@@ -130,8 +130,7 @@ public final class PocuBasketballAssociation {
         }
     }
 
-    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
-            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
 
         if (r == 0) {
             int min = scratch[0].getAssistsPerGame();
@@ -263,7 +262,8 @@ public final class PocuBasketballAssociation {
         // }
         // }
 
-        p1 = findPlayerPointsPerGameRecursive(players, targetPoints, 0, players.length, Math.abs(players[players.length - 1].getPointsPerGame() - targetPoints), players.length - 1);
+        p1 = findPlayerPointsPerGameRecursive(players, targetPoints, 0, players.length,
+                Math.abs(players[players.length - 1].getPointsPerGame() - targetPoints), players.length - 1);
 
         return p1;
     }
@@ -278,12 +278,12 @@ public final class PocuBasketballAssociation {
         // outPlayers 와 scratch 의 크기는 항상 3이라고 가정
         // 총 35가지
 
-        int[] teamwork = { 0 };
+        int[] teamwork = {};
 
         // combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
 
-        boolean[] visit = { false, false, false, false, false };
+        boolean[] visit = {};
         combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork, null);
 
         return teamwork[0];
@@ -291,7 +291,7 @@ public final class PocuBasketballAssociation {
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        int[] teamwork = { 0 };
+        int[] teamwork = {};
 
         // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
@@ -302,7 +302,7 @@ public final class PocuBasketballAssociation {
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
 
         int[] teamwork = {};
-        int[] playerCount = {0};
+        int[] playerCount = {};
 
         for (int i = 1; i < players.length; i++) {
             // combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
