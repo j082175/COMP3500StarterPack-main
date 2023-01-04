@@ -19,7 +19,12 @@ public final class PocuBasketballAssociation {
         }
 
         if (min >= Math.abs(players[s].getPointsPerGame() - targetPoints)) {
-            if (players[s].getPointsPerGame() - targetPoints > 0) {
+            if (Math.abs(players[s].getPointsPerGame() - targetPoints) != min) {
+                min = Math.abs(players[s].getPointsPerGame() - targetPoints);
+                index = s;
+            }
+
+            else if (players[s].getPointsPerGame() - targetPoints > 0) {
                 min = Math.abs(players[s].getPointsPerGame() - targetPoints);
                 index = s;
             }

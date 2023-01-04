@@ -41,7 +41,7 @@ public class Program {
 
         };
 
-        Player player = PocuBasketballAssociation.findPlayerPointsPerGame(players, 0); // player 10
+        Player player = PocuBasketballAssociation.findPlayerPointsPerGame(players, 19); // player 10
 
         player = PocuBasketballAssociation.findPlayerPointsPerGame(players, 5); // player: Player 2
         player = PocuBasketballAssociation.findPlayerPointsPerGame(players, 13); // player: Player 6
