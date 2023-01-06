@@ -331,14 +331,16 @@ public final class PocuBasketballAssociation {
         // combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork,
         // null);
 
+        // return teamwork[0];
+
         int sum = 0;
         int min = 0;
         int teamwork = 0;
         int max = 0;
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 1 + i; j < 6; j++) {
-                for (int k = 1 + j; k < 7; k++) {
+        for (int i = 0; i < players.length - 2; i++) {
+            for (int j = 1 + i; j < players.length - 1; j++) {
+                for (int k = 1 + j; k < players.length; k++) {
                     sum = players[i].getPassesPerGame() + players[j].getPassesPerGame() + players[k].getPassesPerGame();
                     min = players[i].getAssistsPerGame();
 
@@ -362,17 +364,50 @@ public final class PocuBasketballAssociation {
         }
 
         return max;
-        // return teamwork[0];
+
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        int[] teamwork = { 0 };
+        //int[] teamwork = { 0 };
 
-        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
-        return teamwork[0];
+        //return teamwork[0];
+
+        int i = 0;
+        int j = i + 1;
+        int l = j + 1;
+
+        int sum = 0;
+        int min = 0;
+        int teamwork = 0;
+        int max = 0;
+
+        while (i < players.length - 2) {
+
+            sum = players[i].getPassesPerGame() + players[j].getPassesPerGame() + players[k].getPassesPerGame();
+            min = players[i].getAssistsPerGame();
+
+
+            if (l >= players.length) {
+                ++j;
+                if (j >= players.length - 1) {
+                    j = i + 1;
+                    ++i;
+                    if (i >= players.length - 2) {
+                        break;
+                    }
+                }
+                l = j + 1;
+            }
+
+            ++l;
+        }
+
+
+        return 0;
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
