@@ -7,7 +7,8 @@ public final class PocuBasketballAssociation {
     // private static int teamwork = 0;
     // private static int playerCount = 0;
 
-    private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
+    private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end,
+            int min, int index) {
         int s = (start + end) / 2; // 중간 값 (middle)
 
         if (s >= players.length) {
@@ -40,7 +41,8 @@ public final class PocuBasketballAssociation {
         return null;
     }
 
-    private static Player findPlayerShootingPercentageRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
+    private static Player findPlayerShootingPercentageRecursive(final Player[] players, int targetPoints, int start,
+            int end, int min, int index) {
         int s = (start + end) / 2; // 중간 값 (middle)
 
         if (s >= players.length) {
@@ -73,7 +75,8 @@ public final class PocuBasketballAssociation {
         return null;
     }
 
-    private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
+    private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit,
+            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
         int min = players[0].getAssistsPerGame();
         int sum = 0;
 
@@ -123,7 +126,8 @@ public final class PocuBasketballAssociation {
         }
     }
 
-    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers,
+            int length, int[] teamwork, int[] playerCount) {
         if (depth == scratch.length) {
             int min = scratch[0].getAssistsPerGame();
             int sum = 0;
@@ -165,7 +169,8 @@ public final class PocuBasketballAssociation {
         }
     }
 
-    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
+            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
 
         if (r == 0) {
             int min = scratch[0].getAssistsPerGame();
@@ -306,7 +311,9 @@ public final class PocuBasketballAssociation {
     public static Player findPlayerShootingPercentage(final Player[] players, int targetShootingPercentage) {
         // players[0].getShootingPercentage();
 
-        Player p1 = findPlayerShootingPercentageRecursive(players, targetShootingPercentage, 0, players.length, Math.abs(players[players.length - 1].getShootingPercentage() - targetShootingPercentage), players.length - 1);
+        Player p1 = findPlayerShootingPercentageRecursive(players, targetShootingPercentage, 0, players.length,
+                Math.abs(players[players.length - 1].getShootingPercentage() - targetShootingPercentage),
+                players.length - 1);
         return p1;
     }
 
@@ -315,35 +322,67 @@ public final class PocuBasketballAssociation {
         // outPlayers 와 scratch 의 크기는 항상 3이라고 가정
         // 총 35가지
 
-        int[] teamwork = {0};
-        boolean[] visit = {false, false, false , false};
+        // int[] teamwork = {0};
+        // boolean[] visit = {false, false, false , false};
 
-         combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
+        // combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
 
-        //combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork, null);
+        // combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork,
+        // null);
 
-        return teamwork[0];
+        int sum = 0;
+        int min = 0;
+        int teamwork = 0;
+        int max = 0;
+
+        for (int i = 0; i < 5; i++) {
+            for (int j = 1 + i; j < 6; j++) {
+                for (int k = 1 + j; k < 7; k++) {
+                    sum = players[i].getPassesPerGame() + players[j].getPassesPerGame() + players[k].getPassesPerGame();
+                    min = players[i].getAssistsPerGame();
+
+                    if (min > players[j].getAssistsPerGame()) {
+                        min = players[j].getAssistsPerGame();
+                    } else if (min > players[k].getAssistsPerGame()) {
+                        min = players[k].getAssistsPerGame();
+                    }
+
+                    teamwork = sum * min;
+
+                    if (max < teamwork) {
+                        max = teamwork;
+                        outPlayers[0] = players[i];
+                        outPlayers[1] = players[j];
+                        outPlayers[2] = players[k];
+                    }
+
+                }
+            }
+        }
+
+        return max;
+        // return teamwork[0];
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        int[] teamwork = {0};
+        int[] teamwork = { 0 };
 
-         combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
-        //combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
+        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
         return teamwork[0];
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
 
-        int[] teamwork = {0};
-        int[] playerCount = {0};
+        int[] teamwork = { 0 };
+        int[] playerCount = { 0 };
 
         for (int i = 1; i < players.length; i++) {
-             combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
-            //combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
+            combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
+            // combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
         }
 
         return playerCount[0];
