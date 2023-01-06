@@ -346,7 +346,9 @@ public final class PocuBasketballAssociation {
 
                     if (min > players[j].getAssistsPerGame()) {
                         min = players[j].getAssistsPerGame();
-                    } else if (min > players[k].getAssistsPerGame()) {
+                    } 
+                    
+                    if (min > players[k].getAssistsPerGame()) {
                         min = players[k].getAssistsPerGame();
                     }
 
