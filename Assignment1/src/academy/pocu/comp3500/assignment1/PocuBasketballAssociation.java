@@ -420,8 +420,8 @@ public final class PocuBasketballAssociation {
             for (int i = 0; i < ind.length; i++) {
                 // System.out.println(a[i] + " ");
                 if (ind[i] == 1) {
-                    System.out.print(players[i].getPassesPerGame());
-                    System.out.print(" ");
+                    //System.out.print(players[i].getPassesPerGame());
+                    //System.out.print(" ");
 
                     sum += players[i].getPassesPerGame();
                     if (min > players[i].getAssistsPerGame()) {
@@ -444,7 +444,7 @@ public final class PocuBasketballAssociation {
             sum = 0;
             min = Integer.MAX_VALUE;
 
-            System.out.println();
+            //System.out.println();
         } while (PocuBasketballAssociation.next_permutation(ind));
 
         return teamwork;
