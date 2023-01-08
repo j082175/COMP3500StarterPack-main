@@ -7,6 +7,47 @@ public final class PocuBasketballAssociation {
     // private static int teamwork = 0;
     // private static int playerCount = 0;
 
+    public static boolean next_permutation(int[] a) {
+
+        int i = a.length - 1;
+        // a[i-1] < a[i] 인 시점에서 빠져나올 것임
+        while (i > 0 && a[i - 1] >= a[i]) {
+            i -= 1;
+            // check++;
+        }
+
+        if (i <= 0)
+            return false;
+
+        int j = a.length - 1;
+        // 뒤에서부터 시작해서 a[j] > a[i-1] 인 시점에서 빠져나올 것임
+        while (a[j] <= a[i - 1]) {
+            j -= 1;
+        }
+
+        // swap 하기
+        int temp = a[i - 1];
+        a[i - 1] = a[j];
+        // a[i - 1].setPointsPerGame(a[j].getPointsPerGame());
+        a[j] = temp;
+        // a[j].setPointsPerGame(temp);
+
+        // 현재 상태는 내림차순 되어있으므로
+        // i 부터 끝까지 오름차순 정렬하기
+        j = a.length - 1;
+        while (i < j) {
+            temp = a[i];
+            a[i] = a[j];
+            // a[i].setPointsPerGame(a[j].getPointsPerGame());
+            a[j] = temp;
+            // a[j].setPointsPerGame(i);
+            i += 1;
+            j -= 1;
+        }
+
+        return true;
+    }
+
     private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end,
             int min, int index) {
         int s = (start + end) / 2; // 중간 값 (middle)
@@ -321,6 +362,7 @@ public final class PocuBasketballAssociation {
         // players 의 길이는 항상 3보다 같거나 크다고 가정
         // outPlayers 와 scratch 의 크기는 항상 3이라고 가정
         // 총 35가지
+        // n logn
 
         // int[] teamwork = {0};
         // boolean[] visit = {false, false, false , false};
@@ -333,83 +375,80 @@ public final class PocuBasketballAssociation {
 
         // return teamwork[0];
 
-        int sum = 0;
-        int min = 0;
-        int teamwork = 0;
-        int max = 0;
+        // int[] ind = { 0, 0, 0, 1, 1, 1, 1 };
 
-        for (int i = 0; i < players.length - 2; i++) {
-            for (int j = 1 + i; j < players.length - 1; j++) {
-                for (int k = 1 + j; k < players.length; k++) {
-                    sum = players[i].getPassesPerGame() + players[j].getPassesPerGame() + players[k].getPassesPerGame();
-                    min = players[i].getAssistsPerGame();
+        // for (int i = k; i > 2; i--) {
 
-                    if (min > players[j].getAssistsPerGame()) {
-                        min = players[j].getAssistsPerGame();
-                    } 
-                    
-                    if (min > players[k].getAssistsPerGame()) {
-                        min = players[k].getAssistsPerGame();
-                    }
+        // }
 
-                    teamwork = sum * min;
+        // do {
+        // for (int i = 0; i < scratch.length; i++) {
+        // // System.out.println(a[i] + " ");
+        // if (ind[i] == 1) {
+        // System.out.print(players[i].getPointsPerGame());
+        // }
+        // }
+        // System.out.println();
+        // } while (PocuBasketballAssociation.next_permutation(ind));
 
-                    if (max < teamwork) {
-                        max = teamwork;
-                        outPlayers[0] = players[i];
-                        outPlayers[1] = players[j];
-                        outPlayers[2] = players[k];
-                    }
-
-                }
-            }
-        }
-
-        return max;
+        return 0;
 
     }
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        //int[] teamwork = { 0 };
+        // int[] teamwork = { 0 };
 
         // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
-        //return teamwork[0];
+        int[] ind = new int[players.length];
 
-        int i = 0;
-        int j = i + 1;
-        int l = j + 1;
-
-        int sum = 0;
-        int min = 0;
-        int teamwork = 0;
-        int max = 0;
-
-        while (i < players.length - 2) {
-
-            sum = players[i].getPassesPerGame() + players[j].getPassesPerGame() + players[k].getPassesPerGame();
-            min = players[i].getAssistsPerGame();
-
-
-            if (l >= players.length) {
-                ++j;
-                if (j >= players.length - 1) {
-                    j = i + 1;
-                    ++i;
-                    if (i >= players.length - 2) {
-                        break;
-                    }
-                }
-                l = j + 1;
-            }
-
-            ++l;
+        for (int i = 0; i <= players.length - k; i++) {
+            ind[i] = 0;
         }
 
+        for (int i = players.length - k; i < players.length; i++) {
+            ind[i] = 1;
+        }
 
-        return 0;
+        int min = Integer.MAX_VALUE;
+        int sum = 0;
+        int teamwork = 0;
+
+        do {
+            for (int i = 0; i < ind.length; i++) {
+                // System.out.println(a[i] + " ");
+                if (ind[i] == 1) {
+                    System.out.print(players[i].getPassesPerGame());
+                    System.out.print(" ");
+
+                    sum += players[i].getPassesPerGame();
+                    if (min > players[i].getAssistsPerGame()) {
+                        min = players[i].getAssistsPerGame();
+                    }
+                }
+            }
+
+            if (teamwork < sum * min) {
+                teamwork = sum * min;
+                int j = 0;
+                for (int i = 0; i < ind.length; i++) {
+                    if (ind[i] == 1) {
+                        outPlayers[j] = players[i];
+                        ++j;
+                    }
+                }
+            }
+
+            sum = 0;
+            min = Integer.MAX_VALUE;
+
+            System.out.println();
+        } while (PocuBasketballAssociation.next_permutation(ind));
+
+        return teamwork;
+
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
