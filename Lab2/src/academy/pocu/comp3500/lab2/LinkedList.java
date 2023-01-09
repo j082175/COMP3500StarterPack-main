@@ -59,19 +59,16 @@ public final class LinkedList {
 
             backup1 = backup1.getNextOrNull();
 
-            
             if (count < index - 1) {
                 backup2 = backup2.getNextOrNull();
             }
             
             ++count;
             check = true;
-
         }
 
         Node n3 = backup1;
-        Node n4 = backup1;
-        n4 = new Node(data);
+        Node n4 = new Node(data);
         n4.setNext(n3);
 
         if (check) {
