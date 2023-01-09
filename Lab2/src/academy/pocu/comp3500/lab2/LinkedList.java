@@ -197,14 +197,25 @@ public final class LinkedList {
             Node n2 = null;
 
             if (count % 2 == 0) {
-                Node n3 = backup1.getNextOrNull();
-                n2 = new Node(backup2.getData());
-                n2.setNext(n3);
-                n1.setNext(n2);
-                backup2 = backup2.getNextOrNull();
+                if (backup2 != null) {
+                    Node n3 = backup1.getNextOrNull();
+                    n2 = new Node(backup2.getData());
+                    n2.setNext(n3);
+                    n1.setNext(n2);
+
+                    backup2 = backup2.getNextOrNull();
+                } else {
+                    break;
+                }
+
             }
 
             backup1 = backup1.getNextOrNull();
+
+            if (backup1.getNextOrNull() == null) {
+                backup1.setNext(backup2);
+                break;
+            }
             ++count;
         }
 

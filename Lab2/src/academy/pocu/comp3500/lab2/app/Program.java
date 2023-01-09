@@ -259,22 +259,30 @@ public class Program {
 
         root = LinkedList.insertAt(root, 0, 11); // root: 11, list: 11 -> 10
         root = LinkedList.insertAt(root, 1, 12); // root: 11, list: 11 -> 12 -> 10
-        root = LinkedList.insertAt(root, 2, 0);
+        root = LinkedList.insertAt(root, 55, 0);
 
-        // root = LinkedList.append(root, 1);
-        // root = LinkedList.append(root, 2);
-        // root = LinkedList.append(root, 3);
-        // root = LinkedList.append(root, 4);
-        // root = LinkedList.append(root, 5);
+        root = LinkedList.append(root, 1);
+        root = LinkedList.append(root, 2);
+        root = LinkedList.append(root, 3);
+        root = LinkedList.append(root, 4);
+        root = LinkedList.append(root, 5);
 
-        // root = LinkedList.insertAt(root, 0, 1);
-        // root = LinkedList.insertAt(root, 1, 2);
-        // root = LinkedList.insertAt(root, 2, 3);
-        // root = LinkedList.insertAt(root, 3, 4);
-        // root = LinkedList.insertAt(root, 4, 5);
-        // root = LinkedList.insertAt(root, 5, 6);
-        // root = LinkedList.insertAt(root, 6, 7);
+        root = LinkedList.insertAt(root, 0, 1);
+        root = LinkedList.insertAt(root, 1, 2);
+        root = LinkedList.insertAt(root, 2, 3);
+        root = LinkedList.insertAt(root, 3, 4);
+        root = LinkedList.insertAt(root, 4, 5);
+        root = LinkedList.insertAt(root, 5, 6);
+        root = LinkedList.insertAt(root, 6, 7);
 
-        // root = LinkedList.insertAt(root, 14, 77);
+        root = LinkedList.insertAt(root, 16, 77);
+
+        Node root2 = LinkedList.append(null, 30);
+        root2 = LinkedList.append(root2, 31);
+        root2 = LinkedList.append(root2, 32);
+        root2 = LinkedList.append(root2, 33);
+
+        Node newRoot = LinkedList.interleaveOrNull(root2, root);
+
     }
 }
