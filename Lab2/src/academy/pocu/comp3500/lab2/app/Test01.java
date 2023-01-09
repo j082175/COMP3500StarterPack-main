@@ -5,9 +5,21 @@ import academy.pocu.comp3500.lab2.Queue;
 import academy.pocu.comp3500.lab2.Stack;
 import academy.pocu.comp3500.lab2.datastructure.Node;
 
-public class Program {
+import org.junit.jupiter.api.Test;
 
-    public static void test1() {
+/**
+ * Test01
+ */
+public class Test01 {
+
+    @Test
+    public void test2() {
+        int a = 1;
+        assert (a == 2);
+    }
+    
+    @Test
+    public void test1() {
         {
             Node root = LinkedList.append(null, 10);
 
@@ -253,20 +265,5 @@ public class Program {
         }
     }
 
-    
-    public static void main(String[] args) {
-        Queue queue = new Queue();
 
-        queue.enqueue(20); // queue: 20
-        queue.enqueue(21); // queue: 20, 21
-        queue.enqueue(22);
-        queue.enqueue(23);
-        queue.enqueue(24);
-
-        int data = queue.peek();
-        data = queue.dequeue();
-        int size = queue.getSize();
-
-        test1();
-    }
 }
