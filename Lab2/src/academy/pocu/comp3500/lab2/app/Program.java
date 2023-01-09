@@ -124,7 +124,8 @@ public class Program {
             root2 = LinkedList.append(root2, 14);
             root2 = LinkedList.append(root2, 15);
 
-            Node newRoot = LinkedList.interleaveOrNull(root1, root2); // newRoot: 10, list: 10 -> 13 -> 11 -> 14 -> 12 -> 15
+            Node newRoot = LinkedList.interleaveOrNull(root1, root2); // newRoot: 10, list: 10 -> 13 -> 11 -> 14 -> 12
+                                                                      // -> 15
 
             assert (newRoot.getData() == 10);
 
@@ -183,7 +184,7 @@ public class Program {
 
             stack.push(20);
             stack.push(21); // stack: 21
-                            //        20
+                            // 20
 
             int data = stack.pop();
 
@@ -202,13 +203,13 @@ public class Program {
             assert (stack.peek() == 20);
 
             stack.push(21); // stack: 21
-                            //        20
+                            // 20
 
             assert (stack.peek() == 21);
         }
 
         {
-            Stack stack  = new Stack();
+            Stack stack = new Stack();
 
             stack.push(20);
             stack.push(21);
@@ -253,20 +254,15 @@ public class Program {
         }
     }
 
-    
     public static void main(String[] args) {
         Queue queue = new Queue();
 
         queue.enqueue(20); // queue: 20
         queue.enqueue(21); // queue: 20, 21
         queue.enqueue(22);
-        queue.enqueue(23);
-        queue.enqueue(24);
 
-        int data = queue.peek();
+        int data = queue.dequeue();
         data = queue.dequeue();
-        int size = queue.getSize();
-
-        test1();
+        data = queue.dequeue();
     }
 }

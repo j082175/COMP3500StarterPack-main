@@ -4,9 +4,11 @@ import academy.pocu.comp3500.lab2.datastructure.Node;
 
 public final class Queue {
     private Node next;
+    private Node origin;
     private int size;
 
     public Queue() {
+        this.origin = null;
         this.next = null;
         this.size = 0;
     }
@@ -19,22 +21,41 @@ public final class Queue {
         }
 
         Node backup1 = this.next;
+        Node n1 = new Node(data);
+        n1.setNext(backup1);
 
-        while (backup1.getNextOrNull() != null) {
-            backup1 = backup1.getNextOrNull();
-        }
-
-        backup1.setNext(new Node(data));
+        this.next = n1;
         ++this.size;
     }
 
     public int peek() {
-        return this.next.getData();
+
+        Node backup1 = this.next;
+        while (backup1.getNextOrNull() != null) {
+            backup1 = backup1.getNextOrNull();
+        }
+        return backup1.getData();
     }
 
     public int dequeue() {
-        int data = this.next.getData();
-        this.next = this.next.getNextOrNull();
+
+        Node backup1 = this.next;
+        int data = 0;
+
+        if (backup1.getNextOrNull() == null) {
+            data = backup1.getData();
+            this.next = null;
+            --this.size;
+            return data;
+        }
+
+        while (backup1.getNextOrNull().getNextOrNull() != null) {
+            backup1 = backup1.getNextOrNull();
+        }
+
+        data = backup1.getNextOrNull().getData();
+        backup1.setNext(null);
+
         --this.size;
         return data;
     }

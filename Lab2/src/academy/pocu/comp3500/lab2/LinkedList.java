@@ -41,6 +41,10 @@ public final class LinkedList {
             return new Node(data);
         }
 
+        if (index < 0) {
+            return rootOrNull;
+        }
+
         boolean check = false;
 
         int count = 0;
@@ -50,12 +54,12 @@ public final class LinkedList {
 
         while (count < index) {
             backup1 = backup1.getNextOrNull();
-            
+
             if (backup1 == null) {
                 return rootOrNull;
             }
 
-            if (backup1.getNextOrNull() != null) {
+            if (count < index - 1) {
                 backup2 = backup2.getNextOrNull();
             }
 
@@ -90,7 +94,7 @@ public final class LinkedList {
 
         while (count < index) {
             backup1 = backup1.getNextOrNull();
-            
+
             if (backup1 == null) {
                 return rootOrNull;
             }
@@ -138,6 +142,10 @@ public final class LinkedList {
             return rootOrNull;
         }
 
+        if (index < 0) {
+            return null;
+        }
+
         Node backup1 = rootOrNull;
         int count = 0;
         while (count < index) {
@@ -163,7 +171,7 @@ public final class LinkedList {
 
         while (backup2.getNextOrNull() != null) {
             backup2 = backup2.getNextOrNull();
-            backup1 = LinkedList.insertAt(backup1, 0,  backup2.getData());
+            backup1 = LinkedList.insertAt(backup1, 0, backup2.getData());
         }
 
         return backup1;
@@ -185,7 +193,7 @@ public final class LinkedList {
         while (backup1 != null) {
             Node n1 = backup1;
             Node n2 = null;
-            
+
             if (count % 2 == 0) {
                 Node n3 = backup1.getNextOrNull();
                 n2 = new Node(backup2.getData());
@@ -193,7 +201,7 @@ public final class LinkedList {
                 n1.setNext(n2);
                 backup2 = backup2.getNextOrNull();
             }
-            
+
             backup1 = backup1.getNextOrNull();
             ++count;
         }
