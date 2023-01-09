@@ -255,14 +255,26 @@ public class Program {
     }
 
     public static void main(String[] args) {
-        Queue queue = new Queue();
+        Node root = LinkedList.append(null, 10);
 
-        queue.enqueue(20); // queue: 20
-        queue.enqueue(21); // queue: 20, 21
-        queue.enqueue(22);
+        root = LinkedList.insertAt(root, 0, 11); // root: 11, list: 11 -> 10
+        root = LinkedList.insertAt(root, 1, 12); // root: 11, list: 11 -> 12 -> 10
+        root = LinkedList.insertAt(root, 2, 0);
 
-        int data = queue.dequeue();
-        data = queue.dequeue();
-        data = queue.dequeue();
+        // root = LinkedList.append(root, 1);
+        // root = LinkedList.append(root, 2);
+        // root = LinkedList.append(root, 3);
+        // root = LinkedList.append(root, 4);
+        // root = LinkedList.append(root, 5);
+
+        // root = LinkedList.insertAt(root, 0, 1);
+        // root = LinkedList.insertAt(root, 1, 2);
+        // root = LinkedList.insertAt(root, 2, 3);
+        // root = LinkedList.insertAt(root, 3, 4);
+        // root = LinkedList.insertAt(root, 4, 5);
+        // root = LinkedList.insertAt(root, 5, 6);
+        // root = LinkedList.insertAt(root, 6, 7);
+
+        // root = LinkedList.insertAt(root, 14, 77);
     }
 }

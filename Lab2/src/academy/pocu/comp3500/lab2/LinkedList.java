@@ -53,18 +53,20 @@ public final class LinkedList {
         Node backup2 = rootOrNull;
 
         while (count < index) {
-            backup1 = backup1.getNextOrNull();
-
             if (backup1 == null) {
                 return rootOrNull;
             }
 
+            backup1 = backup1.getNextOrNull();
+
+            
             if (count < index - 1) {
                 backup2 = backup2.getNextOrNull();
             }
-
+            
             ++count;
             check = true;
+
         }
 
         Node n3 = backup1;
