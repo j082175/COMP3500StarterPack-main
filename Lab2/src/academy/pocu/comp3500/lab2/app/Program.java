@@ -261,6 +261,9 @@ public class Program {
         root = LinkedList.insertAt(root, 1, 12); // root: 11, list: 11 -> 12 -> 10
         root = LinkedList.insertAt(root, 55, 0);
 
+        root = LinkedList.removeAt(root, 1);
+        root = LinkedList.insertAt(root, 0, 55);
+
         root = LinkedList.append(root, 1);
         root = LinkedList.append(root, 2);
         root = LinkedList.append(root, 3);
@@ -282,7 +285,13 @@ public class Program {
         root2 = LinkedList.append(root2, 32);
         root2 = LinkedList.append(root2, 33);
 
-        Node newRoot = LinkedList.interleaveOrNull(root2, root);
+        Node root3 = LinkedList.append(null, 30);
+        root3 = LinkedList.append(root3, 31);
+        root3 = LinkedList.append(root3, 32);
+        root3 = LinkedList.append(root3, 33);
 
+        Node newRoot = LinkedList.interleaveOrNull(root2, root3);
+
+        newRoot = LinkedList.reverse(root3);
     }
 }
