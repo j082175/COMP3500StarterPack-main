@@ -220,37 +220,55 @@ public final class LinkedList {
             return root0OrNull;
         }
 
-        int count = 0;
-        Node backup1 = root0OrNull;
-        Node backup2 = root1OrNull;
+        Node n1 = root0OrNull;
+        Node n2 = root1OrNull;
 
-        while (backup1 != null) {
-            Node n1 = backup1;
-            Node n2 = null;
+        Node result = n1;
+        while (n1 != null && n2 != null) {
+            Node temp1 = n1.getNextOrNull();
+            Node temp2 = n2.getNextOrNull();
 
-            if (count % 2 == 0) {
-                if (backup2 != null) {
-                    Node n3 = backup1.getNextOrNull();
-                    n2 = new Node(backup2.getData());
-                    n2.setNext(n3);
-                    n1.setNext(n2);
-
-                    backup2 = backup2.getNextOrNull();
-                } else {
-                    break;
-                }
-
+            if (n1.getNextOrNull() != null) {
+                n2.setNext(n1.getNextOrNull());
             }
-
-            backup1 = backup1.getNextOrNull();
-
-            if (backup1.getNextOrNull() == null) {
-                backup1.setNext(backup2);
-                break;
-            }
-            ++count;
+            n1.setNext(n2);
+            n1 = temp1;
+            n2 = temp2;
         }
 
-        return root0OrNull;
+        return result;
+
+        // int count = 0;
+        // Node backup1 = root0OrNull;
+        // Node backup2 = root1OrNull;
+
+        // while (backup1 != null) {
+        //     Node n1 = backup1;
+        //     Node n2 = null;
+
+        //     if (count % 2 == 0) {
+        //         if (backup2 != null) {
+        //             Node n3 = backup1.getNextOrNull();
+        //             n2 = new Node(backup2.getData());
+        //             n2.setNext(n3);
+        //             n1.setNext(n2);
+
+        //             backup2 = backup2.getNextOrNull();
+        //         } else {
+        //             break;
+        //         }
+
+        //     }
+
+        //     backup1 = backup1.getNextOrNull();
+
+        //     if (backup1.getNextOrNull() == null) {
+        //         backup1.setNext(backup2);
+        //         break;
+        //     }
+        //     ++count;
+        // }
+
+        // return root0OrNull;
     }
 }

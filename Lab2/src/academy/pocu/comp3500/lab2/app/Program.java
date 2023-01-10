@@ -283,7 +283,7 @@ public class Program {
         root3 = LinkedList.append(root3, 32);
         root3 = LinkedList.append(root3, 33);
 
-        Node newRoot = LinkedList.interleaveOrNull(root2, root3);
+        Node newRoot = LinkedList.interleaveOrNull(root2, root);
 
         newRoot = LinkedList.reverse(root3);
     }
