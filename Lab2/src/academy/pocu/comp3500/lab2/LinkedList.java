@@ -38,35 +38,63 @@ public final class LinkedList {
 
     public static Node insertAt(final Node rootOrNull, final int index, final int data) {
         if (rootOrNull == null) {
-            //return new Node(data);
-            return rootOrNull;
+            return new Node(data);
         }
 
         if (index < 0) {
             return rootOrNull;
         }
 
-        if (index == 0) {
-            Node n = new Node(data);
-            n.setNext(rootOrNull);
-            return n;
-        }
-
-        Node x = rootOrNull;
-        for (int i = 0; i < index - 1; i++) {
-            if (x.getNextOrNull() == null) {
-                return rootOrNull;
-            }
-            x = x.getNextOrNull();
-        }
-
-        Node temp1 = x;
-        Node temp2 = temp1.getNextOrNull();
+        Node head = rootOrNull;
         Node newNode = new Node(data);
-        temp1.setNext(newNode);
-        newNode.setNext(temp2);
-        return rootOrNull;
+        newNode.setNext(null);
 
+        if (index < 0) {
+            return head;
+        } else if (index == 0) {
+            newNode.setNext(head);
+            head = newNode;
+        } else {
+            Node temp = new Node(data);
+            temp = head;
+            for (int i = 1; i < index; i++) {
+                if (temp != null) {
+                    temp = temp.getNextOrNull();
+                }
+            }
+
+            if (temp != null) {
+                newNode.setNext(temp.getNextOrNull());
+                temp.setNext(newNode);
+            } else {
+                return head;
+            }
+        }
+
+        return head;
+
+        // if (index == 0) {
+        //     Node n = new Node(data);
+        //     n.setNext(rootOrNull);
+        //     return n;
+        // }
+
+        // Node x = rootOrNull;
+        // for (int i = 0; i < index - 1; i++) {
+        //     if (x.getNextOrNull() == null) {
+        //         return rootOrNull;
+        //     }
+        //     x = x.getNextOrNull();
+        // }
+
+        // Node temp1 = x;
+        // Node temp2 = temp1.getNextOrNull();
+        // Node newNode = new Node(data);
+        // temp1.setNext(newNode);
+        // newNode.setNext(temp2);
+        // return rootOrNull;
+
+/////////////////////////////////////////////////////////
 
         // Node exNode = rootOrNull;
         // Node newNode = new Node(data);

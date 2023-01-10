@@ -257,9 +257,9 @@ public class Program {
     public static void main(String[] args) {
         Node root = LinkedList.append(null, 10);
 
-        root = LinkedList.insertAt(null, 0, 11); // root: 11, list: 11 -> 10
+        root = LinkedList.insertAt(root, 0, 11); // root: 11, list: 11 -> 10
         root = LinkedList.insertAt(root, 1, 12); // root: 11, list: 11 -> 12 -> 10
-        root = LinkedList.insertAt(root, 2, 99);
+        root = LinkedList.insertAt(root, 4, 99);
 
         root = LinkedList.insertAt(root, 0, 55);
 
