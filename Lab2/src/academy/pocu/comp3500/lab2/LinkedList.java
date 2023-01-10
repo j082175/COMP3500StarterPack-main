@@ -45,70 +45,57 @@ public final class LinkedList {
             return rootOrNull;
         }
 
-        Node exNode = rootOrNull;
-        Node newNode = new Node(data);
-        Node prevNode = rootOrNull;
-        int count = 0;
-        boolean check = false;
+        if (index == 0) {
+            Node n = new Node(data);
+            n.setNext(rootOrNull);
+            return n;
+        }
 
-        while (count < index) {
-            if (exNode == null) {
+        Node x = rootOrNull;
+        for (int i = 0; i < index - 1; i++) {
+            if (x.getNextOrNull() == null) {
                 return rootOrNull;
             }
-
-            exNode = exNode.getNextOrNull();
-
-            if (count < index - 1) {
-                prevNode = prevNode.getNextOrNull();
-            }
-
-            ++count;
-            check = true;
+            x = x.getNextOrNull();
         }
 
-        newNode.setNext(exNode);
+        Node temp1 = x;
+        Node temp2 = temp1.getNextOrNull();
+        Node newNode = new Node(data);
+        temp1.setNext(newNode);
+        newNode.setNext(temp2);
+        return rootOrNull;
 
-        if (check) {
-            prevNode.setNext(newNode);
-            return rootOrNull;
-        }
 
-        return newNode;
-
+        // Node exNode = rootOrNull;
+        // Node newNode = new Node(data);
+        // Node prevNode = rootOrNull;
+        // int count = 0;
         // boolean check = false;
 
-        // int count = 0;
-
-        // Node backup1 = rootOrNull;
-        // Node backup2 = rootOrNull;
-
         // while (count < index) {
-        //     if (backup1 == null) {
+        //     if (exNode == null) {
         //         return rootOrNull;
         //     }
 
-        //     backup1 = backup1.getNextOrNull();
+        //     exNode = exNode.getNextOrNull();
 
         //     if (count < index - 1) {
-        //         backup2 = backup2.getNextOrNull();
+        //         prevNode = prevNode.getNextOrNull();
         //     }
-            
+
         //     ++count;
         //     check = true;
         // }
 
-        // Node n3 = backup1;
-        // Node n4 = new Node(data);
-        // n4.setNext(n3);
+        // newNode.setNext(exNode);
 
         // if (check) {
-        //     backup2.setNext(n4);
+        //     prevNode.setNext(newNode);
         //     return rootOrNull;
         // }
 
-        // return n4;
-
-
+        // return newNode;
     }
 
     public static Node removeAt(final Node rootOrNull, final int index) {
