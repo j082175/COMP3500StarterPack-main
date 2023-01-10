@@ -52,7 +52,7 @@ public final class LinkedList {
         boolean check = false;
 
         while (count < index) {
-            if (exNode.getNextOrNull() == null) {
+            if (exNode == null) {
                 return rootOrNull;
             }
 

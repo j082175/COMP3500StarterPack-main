@@ -259,7 +259,7 @@ public class Program {
 
         root = LinkedList.insertAt(root, 0, 11); // root: 11, list: 11 -> 10
         root = LinkedList.insertAt(root, 1, 12); // root: 11, list: 11 -> 12 -> 10
-        root = LinkedList.insertAt(root, 55, 0);
+        root = LinkedList.insertAt(root, 2, 99);
 
         root = LinkedList.insertAt(root, 0, 55);
 
@@ -271,7 +271,7 @@ public class Program {
         root = LinkedList.insertAt(root, 5, 5);
         root = LinkedList.insertAt(root, 6, 6);
 
-        root = LinkedList.insertAt(root, 16, 77);
+        root = LinkedList.insertAt(root, 11, 77);
 
         Node root2 = LinkedList.append(null, 30);
         root2 = LinkedList.append(root2, 31);
