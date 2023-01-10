@@ -45,38 +45,70 @@ public final class LinkedList {
             return rootOrNull;
         }
 
+        Node exNode = rootOrNull;
+        Node newNode = new Node(data);
+        Node prevNode = rootOrNull;
+        int count = 0;
         boolean check = false;
 
-        int count = 0;
-
-        Node backup1 = rootOrNull;
-        Node backup2 = rootOrNull;
-
         while (count < index) {
-            if (backup1 == null) {
+            if (exNode.getNextOrNull() == null) {
                 return rootOrNull;
             }
 
-            backup1 = backup1.getNextOrNull();
+            exNode = exNode.getNextOrNull();
 
             if (count < index - 1) {
-                backup2 = backup2.getNextOrNull();
+                prevNode = prevNode.getNextOrNull();
             }
-            
+
             ++count;
             check = true;
         }
 
-        Node n3 = backup1;
-        Node n4 = new Node(data);
-        n4.setNext(n3);
+        newNode.setNext(exNode);
 
         if (check) {
-            backup2.setNext(n4);
+            prevNode.setNext(newNode);
             return rootOrNull;
         }
 
-        return n4;
+        return newNode;
+
+        // boolean check = false;
+
+        // int count = 0;
+
+        // Node backup1 = rootOrNull;
+        // Node backup2 = rootOrNull;
+
+        // while (count < index) {
+        //     if (backup1 == null) {
+        //         return rootOrNull;
+        //     }
+
+        //     backup1 = backup1.getNextOrNull();
+
+        //     if (count < index - 1) {
+        //         backup2 = backup2.getNextOrNull();
+        //     }
+            
+        //     ++count;
+        //     check = true;
+        // }
+
+        // Node n3 = backup1;
+        // Node n4 = new Node(data);
+        // n4.setNext(n3);
+
+        // if (check) {
+        //     backup2.setNext(n4);
+        //     return rootOrNull;
+        // }
+
+        // return n4;
+
+
     }
 
     public static Node removeAt(final Node rootOrNull, final int index) {
