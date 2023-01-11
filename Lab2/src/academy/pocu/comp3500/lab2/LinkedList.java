@@ -51,17 +51,7 @@ public final class LinkedList {
         } else if (rootOrNull != null && index == 0) {
             newNode.setNext(head);
             head = newNode;
-        }
-
-
-        // if (index < 0) {
-        //     return head;
-        // } else if (index == 0) {
-        //     newNode.setNext(head);
-        //     head = newNode;
-        // } else {
-
-            else {
+        } else {
             Node temp = new Node(data);
             temp = head;
             for (int i = 1; i < index; i++) {
