@@ -41,9 +41,9 @@ public final class LinkedList {
             return new Node(data);
         }
 
-        if (index < 0) {
-            return rootOrNull;
-        }
+        // if (index < 0) {
+        //     return rootOrNull;
+        // }
 
         Node head = rootOrNull;
         Node newNode = new Node(data);
