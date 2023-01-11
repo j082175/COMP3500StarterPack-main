@@ -37,33 +37,31 @@ public final class LinkedList {
     }
 
     public static Node insertAt(final Node rootOrNull, final int index, final int data) {
-        if (rootOrNull == null && index < 0) {
-            //return new Node(data);
-            return rootOrNull;
-        }
-
-        if (rootOrNull == null || index == 0) {
-            return new Node(data);
-        }
-
-        if (rootOrNull != null && index < 0) {
-            return rootOrNull;
-        }
-
-        // if (index < 0) {
-        //     return rootOrNull;
-        // }
-
         Node head = rootOrNull;
         Node newNode = new Node(data);
         newNode.setNext(null);
 
-        if (index < 0) {
-            return head;
-        } else if (index == 0) {
+        if (rootOrNull == null && index < 0) {
+            //return new Node(data);
+            return rootOrNull;
+        } else if (rootOrNull == null && index == 0) {
+            return new Node(data);
+        } else if (rootOrNull != null && index < 0) {
+            return rootOrNull;
+        } else if (rootOrNull != null && index == 0) {
             newNode.setNext(head);
             head = newNode;
-        } else {
+        }
+
+
+        // if (index < 0) {
+        //     return head;
+        // } else if (index == 0) {
+        //     newNode.setNext(head);
+        //     head = newNode;
+        // } else {
+
+            else {
             Node temp = new Node(data);
             temp = head;
             for (int i = 1; i < index; i++) {
