@@ -395,59 +395,16 @@ public final class PocuBasketballAssociation {
 
     }
 
-    public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
+    public static long findDreamTeam(Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        // int[] teamwork = { 0 };
+        int[] teamwork = { 0 };
 
-        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
-        int[] ind = new int[players.length];
+        players[0].setPointsPerGame(1);
 
-        for (int i = 0; i <= players.length - k; i++) {
-            ind[i] = 0;
-        }
-
-        for (int i = players.length - k; i < players.length; i++) {
-            ind[i] = 1;
-        }
-
-        int min = Integer.MAX_VALUE;
-        int sum = 0;
-        int teamwork = 0;
-
-        do {
-            for (int i = 0; i < ind.length; i++) {
-                // System.out.println(a[i] + " ");
-                if (ind[i] == 1) {
-                    //System.out.print(players[i].getPassesPerGame());
-                    //System.out.print(" ");
-
-                    sum += players[i].getPassesPerGame();
-                    if (min > players[i].getAssistsPerGame()) {
-                        min = players[i].getAssistsPerGame();
-                    }
-                }
-            }
-
-            if (teamwork < sum * min) {
-                teamwork = sum * min;
-                int j = 0;
-                for (int i = 0; i < ind.length; i++) {
-                    if (ind[i] == 1) {
-                        outPlayers[j] = players[i];
-                        ++j;
-                    }
-                }
-            }
-
-            sum = 0;
-            min = Integer.MAX_VALUE;
-
-            //System.out.println();
-        } while (PocuBasketballAssociation.next_permutation(ind));
-
-        return teamwork;
+        return teamwork[0];
 
     }
 

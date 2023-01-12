@@ -27,42 +27,45 @@ public class Program {
         // player = PocuBasketballAssociation.findPlayerPointsPerGame(players, 13); //
         // player: Player 6
 
-    //     Player[] players = new Player[] {
-    //         new Player("Player 2", 5, 5, 17, 50),
-    //         new Player("Player 6", 15, 4, 10, 40),
-    //         new Player("Player 5", 11, 3, 25, 54),
-    //         new Player("Player 4", 10, 9, 1, 88),
-    //         new Player("Player 7", 16, 7, 5, 77),
-    //         new Player("Player 1", 1, 2, 8, 22),
-    //         new Player("Player 9", 42, 15, 4, 56),
-    //         new Player("Player 8", 33, 11, 3, 72),
-    // };
-    
-    // int k = 4;
-    // Player[] outPlayers = new Player[4];
-    // Player[] scratch = new Player[k];
-    
-    // long maxTeamwork = PocuBasketballAssociation.findDreamTeam(players, k, outPlayers, scratch); // maxTeamwork: 171, outPlayers: [ Player 6, Player 5, Player 2, Player 7 ]
+        // Player[] players = new Player[] {
+        // new Player("Player 2", 5, 5, 17, 50),
+        // new Player("Player 6", 15, 4, 10, 40),
+        // new Player("Player 5", 11, 3, 25, 54),
+        // new Player("Player 4", 10, 9, 1, 88),
+        // new Player("Player 7", 16, 7, 5, 77),
+        // new Player("Player 1", 1, 2, 8, 22),
+        // new Player("Player 9", 42, 15, 4, 56),
+        // new Player("Player 8", 33, 11, 3, 72),
+        // };
+
+        // int k = 4;
+        // Player[] outPlayers = new Player[4];
+        // Player[] scratch = new Player[k];
+
+        // long maxTeamwork = PocuBasketballAssociation.findDreamTeam(players, k,
+        // outPlayers, scratch); // maxTeamwork: 171, outPlayers: [ Player 6, Player 5,
+        // Player 2, Player 7 ]
 
         // Player[] players = new Player[] {
-        //         new Player("Player 2", 5, 12, 14, 50),
-        //         new Player("Player 6", 15, 2, 5, 40),
-        //         new Player("Player 5", 11, 1, 11, 54),
-        //         new Player("Player 4", 10, 3, 51, 88),
-        //         new Player("Player 7", 16, 8, 5, 77),
-        //         new Player("Player 1", 1, 15, 2, 22),
-        //         new Player("Player 3", 7, 5, 8, 66)
+        // new Player("Player 2", 5, 12, 14, 50),
+        // new Player("Player 6", 15, 2, 5, 40),
+        // new Player("Player 5", 11, 1, 11, 54),
+        // new Player("Player 4", 10, 3, 51, 88),
+        // new Player("Player 7", 16, 8, 5, 77),
+        // new Player("Player 1", 1, 15, 2, 22),
+        // new Player("Player 3", 7, 5, 8, 66)
         // };
 
         // Player[] outPlayers = new Player[3];
         // Player[] scratch = new Player[3];
 
-        // long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players, outPlayers, scratch); // maxTeamwork:
-        //                                                                                               // 219,
-        //                                                                                               // outPlayers: [
-        //                                                                                               // Player 4,
-        //                                                                                               // Player 2,
-        //                                                                                               // Player 3 ]
+        // long maxTeamwork = PocuBasketballAssociation.find3ManDreamTeam(players,
+        // outPlayers, scratch); // maxTeamwork:
+        // // 219,
+        // // outPlayers: [
+        // // Player 4,
+        // // Player 2,
+        // // Player 3 ]
 
         Player[] players1 = new Player[] {
                 new Player("Player 1", -1, 14, 44, -1),
@@ -104,5 +107,27 @@ public class Program {
         // System.out.println();
         // } while (PocuBasketballAssociation.next_permutation(ind));
 
+        Player[] players = new Player[] {
+                new Player("Player 1",-1, 1, 9, -1),
+                new Player("Player 2", -1, 2, 8, -1),
+                new Player("Player 3", -1, 3, 7, -1),
+                new Player("Player 4", -1, 4, 6, -1),
+                new Player("Player 5", -1, 5, 5, -1),
+                new Player("Player 6",-1, 6, 4, -1),
+                new Player("Player 7",-1, 7, 3, -1),
+                new Player("Player 8",-1, 8, 2, -1),
+                new Player("Player 9",-1, 9, 1, -1)
+        };
+
+        int size = 3;
+        Player[] outPlayers = new Player[size];
+        Player[] scratch = new Player[size];
+
+        long maxTeamwork = PocuBasketballAssociation.findDreamTeam(players, size, outPlayers, scratch); // maxTeamwork:
+                                                                                                      // 219,
+                                                                                                      // outPlayers: [
+                                                                                                      // Player 4,
+                                                                                                      // Player 2,
+                                                                                                      // Player 3 ]
     }
 }
