@@ -364,16 +364,16 @@ public final class PocuBasketballAssociation {
         // 총 35가지
         // n logn
 
-        // int[] teamwork = {0};
-        // boolean[] visit = {false, false, false , false};
+        int[] teamwork = {0};
+        boolean[] visit = {false, false, false , false};
 
-        // combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
+        combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
 
         // combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork,
         // null);
 
-        // return teamwork[0];
+        return teamwork[0];
 
         // int[] ind = { 0, 0, 0, 1, 1, 1, 1 };
 
@@ -391,18 +391,16 @@ public final class PocuBasketballAssociation {
         // System.out.println();
         // } while (PocuBasketballAssociation.next_permutation(ind));
 
-        return 0;
+        // return 0;
 
     }
 
-    public static long findDreamTeam(Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
+    public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
         int[] teamwork = { 0 };
 
         combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
-
-        players[0].setPointsPerGame(1);
 
         return teamwork[0];
 
