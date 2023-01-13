@@ -33,6 +33,7 @@ public final class PocuBasketballAssociation {
     }
 
     private static int partition2(Player[] nums, int left, int right) {
+
         int pivot = nums[right].getPassesPerGame();
 
         int i = left;
@@ -474,17 +475,15 @@ public final class PocuBasketballAssociation {
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        // int[] teamwork = { 0 };
+        // int[] teamwork1 = { 0 };
 
-        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork1, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
 
-        // nlogn + n*(3nlogn)
+        // nlogn + n * 2k
 
         quickSort(players); // nlogn
-        int totalPass = 0;
         int teamwork = 0;
-        int min = Integer.MAX_VALUE;
 
         for (int i = 0; i < k - 1; i++) {
             scratch[i] = players[i];
@@ -493,6 +492,9 @@ public final class PocuBasketballAssociation {
         for (int i = k - 1; i < players.length; i++) {
             scratch[k - 1] = players[i];
 
+            int min = Integer.MAX_VALUE;
+            int totalPass = 0;
+            
             for (int j = 0; j < k; j++) {
                 totalPass += scratch[j].getPassesPerGame();
                 if (min > scratch[j].getAssistsPerGame()) {
@@ -507,10 +509,17 @@ public final class PocuBasketballAssociation {
                 }
             }
 
-            quickSort2(scratch);
-
-            totalPass = 0;
+            int index = 0;
             min = Integer.MAX_VALUE;
+            for (int l = 0; l < k; l++) {
+                if (min > scratch[l].getPassesPerGame()) {
+                    min = scratch[l].getPassesPerGame();
+                    index = l;
+                }
+            }
+
+            swap(scratch, index, k - 1);
+            //quickSort2(scratch);
 
         }
 
