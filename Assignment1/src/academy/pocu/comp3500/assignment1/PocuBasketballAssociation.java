@@ -45,7 +45,8 @@ public final class PocuBasketballAssociation {
         return pivotPos;
     }
 
-    private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
+    private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end,
+            int min, int index) {
         int s = (start + end) / 2; // 중간 값 (middle)
 
         if (s >= players.length) {
@@ -78,7 +79,8 @@ public final class PocuBasketballAssociation {
         return null;
     }
 
-    private static Player findPlayerShootingPercentageRecursive(final Player[] players, int targetPoints, int start, int end, int min, int index) {
+    private static Player findPlayerShootingPercentageRecursive(final Player[] players, int targetPoints, int start,
+            int end, int min, int index) {
         int s = (start + end) / 2; // 중간 값 (middle)
 
         if (s >= players.length) {
@@ -111,7 +113,8 @@ public final class PocuBasketballAssociation {
         return null;
     }
 
-    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth, Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
+    private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
+            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) {
 
         if (r == 0) {
             int min = scratch[0].getAssistsPerGame();
@@ -376,60 +379,62 @@ public final class PocuBasketballAssociation {
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
         // n * (nlogn + n * 2k)
 
+        // int result = find(players, scratch, 0, 0, players.length, Integer.MAX_VALUE,
+        // 0, 0);
 
-        return find(players, scratch, 0, 0, players.length, Integer.MAX_VALUE, 0, 0);
+        quickSort(players); // nlogn
+        int teamwork = 0;
+        int maxIndex = 0;
 
-        // quickSort(players); // nlogn
-        // int teamwork = 0;
-        // int maxIndex = 0;
+        for (int k = players.length / 4; k <= players.length; k++) {
+            for (int i = 0; i < k; i++) {
+                scratch[i] = players[i];
+            }
 
-        // for (int k = 1; k <= players.length; k++) {
-        //     for (int i = 0; i < k; i++) {
-        //         scratch[i] = players[i];
-        //     }
+            for (int i = k - 1; i < players.length; i++) {
+                scratch[k - 1] = players[i];
 
-        //     for (int i = k - 1; i < players.length; i++) {
-        //         scratch[k - 1] = players[i];
+                int min = Integer.MAX_VALUE;
+                int totalPass = 0;
 
-        //         int min = Integer.MAX_VALUE;
-        //         int totalPass = 0;
+                for (int j = 0; j < k; j++) {
+                    totalPass += scratch[j].getPassesPerGame();
+                    if (min > scratch[j].getAssistsPerGame()) {
+                        min = scratch[j].getAssistsPerGame();
+                    }
+                }
 
-        //         for (int j = 0; j < k; j++) {
-        //             totalPass += scratch[j].getPassesPerGame();
-        //             if (min > scratch[j].getAssistsPerGame()) {
-        //                 min = scratch[j].getAssistsPerGame();
-        //             }
-        //         }
+                if (teamwork < min * totalPass) {
+                    teamwork = min * totalPass;
+                    maxIndex = k;
+                }
 
-        //         if (teamwork < min * totalPass) {
-        //             teamwork = min * totalPass;
-        //             maxIndex = k;
-        //         }
+                int index = 0;
+                min = Integer.MAX_VALUE;
+                for (int l = 0; l < k; l++) {
+                    if (min > scratch[l].getPassesPerGame()) {
+                        min = scratch[l].getPassesPerGame();
+                        index = l;
+                    }
+                }
 
-        //         int index = 0;
-        //         min = Integer.MAX_VALUE;
-        //         for (int l = 0; l < k; l++) {
-        //             if (min > scratch[l].getPassesPerGame()) {
-        //                 min = scratch[l].getPassesPerGame();
-        //                 index = l;
-        //             }
-        //         }
+                swap(scratch, index, k - 1);
+                // quickSort2(scratch);
 
-        //         swap(scratch, index, k - 1);
-        //         // quickSort2(scratch);
+            }
+        }
 
-        //     }
-        // }
-
-        // return maxIndex;
+        return maxIndex;
     }
 
-    private static int find(final Player[] players, final Player[] scratch, int index, int start, int end, int min, long teamwork, long maxTeamwork) {
+    private static int find(final Player[] players, final Player[] scratch, int index, int start, int end, int min,
+            long teamwork, long maxTeamwork) {
 
         return findRecursive(players, scratch, index, start, end, min, teamwork, maxTeamwork);
     }
 
-    private static int findRecursive(final Player[] players, final Player[] scratch, int index, int start, int end, int min, long teamwork, long maxTeamwork) {
+    private static int findRecursive(final Player[] players, final Player[] scratch, int index, int start, int end,
+            int min, long teamwork, long maxTeamwork) {
         int s = (start + end) / 2; // 중간 값 (middle)
 
         if (s >= players.length) {
@@ -437,7 +442,7 @@ public final class PocuBasketballAssociation {
         }
 
         // if (players[s].getPointsPerGame() == targetPoints) {
-        //     return players[s];
+        // return players[s];
         // }
 
         teamwork = findDreamTeam(players, s, null, scratch);
@@ -450,11 +455,20 @@ public final class PocuBasketballAssociation {
         if (start >= end) // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
             return index; // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
 
+        // else if (teamwork < maxTeamwork) {
+        // findRecursive(players, scratch, index, start, s - 1, min, teamwork,
+        // maxTeamwork);
+        // } else if (teamwork >= maxTeamwork) {
+        // findRecursive(players, scratch, index, s + 1, end, min, teamwork,
+        // maxTeamwork);
+        // }
 
-        else if (teamwork < maxTeamwork) {
-            return findRecursive(players, scratch, index, start, s - 1, min, teamwork, maxTeamwork);
-        } else if (teamwork >= maxTeamwork) {
-            return findRecursive(players, scratch, index, s + 1, end, min, teamwork, maxTeamwork);
+        if (teamwork < maxTeamwork) {
+            findRecursive(players, scratch, index, start, s - 1, min, teamwork, maxTeamwork);
+        }
+
+        if (teamwork >= maxTeamwork) {
+            findRecursive(players, scratch, index, s + 1, end, min, teamwork, maxTeamwork);
         }
 
         return index;

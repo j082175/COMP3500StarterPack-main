@@ -83,12 +83,15 @@ public class Program {
 
                 };
 
-                int k = 3;
+                int k = 12;
                 Player[] outPlayers1 = new Player[k];
                 Player[] scratch1 = new Player[k];
 
-                long maxTeamwork1 = PocuBasketballAssociation.findDreamTeam(players1, k, outPlayers1, scratch1);
-                long maxTeamwork2 = PocuBasketballAssociation.find3ManDreamTeam(players1, outPlayers1, scratch1);
+                // long maxTeamwork1 = PocuBasketballAssociation.findDreamTeam(players1, k,
+                // outPlayers1, scratch1);
+                // long maxTeamwork2 = PocuBasketballAssociation.find3ManDreamTeam(players1,
+                // outPlayers1, scratch1);
+                int size1 = PocuBasketballAssociation.findDreamTeamSize(players1, scratch1);
                 // assert maxTeamwork1 == 400;
 
                 Player[] players = new Player[] {
@@ -103,7 +106,7 @@ public class Program {
                                 new Player("Player 9", -1, 9, 1, -1)
                 };
 
-                int size = 8;
+                int size = 9;
                 Player[] outPlayers = new Player[size];
                 Player[] scratch = new Player[size];
 
@@ -117,6 +120,7 @@ public class Program {
                                                                                                                 // 2,
                                                                                                                 // Player
                                                                                                                 // 3 ]
+                int aa = PocuBasketballAssociation.findDreamTeamSize(players, scratch);
 
                 Player[] players3 = new Player[] {
                                 new Player("Player 1", 2, 5, 10, 78),
@@ -134,7 +138,43 @@ public class Program {
 
                 Player[] scratch3 = new Player[11];
                 Player[] outPlayers3 = new Player[11];
-                // long t = PocuBasketballAssociation.findDreamTeam(players3, 6, outPlayers3, scratch3);
+                // long t = PocuBasketballAssociation.findDreamTeam(players3, 6, outPlayers3,
+                // scratch3);
                 int k3 = PocuBasketballAssociation.findDreamTeamSize(players3, scratch3); // k: 6
+
+
+
+
+
+                Player[] players4 = new Player[] {
+                                new Player("Player 1", 2, 5, 10, 78),
+                                new Player("Player 2", 10, 4, 5, 66),
+                                new Player("Player 3", 3, 3, 2, 22),
+                                new Player("Player 4", 1, 9, 8, 12),
+                                new Player("Player 5", 11, 1, 12, 26),
+                                new Player("Player 6", 7, 2, 10, 15),
+                                new Player("Player 7", 8, 15, 3, 11),
+                                new Player("Player 8", 5, 7, 13, 5),
+                                new Player("Player 9", 8, 2, 7, 67),
+                                new Player("Player 10", 1, 11, 1, 29),
+                                new Player("Player 11", 2, 6, 9, 88),
+                                new Player("Player 12", 2, 22, 12, 78),
+                                new Player("Player 13", 10, 45, 33, 66),
+                                new Player("Player 14", 3, 31, 44, 22),
+                                new Player("Player 15", 1, 12, 22, 12),
+                                new Player("Player 16", 11, 16, 55, 26),
+                                new Player("Player 17", 7, 25, 32, 15),
+                                new Player("Player 18", 8, 19, 42, 11),
+                                new Player("Player 19", 5, 30, 45, 5),
+                                new Player("Player 20", 8, 41, 14, 67),
+                                new Player("Player 21", 1, 13, 24, 29),
+                                new Player("Player 22", 2, 18, 21, 88),
+
+                };
+
+                Player[] scratch4 = new Player[players4.length];
+                Player[] outPlayers4 = new Player[players4.length];
+
+                int k4 = PocuBasketballAssociation.findDreamTeamSize(players4, scratch4);
         }
 }
