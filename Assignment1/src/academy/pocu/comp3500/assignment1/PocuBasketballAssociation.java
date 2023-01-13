@@ -474,32 +474,93 @@ public final class PocuBasketballAssociation {
 
     public static long findDreamTeam(final Player[] players, int k, final Player[] outPlayers, final Player[] scratch) {
 
-        int[] teamwork = { 0 };
+        // int[] teamwork = { 0 };
 
-        combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
+        // combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
+
+        // nlogn + n*(3nlogn)
 
         quickSort(players); // nlogn
         int totalPass = 0;
+        int teamwork = 0;
+        int min = Integer.MAX_VALUE;
 
-        for (int i = 0; i < players.length; i++) {
+        for (int i = 0; i < k - 1; i++) {
+            scratch[i] = players[i];
+        }
+
+        for (int i = k - 1; i < players.length; i++) {
+            scratch[k - 1] = players[i];
+
+            for (int j = 0; j < k; j++) {
+                totalPass += scratch[j].getPassesPerGame();
+                if (min > scratch[j].getAssistsPerGame()) {
+                    min = scratch[j].getAssistsPerGame();
+                }
+            }
+
+            if (teamwork < min * totalPass) {
+                teamwork = min * totalPass;
+                for (int z = 0; z < k; z++) {
+                    outPlayers[z] = scratch[z];
+                }
+            }
+
+            quickSort2(scratch);
+
+            totalPass = 0;
+            min = Integer.MAX_VALUE;
 
         }
 
-        return teamwork[0];
+        return teamwork;
 
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
 
-        int[] teamwork = { 0 };
-        int[] playerCount = { 0 };
+        quickSort(players); // nlogn
+        int totalPass = 0;
+        int teamwork = 0;
+        int min = Integer.MAX_VALUE;
 
-        for (int i = 1; i < players.length; i++) {
-            combination(players, scratch, i, 0, 0, null, i, teamwork, playerCount);
-            // combination2(players, scratch, 0, 0, null, i, teamwork, playerCount);
+        int maxIndex = 0;
+
+        for (int k = 1; k <= players.length; k++) {
+            for (int i = 0; i < k - 1; i++) {
+                scratch[i] = players[i];
+            }
+    
+            for (int i = k - 1; i < players.length; i++) {
+                scratch[k - 1] = players[i];
+    
+                for (int j = 0; j < k; j++) {
+                    totalPass += scratch[j].getPassesPerGame();
+                    if (min > scratch[j].getAssistsPerGame()) {
+                        min = scratch[j].getAssistsPerGame();
+                    }
+                }
+    
+                if (teamwork < min * totalPass) {
+                    teamwork = min * totalPass;
+
+                    maxIndex = k;
+                }
+    
+                for (int z = k; z < scratch.length; z++) {
+                    scratch[z] = scratch[k - 1];
+                }
+                quickSort2(scratch);
+    
+                totalPass = 0;
+                min = Integer.MAX_VALUE;
+    
+            }
         }
 
-        return playerCount[0];
+        
+
+        return maxIndex;
     }
 }
