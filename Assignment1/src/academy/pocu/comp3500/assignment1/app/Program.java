@@ -83,7 +83,7 @@ public class Program {
 
                 };
 
-                int k = 9;
+                int k = 3;
                 Player[] outPlayers1 = new Player[k];
                 Player[] scratch1 = new Player[k];
 
@@ -132,9 +132,9 @@ public class Program {
                                 new Player("Player 11", 2, 6, 9, 88)
                 };
 
-                Player[] scratch3 = new Player[6];
-                Player[] outPlayers3 = new Player[6];
-                long t = PocuBasketballAssociation.findDreamTeam(players3, 6, outPlayers3, scratch3);
+                Player[] scratch3 = new Player[11];
+                Player[] outPlayers3 = new Player[11];
+                // long t = PocuBasketballAssociation.findDreamTeam(players3, 6, outPlayers3, scratch3);
                 int k3 = PocuBasketballAssociation.findDreamTeamSize(players3, scratch3); // k: 6
         }
 }

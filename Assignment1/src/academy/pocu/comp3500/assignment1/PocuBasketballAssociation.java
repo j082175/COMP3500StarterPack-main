@@ -13,41 +13,8 @@ public final class PocuBasketballAssociation {
         nums[j] = temp;
     }
 
-    private static void quickSort2(Player[] nums) {
-        quickSortRecursive2(nums, 0, nums.length - 1);
-    }
-
     private static void quickSort(Player[] nums) {
         quickSortRecursive(nums, 0, nums.length - 1);
-    }
-
-    private static void quickSortRecursive2(Player[] nums, int left, int right) {
-        if (left >= right) {
-            return;
-        }
-
-        int pivotPos = partition2(nums, left, right);
-
-        quickSortRecursive2(nums, left, pivotPos - 1);
-        quickSortRecursive2(nums, pivotPos + 1, right);
-    }
-
-    private static int partition2(Player[] nums, int left, int right) {
-
-        int pivot = nums[right].getPassesPerGame();
-
-        int i = left;
-        for (int j = left; j < right; ++j) {
-            if (nums[j].getPassesPerGame() > pivot) {
-                swap(nums, i, j);
-                ++i;
-            }
-        }
-
-        int pivotPos = i;
-        swap(nums, pivotPos, right);
-
-        return pivotPos;
     }
 
     private static void quickSortRecursive(Player[] nums, int left, int right) {
@@ -76,47 +43,6 @@ public final class PocuBasketballAssociation {
         swap(nums, pivotPos, right);
 
         return pivotPos;
-    }
-
-    public static boolean next_permutation(int[] a) {
-
-        int i = a.length - 1;
-        // a[i-1] < a[i] 인 시점에서 빠져나올 것임
-        while (i > 0 && a[i - 1] >= a[i]) {
-            i -= 1;
-            // check++;
-        }
-
-        if (i <= 0)
-            return false;
-
-        int j = a.length - 1;
-        // 뒤에서부터 시작해서 a[j] > a[i-1] 인 시점에서 빠져나올 것임
-        while (a[j] <= a[i - 1]) {
-            j -= 1;
-        }
-
-        // swap 하기
-        int temp = a[i - 1];
-        a[i - 1] = a[j];
-        // a[i - 1].setPointsPerGame(a[j].getPointsPerGame());
-        a[j] = temp;
-        // a[j].setPointsPerGame(temp);
-
-        // 현재 상태는 내림차순 되어있으므로
-        // i 부터 끝까지 오름차순 정렬하기
-        j = a.length - 1;
-        while (i < j) {
-            temp = a[i];
-            a[i] = a[j];
-            // a[i].setPointsPerGame(a[j].getPointsPerGame());
-            a[j] = temp;
-            // a[j].setPointsPerGame(i);
-            i += 1;
-            j -= 1;
-        }
-
-        return true;
     }
 
     private static Player findPlayerPointsPerGameRecursive(final Player[] players, int targetPoints, int start, int end,
@@ -185,100 +111,6 @@ public final class PocuBasketballAssociation {
         }
 
         return null;
-    }
-
-    private static void combination_DFS(Player[] players, Player[] scratch, int index, int count, boolean[] visit,
-            Player[] outPlayers, int length, int[] teamwork, int[] playerCount) { // count개의 수를 이용해 조합을 만듬
-        int min = players[0].getAssistsPerGame();
-        int sum = 0;
-
-        if (count == 3) {
-            for (int i = 1; i <= length; i++) {
-                if (visit[i] == true) {
-                    if (scratch[i] == null) {
-                        break;
-                    }
-
-                    // System.out.print(scratch[i].getName());
-                    // System.out.print(" ");
-                    if (min > players[i].getAssistsPerGame()) {
-                        min = players[i].getAssistsPerGame();
-                    }
-                    sum += players[i].getPassesPerGame();
-                } // 조합과 순열의 차이 (조합은 중복 제거)
-            }
-
-            if (teamwork != null) {
-                if (teamwork[0] < sum * min) {
-                    teamwork[0] = (sum * min);
-
-                    if (playerCount != null) {
-                        playerCount[0] = length;
-                    }
-
-                    if (outPlayers != null) {
-                        for (int i = 0; i < length; i++) {
-                            outPlayers[i] = players[i];
-                        }
-                    }
-                }
-            }
-
-            return;
-        }
-
-        for (int i = index; i <= length; i++) {
-            // 이미 방문한 곳이라면 건너뛴다.
-            if (visit[i] == true)
-                continue;
-
-            visit[i] = true; // 방문 표시를 남긴다.
-            combination_DFS(players, scratch, i, count + 1, visit, outPlayers, length, teamwork, playerCount);
-            visit[i] = false; // 체크 취소 (다른 자식 노드를 체크하기 위해)
-        }
-    }
-
-    private static void combination2(Player[] players, Player[] scratch, int index, int depth, Player[] outPlayers,
-            int length, int[] teamwork, int[] playerCount) {
-        if (depth == scratch.length) {
-            int min = scratch[0].getAssistsPerGame();
-            int sum = 0;
-            for (int i = 0; i < scratch.length; i++) {
-                if (scratch[i] == null) {
-                    break;
-                }
-
-                // System.out.print(scratch[i].getName());
-                // System.out.print(" ");
-                if (min > scratch[i].getAssistsPerGame()) {
-                    min = scratch[i].getAssistsPerGame();
-                }
-                sum += scratch[i].getPassesPerGame();
-            }
-
-            if (teamwork != null) {
-                if (teamwork[0] < sum * min) {
-                    teamwork[0] = (sum * min);
-
-                    if (playerCount != null) {
-                        playerCount[0] = length;
-                    }
-
-                    if (outPlayers != null) {
-                        for (int i = 0; i < length; i++) {
-                            outPlayers[i] = scratch[i];
-                        }
-                    }
-                }
-            }
-
-            return;
-        } else {
-            for (int i = index; i < players.length; i++) {
-                scratch[depth] = players[i];
-                combination2(players, scratch, i + 1, depth + 1, outPlayers, length, teamwork, playerCount);
-            }
-        }
     }
 
     private static void combination(Player[] players, Player[] scratch, int r, int index, int depth,
@@ -462,7 +294,16 @@ public final class PocuBasketballAssociation {
                 }
             }
 
-            quickSort2(scratch);
+            int index = 0;
+            min = Integer.MAX_VALUE;
+            for (int l = 0; l < k; l++) {
+                if (min > scratch[l].getPassesPerGame()) {
+                    min = scratch[l].getPassesPerGame();
+                    index = l;
+                }
+            }
+
+            swap(scratch, index, k - 1);
 
             totalPass = 0;
             min = Integer.MAX_VALUE;
@@ -494,7 +335,7 @@ public final class PocuBasketballAssociation {
 
             int min = Integer.MAX_VALUE;
             int totalPass = 0;
-            
+
             for (int j = 0; j < k; j++) {
                 totalPass += scratch[j].getPassesPerGame();
                 if (min > scratch[j].getAssistsPerGame()) {
@@ -519,7 +360,7 @@ public final class PocuBasketballAssociation {
             }
 
             swap(scratch, index, k - 1);
-            //quickSort2(scratch);
+            // quickSort2(scratch);
 
         }
 
@@ -528,47 +369,50 @@ public final class PocuBasketballAssociation {
     }
 
     public static int findDreamTeamSize(final Player[] players, final Player[] scratch) {
+        // n * (nlogn + n * 2k)
 
         quickSort(players); // nlogn
-        int totalPass = 0;
         int teamwork = 0;
-        int min = Integer.MAX_VALUE;
 
         int maxIndex = 0;
 
         for (int k = 1; k <= players.length; k++) {
-            for (int i = 0; i < k - 1; i++) {
+            for (int i = 0; i < k; i++) {
                 scratch[i] = players[i];
             }
-    
+
             for (int i = k - 1; i < players.length; i++) {
                 scratch[k - 1] = players[i];
-    
+
+                int min = Integer.MAX_VALUE;
+                int totalPass = 0;
+
                 for (int j = 0; j < k; j++) {
                     totalPass += scratch[j].getPassesPerGame();
                     if (min > scratch[j].getAssistsPerGame()) {
                         min = scratch[j].getAssistsPerGame();
                     }
                 }
-    
+
                 if (teamwork < min * totalPass) {
                     teamwork = min * totalPass;
-
                     maxIndex = k;
                 }
-    
-                for (int z = k; z < scratch.length; z++) {
-                    scratch[z] = scratch[k - 1];
-                }
-                quickSort2(scratch);
-    
-                totalPass = 0;
+
+                int index = 0;
                 min = Integer.MAX_VALUE;
-    
+                for (int l = 0; l < k; l++) {
+                    if (min > scratch[l].getPassesPerGame()) {
+                        min = scratch[l].getPassesPerGame();
+                        index = l;
+                    }
+                }
+
+                swap(scratch, index, k - 1);
+                // quickSort2(scratch);
+
             }
         }
-
-        
 
         return maxIndex;
     }
