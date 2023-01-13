@@ -7,6 +7,76 @@ public final class PocuBasketballAssociation {
     // private static int teamwork = 0;
     // private static int playerCount = 0;
 
+    private static void swap(Player[] nums, int i, int j) {
+        Player temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private static void quickSort2(Player[] nums) {
+        quickSortRecursive2(nums, 0, nums.length - 1);
+    }
+
+    private static void quickSort(Player[] nums) {
+        quickSortRecursive(nums, 0, nums.length - 1);
+    }
+
+    private static void quickSortRecursive2(Player[] nums, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        int pivotPos = partition2(nums, left, right);
+
+        quickSortRecursive2(nums, left, pivotPos - 1);
+        quickSortRecursive2(nums, pivotPos + 1, right);
+    }
+
+    private static int partition2(Player[] nums, int left, int right) {
+        int pivot = nums[right].getPassesPerGame();
+
+        int i = left;
+        for (int j = left; j < right; ++j) {
+            if (nums[j].getPassesPerGame() > pivot) {
+                swap(nums, i, j);
+                ++i;
+            }
+        }
+
+        int pivotPos = i;
+        swap(nums, pivotPos, right);
+
+        return pivotPos;
+    }
+
+    private static void quickSortRecursive(Player[] nums, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        int pivotPos = partition(nums, left, right);
+
+        quickSortRecursive(nums, left, pivotPos - 1);
+        quickSortRecursive(nums, pivotPos + 1, right);
+    }
+
+    private static int partition(Player[] nums, int left, int right) {
+        int pivot = nums[right].getAssistsPerGame();
+
+        int i = left;
+        for (int j = left; j < right; ++j) {
+            if (nums[j].getAssistsPerGame() > pivot) {
+                swap(nums, i, j);
+                ++i;
+            }
+        }
+
+        int pivotPos = i;
+        swap(nums, pivotPos, right);
+
+        return pivotPos;
+    }
+
     public static boolean next_permutation(int[] a) {
 
         int i = a.length - 1;
@@ -364,34 +434,41 @@ public final class PocuBasketballAssociation {
         // 총 35가지
         // n logn
 
-        int[] teamwork = {0};
-        boolean[] visit = {false, false, false , false};
+        quickSort(players); // nlogn
+        int totalPass = 0;
+        int teamwork = 0;
+        int min = Integer.MAX_VALUE;
+        int k = 3;
 
-        combination(players, scratch, 3, 0, 0, outPlayers, 3, teamwork, null);
-        // combination2(players, scratch, 0, 0, outPlayers, 3, teamwork, null);
+        for (int i = 0; i < k - 1; i++) {
+            scratch[i] = players[i];
+        }
 
-        // combination_DFS(players, scratch, 1, 0, visit, outPlayers, 3, teamwork,
-        // null);
+        for (int i = k - 1; i < players.length; i++) {
+            scratch[k - 1] = players[i];
 
-        return teamwork[0];
+            for (int j = 0; j < k; j++) {
+                totalPass += scratch[j].getPassesPerGame();
+                if (min > scratch[j].getAssistsPerGame()) {
+                    min = scratch[j].getAssistsPerGame();
+                }
+            }
 
-        // int[] ind = { 0, 0, 0, 1, 1, 1, 1 };
+            if (teamwork < min * totalPass) {
+                teamwork = min * totalPass;
+                for (int z = 0; z < k; z++) {
+                    outPlayers[z] = scratch[z];
+                }
+            }
 
-        // for (int i = k; i > 2; i--) {
+            quickSort2(scratch);
 
-        // }
+            totalPass = 0;
+            min = Integer.MAX_VALUE;
 
-        // do {
-        // for (int i = 0; i < scratch.length; i++) {
-        // // System.out.println(a[i] + " ");
-        // if (ind[i] == 1) {
-        // System.out.print(players[i].getPointsPerGame());
-        // }
-        // }
-        // System.out.println();
-        // } while (PocuBasketballAssociation.next_permutation(ind));
+        }
 
-        // return 0;
+        return teamwork;
 
     }
 
@@ -401,6 +478,13 @@ public final class PocuBasketballAssociation {
 
         combination(players, scratch, k, 0, 0, outPlayers, k, teamwork, null);
         // combination2(players, scratch, 0, 0, outPlayers, k, teamwork, null);
+
+        quickSort(players); // nlogn
+        int totalPass = 0;
+
+        for (int i = 0; i < players.length; i++) {
+
+        }
 
         return teamwork[0];
 

@@ -68,44 +68,28 @@ public class Program {
                 // // Player 3 ]
 
                 Player[] players1 = new Player[] {
+                                new Player("Player 9", -1, 5, 88, -1), //
+                                new Player("Player 6", -1, 6, 200, -1), //
+                                new Player("Player 3", -1, 10, 67, -1),
+                                new Player("Player 7", -1, 11, 23, -1),
+                                new Player("Player 12", -1, 12, 39, -1),
+                                new Player("Player 10", -1, 13, 11, -1),
                                 new Player("Player 1", -1, 14, 44, -1),
                                 new Player("Player 2", -1, 15, 5, -1),
-                                new Player("Player 3", -1, 10, 67, -1),
-                                new Player("Player 4", -1, 22, 2, -1),
                                 new Player("Player 5", -1, 17, 51, -1),
-                                new Player("Player 6", -1, 6, 200, -1), //
-                                new Player("Player 7", -1, 11, 23, -1),
                                 new Player("Player 8", -1, 19, 56, -1), //
-                                new Player("Player 9", -1, 5, 88, -1), //
-                                new Player("Player 10", -1, 13, 11, -1),
                                 new Player("Player 11", -1, 20, 25, -1),
-                                new Player("Player 12", -1, 12, 39, -1),
+                                new Player("Player 4", -1, 22, 2, -1),
 
                 };
 
-                int k = 9;
+                int k = 3;
                 Player[] outPlayers1 = new Player[k];
                 Player[] scratch1 = new Player[k];
 
                 long maxTeamwork1 = PocuBasketballAssociation.findDreamTeam(players1, k, outPlayers1, scratch1);
+                long maxTeamwork2 = PocuBasketballAssociation.find3ManDreamTeam(players1, outPlayers1, scratch1);
                 // assert maxTeamwork1 == 400;
-
-                // int[] a = { 0, 0, 0, 0, 0 ,0, 0};
-                // for (int i = 0; i < a.length; i++) {
-                // a[i] = i + 1;
-                // }
-
-                // int[] ind = { 0, 0,0 , 1, 1, 1, 1 };
-
-                // do {
-                // for (int i = 0; i < ind.length; i++) {
-                // //System.out.println(a[i] + " ");
-                // if(ind[i] == 1) {
-                // System.out.print(a[i]);
-                // }
-                // }
-                // System.out.println();
-                // } while (PocuBasketballAssociation.next_permutation(ind));
 
                 Player[] players = new Player[] {
                                 new Player("Player 1", -1, 1, 9, -1),
@@ -119,7 +103,7 @@ public class Program {
                                 new Player("Player 9", -1, 9, 1, -1)
                 };
 
-                int size = 3;
+                int size = 8;
                 Player[] outPlayers = new Player[size];
                 Player[] scratch = new Player[size];
 
@@ -133,5 +117,29 @@ public class Program {
                                                                                                                 // 2,
                                                                                                                 // Player
                                                                                                                 // 3 ]
+
+                Player[] players3 = new Player[] {
+                                new Player("Player 2", 5, 12, 14, 50),
+                                new Player("Player 6", 15, 2, 5, 40),
+                                new Player("Player 5", 11, 1, 11, 54),
+                                new Player("Player 4", 10, 3, 51, 88),
+                                new Player("Player 7", 16, 8, 5, 77),
+                                new Player("Player 1", 1, 15, 2, 22),
+                                new Player("Player 3", 7, 5, 8, 66)
+                };
+
+                Player[] outPlayers3 = new Player[3];
+                Player[] scratch3 = new Player[3];
+
+                long maxTeamwork3 = PocuBasketballAssociation.find3ManDreamTeam(players3, outPlayers3, scratch3); // maxTeamwork:
+                                                                                                                  // 219,
+                                                                                                                  // outPlayers:
+                                                                                                                  // [
+                                                                                                                  // Player
+                                                                                                                  // 4,
+                                                                                                                  // Player
+                                                                                                                  // 2,
+                                                                                                                  // Player
+                                                                                                                  // 3 ]
         }
 }
