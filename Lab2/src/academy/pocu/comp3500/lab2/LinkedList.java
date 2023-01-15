@@ -210,31 +210,31 @@ public final class LinkedList {
             return null;
         }
 
-        Node backup1 = LinkedList.append(null, rootOrNull.getData());
-        Node backup2 = rootOrNull;
+        // Node backup1 = LinkedList.append(null, rootOrNull.getData());
+        // Node backup2 = rootOrNull;
 
-        while (backup2.getNextOrNull() != null) {
-            backup2 = backup2.getNextOrNull();
-            backup1 = LinkedList.insertAt(backup1, 0, backup2.getData());
-        }
-
-        return backup1;
-
-        // Node head = rootOrNull;
-        // Node nextNode = head;
-        // Node currentNode = null;
-        // Node preNode = null;
-
-        // while (nextNode != null) {
-        //     preNode = currentNode;
-        //     currentNode = nextNode;
-        //     nextNode = nextNode.getNextOrNull();
-        //     currentNode.setNext(preNode);
+        // while (backup2.getNextOrNull() != null) {
+        //     backup2 = backup2.getNextOrNull();
+        //     backup1 = LinkedList.insertAt(backup1, 0, backup2.getData());
         // }
 
-        // head = currentNode;
+        // return backup1;
 
-        // return head;
+        Node head = rootOrNull;
+        Node nextNode = head;
+        Node currentNode = null;
+        Node preNode = null;
+
+        while (nextNode != null) {
+            preNode = currentNode;
+            currentNode = nextNode;
+            nextNode = nextNode.getNextOrNull();
+            currentNode.setNext(preNode);
+        }
+
+        head = currentNode;
+
+        return head;
     }
 
     public static Node interleaveOrNull(final Node root0OrNull, final Node root1OrNull) {
