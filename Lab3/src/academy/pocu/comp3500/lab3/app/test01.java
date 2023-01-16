@@ -8,11 +8,13 @@ import org.junit.Test;
 
 public class test01 {
 
+    @Test
     public void sejinTest() {
         {
             final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7, 4, 3, 2 };
             final int maxAltitudeTime = MissionControl.findMaxAltitudeTime(altitudes);
             assert (maxAltitudeTime == 6);
+            // assert (1 == 0);
         }
 
         {

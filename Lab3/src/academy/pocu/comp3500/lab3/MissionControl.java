@@ -30,17 +30,27 @@ public final class MissionControl {
             index = mid;
         }
 
-        if (mid == altitudes.length - 1 || mid == 0) {
+        // if (mid == altitudes.length - 1 || mid == 0) {
+        //     return index;
+        // }
+
+        if (mid != altitudes.length - 1) {
+            if (altitudes[mid] < altitudes[mid + 1]) {
+                return findArrRecursive(altitudes, mid + 1, end, maxValue, index);
+            }
+        } else {
             return index;
         }
 
-        if (altitudes[mid] < altitudes[mid + 1]) {
-            return findArrRecursive(altitudes, mid + 1, end, maxValue, index);
+
+        if (mid != 0) {
+            if (altitudes[mid] < altitudes[mid - 1]) {
+                return findArrRecursive(altitudes, start, mid - 1, maxValue, index);
+            }
+        } else {
+            return index;
         }
 
-        if (altitudes[mid] < altitudes[mid - 1]) {
-            return findArrRecursive(altitudes, start, mid - 1, maxValue, index);
-        }
 
         return index;
     }

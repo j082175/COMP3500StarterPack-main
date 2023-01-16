@@ -7,9 +7,10 @@ import academy.pocu.comp3500.lab3.MissionControl;
 public class Program {
 
     public static void main(String[] args) {
-        final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7 };
+        final int[] altitudes = new int[] { 4, 5, 4, 3, 2 };
 
-        final int maxAltitudeTime = MissionControl.findMaxAltitudeTime(altitudes); // maxAltitudeTime: 6
+        final int maxAltitudeTime = MissionControl.findMaxAltitudeTime(altitudes);
+        assert (maxAltitudeTime == 1);
 
         final int[] altitudes2 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 10, 8, 5, 3, 1 }; // 10
         int maxAltitudeTime2 = MissionControl.findMaxAltitudeTime(altitudes2);
