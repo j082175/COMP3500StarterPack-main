@@ -11,6 +11,14 @@ public final class MissionControl {
     }
 
     private static int findArrRecursive(final int[] altitudes, int start, int end, int maxValue, int index) {
+        if (altitudes.length == 1) {
+            return 0;
+        }
+
+        if (altitudes.length == 2) {
+            return altitudes[0] > altitudes[1] ? 0 : 1;
+        }
+
         int mid = (start + end) / 2;
 
         if (start > end) {
@@ -20,6 +28,14 @@ public final class MissionControl {
         if (maxValue < altitudes[mid]) {
             maxValue = altitudes[mid];
             index = mid;
+        }
+
+        if (mid == altitudes.length - 1) {
+            return index + 1;
+        }
+
+        if (mid == 0) {
+            return index;
         }
 
         if (altitudes[mid] < altitudes[mid + 1]) {
@@ -43,11 +59,25 @@ public final class MissionControl {
 
         ArrayList<Integer> result = new ArrayList<>();
 
+        boolean checkLeft = false;
+        boolean checkRight = false;
+
         if (left != -1) {
-            result.add(left);
+            checkLeft = true;
         }
 
         if (right != -1) {
+            checkRight = true;
+        }
+
+        if (left == right && checkLeft & checkRight) {
+            result.add(left);
+        } else if (checkLeft & checkRight) {
+            result.add(left);
+            result.add(right);
+        } else if (checkLeft) {
+            result.add(left);
+        } else if (checkRight) {
             result.add(right);
         }
 
@@ -59,6 +89,10 @@ public final class MissionControl {
 
         if (start > end) {
             return -1;
+        }
+
+        if (mid == altitudes.length) {
+            return mid - 1;
         }
 
         if (targetAltitude == altitudes[mid]) {
