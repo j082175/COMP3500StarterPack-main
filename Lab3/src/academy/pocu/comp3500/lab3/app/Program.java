@@ -7,7 +7,7 @@ import academy.pocu.comp3500.lab3.MissionControl;
 public class Program {
 
     public static void main(String[] args) {
-        final int[] altitudes = new int[] { 1 };
+        final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7 };
 
         final int maxAltitudeTime = MissionControl.findMaxAltitudeTime(altitudes); // maxAltitudeTime: 6
 
@@ -28,6 +28,6 @@ public class Program {
 
         bounds = MissionControl.findAltitudeTimes(altitudes4, 33);
 
-        bounds = MissionControl.findAltitudeTimes(altitudes, 1);
+        bounds = MissionControl.findAltitudeTimes(altitudes, 8);
     }
 }

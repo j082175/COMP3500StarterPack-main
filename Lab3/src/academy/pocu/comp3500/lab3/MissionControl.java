@@ -30,11 +30,7 @@ public final class MissionControl {
             index = mid;
         }
 
-        if (mid == altitudes.length - 1) {
-            return index + 1;
-        }
-
-        if (mid == 0) {
+        if (mid == altitudes.length - 1 || mid == 0) {
             return index;
         }
 
