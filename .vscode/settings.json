@@ -3,5 +3,10 @@
     "lib/**/*.jar",
     "c:\\Users\\aa\\Downloads\\junit-platform-console-standalone-1.8.2.jar"
   ],
-  "java.project.sourcePaths": ["Lab3/src", "Lab2/src", "Lab3"]
+  "java.project.sourcePaths": [
+    "Lab3/src",
+    "Lab3",
+    "Lab2/src",
+    "Assignment1/src"
+  ]
 }
