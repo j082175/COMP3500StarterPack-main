@@ -4,9 +4,19 @@
     "c:\\Users\\aa\\Downloads\\junit-platform-console-standalone-1.8.2.jar"
   ],
   "java.project.sourcePaths": [
-    "Lab3/src",
-    "Lab3",
-    "Lab2/src",
-    "Assignment1/src"
+    "Assignment1\\src",
+    "Lab2\\src",
+    "Lab3\\src",
+    "Lab4\\src",
+    "Assignment2\\src",
+    "Assignment3\\src",
+    "Assignment4\\src",
+    "Lab5\\src",
+    "Lab6\\src",
+    "Lab7\\src",
+    "Lab8\\src",
+    "Lab9\\src",
+    "Lab10\\src",
+    "Lab11\\src"
   ]
 }

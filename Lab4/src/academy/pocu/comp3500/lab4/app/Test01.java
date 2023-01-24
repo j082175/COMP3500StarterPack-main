@@ -9,8 +9,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class Program {
-    public static void main(String[] args) {
+
+public class Test01 {
+    
+    @Test
+    public void test1() {
         HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                 "211534962", "0000",
                 "477404077", "letmein",

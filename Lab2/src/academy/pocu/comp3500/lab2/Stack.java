@@ -7,8 +7,8 @@ public final class Stack {
     private int size;
 
     public Stack() {
-        this.size = 0;
-        this.next = null;
+        // this.size = 0;
+        // this.next = null;
     }
 
     public void push(final int data) {

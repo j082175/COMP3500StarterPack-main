@@ -8,9 +8,9 @@ public final class Queue {
     private int size;
 
     public Queue() {
-        this.head = null;
-        this.tail = null;
-        this.size = 0;
+        // this.head = null;
+        // this.tail = null;
+        // this.size = 0;
     }
 
     public void enqueue(final int data) {
