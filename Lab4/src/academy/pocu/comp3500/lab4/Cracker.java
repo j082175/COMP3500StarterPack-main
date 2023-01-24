@@ -25,19 +25,59 @@ public final class Cracker {
         boolean bCheck = false;
 
         String[] result = new String[this.userTable.length];
-        for (int i = 0; i < rainbowTables.length; i++) {
-            for (int j = 0; j < this.userTable.length; j++) {
-                if (rainbowTables[i].contains(this.userTable[j].getPasswordHash())) {
-                    result[j] = rainbowTables[i].get(this.userTable[j].getPasswordHash());
-                    bCheck = true;
-                }
-            }
+        // for (int i = 0; i < rainbowTables.length; i++) {
+        //     for (int j = 0; j < this.userTable.length; j++) {
+        //         if (rainbowTables[i].contains(this.userTable[j].getPasswordHash())) {
+        //             result[j] = rainbowTables[i].get(this.userTable[j].getPasswordHash());
+        //             bCheck = true;
+        //         }
+        //     }
 
-            if (bCheck) {
-                break;
+        //     if (bCheck) {
+        //         break;
+        //     }
+        // }
+
+        final int CRC32 = 0;
+        final int MD2 = 1;
+        final int MD5 = 2;
+        final int SHA1 = 3;
+        final int SHA256 = 4;
+
+        String checkPasswordHash = this.userTable[0].getPasswordHash();
+        if (checkPasswordHash.length() < 24) {
+            printResult(rainbowTables, userTable, CRC32, result);
+            return result;
+        } else if (checkPasswordHash.length() == 24) {
+            if (printResult(rainbowTables, userTable, MD2, result)) {
+                return result;
+            } else {
+                printResult(rainbowTables, userTable, MD5, result);
+                return result;
             }
+        } else if (checkPasswordHash.length() == 28) {
+            printResult(rainbowTables, userTable, SHA1, result);
+            return result;
+        } else if (checkPasswordHash.length() == 44) {
+            printResult(rainbowTables, userTable, SHA256, result);
+            return result;
         }
 
+
+
+
         return result;
+    }
+
+    private boolean printResult(final RainbowTable[] rainbowTables, final User[] userTable, int key, String[] outResult) {
+
+        boolean bCheck = false;
+        for (int j = 0; j < this.userTable.length; j++) {
+            if (rainbowTables[key].contains(this.userTable[j].getPasswordHash())) {
+                outResult[j] = rainbowTables[key].get(this.userTable[j].getPasswordHash());
+                bCheck = true;
+            }
+        }
+        return bCheck;
     }
 }
