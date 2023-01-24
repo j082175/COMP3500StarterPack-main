@@ -22,7 +22,6 @@ public final class Cracker {
         // rainbowTables[3]은 SHA1용 레인보우 테이블
         // rainbowTables[4]은 SHA256용 레인보우 테이블
 
-        boolean bCheck = false;
 
         String[] result = new String[this.userTable.length];
         // for (int i = 0; i < rainbowTables.length; i++) {
@@ -49,11 +48,25 @@ public final class Cracker {
             printResult(rainbowTables, userTable, CRC32, result);
             return result;
         } else if (checkPasswordHash.length() == 24) {
-            if (printResult(rainbowTables, userTable, MD2, result)) {
-                return result;
-            } else {
-                printResult(rainbowTables, userTable, MD5, result);
-                return result;
+            boolean bCheck1 = true;
+            boolean bCheck2 = true;
+
+            for (int j = 0; j < this.userTable.length; j++) {
+
+                if (bCheck1) {
+                    if (rainbowTables[MD2].contains(this.userTable[j].getPasswordHash())) {
+                        result[j] = rainbowTables[MD2].get(this.userTable[j].getPasswordHash());
+                        bCheck2 = false;
+                    }
+                }
+
+                if (bCheck2) {
+                    if (rainbowTables[MD5].contains(this.userTable[j].getPasswordHash())) {
+                        result[j] = rainbowTables[MD5].get(this.userTable[j].getPasswordHash());
+                        bCheck1 = false;
+                    }
+                }
+
             }
         } else if (checkPasswordHash.length() == 28) {
             printResult(rainbowTables, userTable, SHA1, result);
