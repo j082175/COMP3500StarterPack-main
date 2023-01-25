@@ -39,6 +39,7 @@ public final class Cracker {
                 this.index = i;
                 this.hashPassword = userTable[i].getPasswordHash();
                 rainbowCheck = 2;
+                break;
             }
         }
 
@@ -61,18 +62,19 @@ public final class Cracker {
         final int SHA256 = 4;
 
         String checkPasswordHash = this.userTable[0].getPasswordHash();
+
+        if (this.rainbowCheck == 1) {
+            printResult(rainbowTables, userTable, MD2, result);
+            return result;
+        } else if (this.rainbowCheck == 2) {
+            printResult(rainbowTables, userTable, MD5, result);
+            return result;
+        }
+
         if (checkPasswordHash.length() < 24) {
             printResult(rainbowTables, userTable, CRC32, result);
             return result;
         } else if (checkPasswordHash.length() == 24) {
-
-            if (this.rainbowCheck == 1) {
-                printResult(rainbowTables, userTable, MD2, result);
-                return result;
-            } else if (this.rainbowCheck == 2) {
-                printResult(rainbowTables, userTable, MD5, result);
-                return result;
-            }
 
         } else if (checkPasswordHash.length() == 28) {
             printResult(rainbowTables, userTable, SHA1, result);

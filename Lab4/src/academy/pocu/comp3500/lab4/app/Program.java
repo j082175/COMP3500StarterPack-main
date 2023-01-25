@@ -26,11 +26,16 @@ public class Program {
                                 "477404077", "letmein",
                                 "55151997", "qwerty",
                                 "901924565", "password"));
+
+                // HashMap<String, String> md2Map = new HashMap<>(Map.of(
+                //                 "yiRNCBNQgQETz6+ieP/VgQ==", "0000",
+                //                 "EfIl0sd6mcLoS45wACqTUg==", "letmein",
+                //                 "wssIXCT4UJhuVfHESr5odg==", "qwerty",
+                //                 "8DiBqIxuORNfDsxg79YJuQ==", "password"));
+
                 HashMap<String, String> md2Map = new HashMap<>(Map.of(
-                                "yiRNCBNQgQETz6+ieP/VgQ==", "0000",
-                                "EfIl0sd6mcLoS45wACqTUg==", "letmein",
-                                "wssIXCT4UJhuVfHESr5odg==", "qwerty",
-                                "8DiBqIxuORNfDsxg79YJuQ==", "password"));
+                        "22222222", "0000"));
+
                 HashMap<String, String> md5Map = new HashMap<>(Map.of(
                                 "Sn0e1BRHTkAzrCnMuGU9mw==", "0000",
                                 "DRB9CfW75Ayt495ccenptw==", "letmein",
@@ -42,10 +47,10 @@ public class Program {
                                 "sbN3OgXA7QF2eHpPFXT/AHX3Uh4=", "qwerty",
                                 "W6ph5Mm5Pz8GgiULbPgzG37mj9g=", "password"));
                 HashMap<String, String> sha256Map = new HashMap<>(Map.of(
-                                "aaaaaaaaaaaaaaaaaaaamvFbM25qlhmShTffMLLmojdlafz51+dz7M7eZWBlKaA=", "0000",
-                                "aaaaaaaaaaaaaaaaaaaaHIv+j4AdeXRcRjHQn/82yCqjf8TM5PyUZoPXsza2MDI=", "letmein",
-                                "aaaaaaaaaaaaaaaaaaaaZehL4zUy+3hMSBKWdfnv86aCsnFowOp0Syz1juAjN8U=", "qwerty",
-                                "aaaaaaaaaaaaaaaaaaaaXohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=", "password"));
+                                "mvFbM25qlhmShTffMLLmojdlafz51+dz7M7eZWBlKaA=", "0000",
+                                "HIv+j4AdeXRcRjHQn/82yCqjf8TM5PyUZoPXsza2MDI=", "letmein",
+                                "ZehL4zUy+3hMSBKWdfnv86aCsnFowOp0Syz1juAjN8U=", "qwerty",
+                                "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg=", "password"));
 
                 RainbowTable[] rainbowTables = new RainbowTable[] {
                                 new RainbowTable(crc32Map),
@@ -79,11 +84,16 @@ public class Program {
 
                 // MD2
                 {
+                        // User[] userTable = new User[] {
+                        // new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
+                        // new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
+                        // new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA==")
+                        // };
+
                         User[] userTable = new User[] {
-                        new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
-                        new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
-                        new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA==")
-                        };
+                                new User("005", normalUser2, "22222222"),
+                                new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA==")
+                                };
 
                         Cracker cracker = new Cracker(userTable, email, password);
                         String[] plainTexts = cracker.run(rainbowTables);
@@ -129,11 +139,11 @@ public class Program {
                 {
                         User[] userTable = new User[] {
                                         new User("001", email,
-                                                        "aaaaaaaaaaaaaaaaaaaa08WISV7yGWsQpUCXlnErNl6ledurwx7pRhPGiS3zhIA="),
+                                                        "08WISV7yGWsQpUCXlnErNl6ledurwx7pRhPGiS3zhIA="),
                                         new User("002", normalUser2,
-                                                        "aaaaaaaaaaaaaaaaaaaaXohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg="),
+                                                        "XohImNooBHFR0OVvjcYpJ3NgPQ1qq73WKhHvch0VQtg="),
                                         new User("003", normalUser1,
-                                                        "aaaaaaaaaaaaaaaaaaaa/Z7d6Us6HBWG5GIez6AHWSJg2irdWAdXKlsO+6WnVhI=")
+                                                        "/Z7d6Us6HBWG5GIez6AHWSJg2irdWAdXKlsO+6WnVhI=")
                         };
 
                         Cracker cracker = new Cracker(userTable, email, password);
