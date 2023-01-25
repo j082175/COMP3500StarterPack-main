@@ -1,10 +1,15 @@
 package academy.pocu.comp3500.lab4;
 
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -21,27 +26,39 @@ public final class Cracker {
     private String hashPassword;
     private int rainbowCheck;
 
-    public Cracker(User[] userTable, String email, String password) {
+    public Cracker(User[] userTable, String email, String password) throws NoSuchAlgorithmException {
         this.userTable = userTable;
         this.email = email;
         this.password = password;
 
-        final String MD2str = "UHkDM4kEQC1JUsXEPN3QcA==";
-        final String MD5str = "lQGk5Otx90KH95fKA25Aug==";
+        String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
+        String md5str = "lQGk5Otx90KH95fKA25Aug==";
+
+        HashMap<String, Integer> h1 = new HashMap<>(Map.of("UHkDM4kEQC1JUsXEPN3QcA==", 1, "lQGk5Otx90KH95fKA25Aug==", 2));
 
         for (int i = 0; i < userTable.length; i++) {
-            if (userTable[i].getPasswordHash().equals(MD2str)) {
-                this.index = i;
-                this.hashPassword = userTable[i].getPasswordHash();
-                rainbowCheck = 1;
-                break;
-            } else if (userTable[i].getPasswordHash().equals(MD5str)) {
-                this.index = i;
-                this.hashPassword = userTable[i].getPasswordHash();
-                rainbowCheck = 2;
+            if (h1.containsKey(userTable[i].getPasswordHash())) {
+                rainbowCheck = h1.get(userTable[i].getPasswordHash());
                 break;
             }
         }
+
+        // final String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
+        // final String md5str = "lQGk5Otx90KH95fKA25Aug==";
+
+        // for (int i = 0; i < userTable.length; i++) {
+        // if (userTable[i].getPasswordHash().equals(md2str)) {
+        // this.index = i;
+        // this.hashPassword = userTable[i].getPasswordHash();
+        // rainbowCheck = 1;
+        // break;
+        // } else if (userTable[i].getPasswordHash().equals(md5str)) {
+        // this.index = i;
+        // this.hashPassword = userTable[i].getPasswordHash();
+        // rainbowCheck = 2;
+        // break;
+        // }
+        // }
 
     }
 

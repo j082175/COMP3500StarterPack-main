@@ -1,9 +1,10 @@
-package academy.pocu.comp3500.lab4.app;
+
 
 import academy.pocu.comp3500.lab4.Cracker;
 import academy.pocu.comp3500.lab4.pocuhacker.RainbowTable;
 import academy.pocu.comp3500.lab4.pocuhacker.User;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import org.junit.Test;
 public class Test01 {
     
     @Test
-    public void test1() {
+    public void test1() throws NoSuchAlgorithmException {
         HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                 "211534962", "0000",
                 "477404077", "letmein",

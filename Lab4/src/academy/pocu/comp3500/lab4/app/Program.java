@@ -14,12 +14,10 @@ import java.util.Map;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
-import org.junit.Test;
-import org.apache.commons.codec.binary.Hex;
 
 public class Program {
 
-        public static void main(String[] args) {
+        public static void main(String[] args) throws NoSuchAlgorithmException {
 
                 HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                                 "211534962", "0000",
@@ -27,14 +25,16 @@ public class Program {
                                 "55151997", "qwerty",
                                 "901924565", "password"));
 
-                // HashMap<String, String> md2Map = new HashMap<>(Map.of(
-                //                 "yiRNCBNQgQETz6+ieP/VgQ==", "0000",
-                //                 "EfIl0sd6mcLoS45wACqTUg==", "letmein",
-                //                 "wssIXCT4UJhuVfHESr5odg==", "qwerty",
-                //                 "8DiBqIxuORNfDsxg79YJuQ==", "password"));
-
                 HashMap<String, String> md2Map = new HashMap<>(Map.of(
-                        "22222222", "0000"));
+                                "yiRNCBNQgQETz6+ieP/VgQ==", "0000",
+                                "EfIl0sd6mcLoS45wACqTUg==", "letmein",
+                                "wssIXCT4UJhuVfHESr5odg==", "qwerty",
+                                "8DiBqIxuORNfDsxg79YJuQ==", "password",
+                                "abcdefgh","hoho"));
+
+                // HashMap<String, String> md2Map = new HashMap<>(Map.of(
+                //         "22222222", "0000",
+                //         "X03MO1qnZdYdgyfeuILPmQ==", "password"));
 
                 HashMap<String, String> md5Map = new HashMap<>(Map.of(
                                 "Sn0e1BRHTkAzrCnMuGU9mw==", "0000",
@@ -84,15 +84,12 @@ public class Program {
 
                 // MD2
                 {
-                        // User[] userTable = new User[] {
-                        // new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
-                        // new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
-                        // new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA==")
-                        // };
-
                         User[] userTable = new User[] {
-                                new User("005", normalUser2, "22222222")
-                                };
+                        new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
+                        new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
+                        new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA=="),
+                        new User("007", normalUser1, "abcdefgh")
+                        };
 
                         Cracker cracker = new Cracker(userTable, email, password);
                         String[] plainTexts = cracker.run(rainbowTables);
