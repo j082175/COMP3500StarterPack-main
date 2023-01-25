@@ -91,8 +91,7 @@ public class Program {
                         // };
 
                         User[] userTable = new User[] {
-                                new User("005", normalUser2, "22222222"),
-                                new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA==")
+                                new User("005", normalUser2, "22222222")
                                 };
 
                         Cracker cracker = new Cracker(userTable, email, password);

@@ -63,6 +63,15 @@ public final class Cracker {
 
         String checkPasswordHash = this.userTable[0].getPasswordHash();
 
+        if (this.userTable.length == 1) {
+            for (int i = 0; i < rainbowTables.length; i++) {
+                if (rainbowTables[i].contains(this.userTable[0].getPasswordHash())) {
+                    result[0] = rainbowTables[i].get(this.userTable[0].getPasswordHash());
+                    return result;
+                }
+            }
+        }
+
         if (this.rainbowCheck == 1) {
             printResult(rainbowTables, userTable, MD2, result);
             return result;
