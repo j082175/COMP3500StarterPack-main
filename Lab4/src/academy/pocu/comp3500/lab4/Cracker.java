@@ -1,5 +1,14 @@
 package academy.pocu.comp3500.lab4;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
+import java.util.Base64;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 import academy.pocu.comp3500.lab4.pocuhacker.RainbowTable;
 import academy.pocu.comp3500.lab4.pocuhacker.User;
 
@@ -8,10 +17,31 @@ public final class Cracker {
     private String email;
     private String password;
 
+    private int index = 0;
+    private String hashPassword;
+    private int rainbowCheck;
+
     public Cracker(User[] userTable, String email, String password) {
         this.userTable = userTable;
         this.email = email;
         this.password = password;
+
+        final String MD2str = "UHkDM4kEQC1JUsXEPN3QcA==";
+        final String MD5str = "lQGk5Otx90KH95fKA25Aug==";
+
+        for (int i = 0; i < userTable.length; i++) {
+            if (userTable[i].getPasswordHash().equals(MD2str)) {
+                this.index = i;
+                this.hashPassword = userTable[i].getPasswordHash();
+                rainbowCheck = 1;
+                break;
+            } else if (userTable[i].getPasswordHash().equals(MD5str)) {
+                this.index = i;
+                this.hashPassword = userTable[i].getPasswordHash();
+                rainbowCheck = 2;
+            }
+        }
+
     }
 
     public String[] run(final RainbowTable[] rainbowTables) {
@@ -36,32 +66,14 @@ public final class Cracker {
             return result;
         } else if (checkPasswordHash.length() == 24) {
 
-            if (printResult(rainbowTables, userTable, MD5, result)) {
-                return result;
-            } else {
+            if (this.rainbowCheck == 1) {
                 printResult(rainbowTables, userTable, MD2, result);
                 return result;
+            } else if (this.rainbowCheck == 2) {
+                printResult(rainbowTables, userTable, MD5, result);
+                return result;
             }
-            // boolean bCheck1 = true;
-            // boolean bCheck2 = true;
 
-            // for (int j = 0; j < this.userTable.length; j++) {
-
-            //     if (bCheck1) {
-            //         if (rainbowTables[MD2].contains(this.userTable[j].getPasswordHash())) {
-            //             result[j] = rainbowTables[MD2].get(this.userTable[j].getPasswordHash());
-            //             bCheck2 = false;
-            //         }
-            //     }
-
-            //     if (bCheck2) {
-            //         if (rainbowTables[MD5].contains(this.userTable[j].getPasswordHash())) {
-            //             result[j] = rainbowTables[MD5].get(this.userTable[j].getPasswordHash());
-            //             bCheck1 = false;
-            //         }
-            //     }
-
-            // }
         } else if (checkPasswordHash.length() == 28) {
             printResult(rainbowTables, userTable, SHA1, result);
             return result;
@@ -73,7 +85,8 @@ public final class Cracker {
         return result;
     }
 
-    private boolean printResult(final RainbowTable[] rainbowTables, final User[] userTable, int key, String[] outResult) {
+    private boolean printResult(final RainbowTable[] rainbowTables, final User[] userTable, int key,
+            String[] outResult) {
 
         boolean bCheck = false;
         for (int j = 0; j < this.userTable.length; j++) {
