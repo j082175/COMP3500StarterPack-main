@@ -2,7 +2,8 @@
   "java.project.referencedLibraries": [
     "lib/**/*.jar",
     "c:\\Users\\aa\\Downloads\\junit-platform-console-standalone-1.8.2.jar",
-    "c:\\Users\\aa\\Downloads\\commons-codec-1.15.jar"
+    "c:\\Users\\aa\\Downloads\\commons-codec-1.15.jar",
+    "c:\\Users\\aa\\Downloads\\jakarta.xml.bind-api-4.0.0.jar"
   ],
   "java.project.sourcePaths": [
     "Assignment1\\src",

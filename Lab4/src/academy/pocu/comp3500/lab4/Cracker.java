@@ -7,15 +7,12 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import academy.pocu.comp3500.lab4.pocuhacker.RainbowTable;
 import academy.pocu.comp3500.lab4.pocuhacker.User;
+
+import javax.xml.bind.DatatypeConverter;
 
 public final class Cracker {
     private User[] userTable;
@@ -31,17 +28,38 @@ public final class Cracker {
         this.email = email;
         this.password = password;
 
-        String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
-        String md5str = "lQGk5Otx90KH95fKA25Aug==";
+        // String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
+        // String md5str = "lQGk5Otx90KH95fKA25Aug==";
 
-        HashMap<String, Integer> h1 = new HashMap<>(Map.of("UHkDM4kEQC1JUsXEPN3QcA==", 1, "lQGk5Otx90KH95fKA25Aug==", 2));
+        // HashMap<String, Integer> h1 = new HashMap<>(Map.of("UHkDM4kEQC1JUsXEPN3QcA==", 1, "lQGk5Otx90KH95fKA25Aug==", 2));
 
-        for (int i = 0; i < userTable.length; i++) {
-            if (h1.containsKey(userTable[i].getPasswordHash())) {
-                rainbowCheck = h1.get(userTable[i].getPasswordHash());
+        String pshash = null;
+        for (int i = 0; i < this.userTable.length; i++) {
+            if (this.userTable[i].getEmail().equals(this.email)) {
+                pshash = this.userTable[i].getPasswordHash();
                 break;
             }
         }
+
+        String[] algorithm = {"MD2", "MD5"};
+
+        for (int i = 0; i < algorithm.length; i++) {
+            MessageDigest md = MessageDigest.getInstance(algorithm[i]);
+            //해쉬값 업데이트
+            md.update(this.password.getBytes());
+            String result = DatatypeConverter.printBase64Binary(md.digest());
+
+            if (result.equals(pshash)) {
+                this.rainbowCheck = i + 1;
+                break;
+            }
+        }
+
+
+        //Byte To Base64 String
+
+
+
 
         // final String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
         // final String md5str = "lQGk5Otx90KH95fKA25Aug==";
@@ -100,7 +118,6 @@ public final class Cracker {
         if (checkPasswordHash.length() < 24) {
             printResult(rainbowTables, userTable, CRC32, result);
             return result;
-        } else if (checkPasswordHash.length() == 24) {
 
         } else if (checkPasswordHash.length() == 28) {
             printResult(rainbowTables, userTable, SHA1, result);

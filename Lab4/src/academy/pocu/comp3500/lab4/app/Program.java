@@ -4,6 +4,7 @@ import academy.pocu.comp3500.lab4.Cracker;
 import academy.pocu.comp3500.lab4.pocuhacker.RainbowTable;
 import academy.pocu.comp3500.lab4.pocuhacker.User;
 
+import javax.xml.bind.DatatypeConverter;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -18,6 +19,7 @@ import java.util.Base64.Encoder;
 public class Program {
 
         public static void main(String[] args) throws NoSuchAlgorithmException {
+
 
                 HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                                 "211534962", "0000",
