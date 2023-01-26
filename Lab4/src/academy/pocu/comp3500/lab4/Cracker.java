@@ -12,8 +12,6 @@ import java.util.Map;
 import academy.pocu.comp3500.lab4.pocuhacker.RainbowTable;
 import academy.pocu.comp3500.lab4.pocuhacker.User;
 
-import javax.xml.bind.DatatypeConverter;
-
 public final class Cracker {
     private User[] userTable;
     private String email;
@@ -47,7 +45,9 @@ public final class Cracker {
             MessageDigest md = MessageDigest.getInstance(algorithm[i]);
             //해쉬값 업데이트
             md.update(this.password.getBytes());
-            String result = DatatypeConverter.printBase64Binary(md.digest());
+            //String result = DatatypeConverter.printBase64Binary(md.digest());
+            Base64.Encoder encoder = Base64.getEncoder();
+            String result = encoder.encodeToString(md.digest());
 
             if (result.equals(pshash)) {
                 this.rainbowCheck = i + 1;
