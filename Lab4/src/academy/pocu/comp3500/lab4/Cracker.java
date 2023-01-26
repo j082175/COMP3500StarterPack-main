@@ -17,19 +17,12 @@ public final class Cracker {
     private String email;
     private String password;
 
-    private int index = 0;
-    private String hashPassword;
     private int rainbowCheck;
 
     public Cracker(User[] userTable, String email, String password) throws NoSuchAlgorithmException {
         this.userTable = userTable;
         this.email = email;
         this.password = password;
-
-        // String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
-        // String md5str = "lQGk5Otx90KH95fKA25Aug==";
-
-        // HashMap<String, Integer> h1 = new HashMap<>(Map.of("UHkDM4kEQC1JUsXEPN3QcA==", 1, "lQGk5Otx90KH95fKA25Aug==", 2));
 
         String pshash = null;
         for (int i = 0; i < this.userTable.length; i++) {
@@ -54,30 +47,6 @@ public final class Cracker {
                 break;
             }
         }
-
-
-        //Byte To Base64 String
-
-
-
-
-        // final String md2str = "UHkDM4kEQC1JUsXEPN3QcA==";
-        // final String md5str = "lQGk5Otx90KH95fKA25Aug==";
-
-        // for (int i = 0; i < userTable.length; i++) {
-        // if (userTable[i].getPasswordHash().equals(md2str)) {
-        // this.index = i;
-        // this.hashPassword = userTable[i].getPasswordHash();
-        // rainbowCheck = 1;
-        // break;
-        // } else if (userTable[i].getPasswordHash().equals(md5str)) {
-        // this.index = i;
-        // this.hashPassword = userTable[i].getPasswordHash();
-        // rainbowCheck = 2;
-        // break;
-        // }
-        // }
-
     }
 
     public String[] run(final RainbowTable[] rainbowTables) {

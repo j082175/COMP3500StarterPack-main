@@ -14,11 +14,9 @@ import java.util.Map;
 import java.util.Base64.Decoder;
 import java.util.Base64.Encoder;
 
-
 public class Program {
 
         public static void main(String[] args) throws NoSuchAlgorithmException {
-
 
                 HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                                 "211534962", "0000",
@@ -31,11 +29,11 @@ public class Program {
                                 "EfIl0sd6mcLoS45wACqTUg==", "letmein",
                                 "wssIXCT4UJhuVfHESr5odg==", "qwerty",
                                 "8DiBqIxuORNfDsxg79YJuQ==", "password",
-                                "abcdefgh","hoho"));
+                                "abcdefgh", "hoho"));
 
                 // HashMap<String, String> md2Map = new HashMap<>(Map.of(
-                //         "22222222", "0000",
-                //         "X03MO1qnZdYdgyfeuILPmQ==", "password"));
+                // "22222222", "0000",
+                // "X03MO1qnZdYdgyfeuILPmQ==", "password"));
 
                 HashMap<String, String> md5Map = new HashMap<>(Map.of(
                                 "Sn0e1BRHTkAzrCnMuGU9mw==", "0000",
@@ -69,10 +67,10 @@ public class Program {
 
                 // CRC32
                 {
-                        User[] userTable = new User[]{
-                        new User("001", normalUser1, "2418662205"),
-                        new User("004", email, "632000577"),
-                        new User("011", normalUser2, "477404077")
+                        User[] userTable = new User[] {
+                                        new User("001", normalUser1, "2418662205"),
+                                        new User("004", email, "632000577"),
+                                        new User("011", normalUser2, "477404077")
                         };
 
                         Cracker cracker = new Cracker(userTable, email, password);
@@ -86,50 +84,50 @@ public class Program {
                 // MD2
                 {
                         User[] userTable = new User[] {
-                        new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
-                        new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
-                        new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA=="),
-                        new User("007", normalUser1, "abcdefgh")
+                                        new User("001", normalUser1, "8DiBqIxuORNfDsxg79YJuQ=="),
+                                        new User("005", normalUser2, "yiRNCBNQgQETz6+ieP/VgQ=="),
+                                        new User("006", email, "UHkDM4kEQC1JUsXEPN3QcA=="),
+                                        new User("007", normalUser1, "abcdefgh")
                         };
 
                         Cracker cracker = new Cracker(userTable, email, password);
                         String[] plainTexts = cracker.run(rainbowTables);
 
-                        assert(plainTexts[0] != null && plainTexts[0].equals("password"));
-                        assert(plainTexts[1] != null && plainTexts[1].equals("0000"));
-                        assert(plainTexts[2] == null);
+                        assert (plainTexts[0] != null && plainTexts[0].equals("password"));
+                        assert (plainTexts[1] != null && plainTexts[1].equals("0000"));
+                        assert (plainTexts[2] == null);
                 }
 
                 // MD5
                 {
                         User[] userTable = new User[] {
-                        new User("010", email, "lQGk5Otx90KH95fKA25Aug=="),
-                        new User("011", normalUser1, "2FeO34RYzgb7xbt2pYxcpA=="),
-                        new User("012", normalUser2, "6v2Gb022xeiHfqvTTmmT/g==")
+                                        new User("010", email, "lQGk5Otx90KH95fKA25Aug=="),
+                                        new User("011", normalUser1, "2FeO34RYzgb7xbt2pYxcpA=="),
+                                        new User("012", normalUser2, "6v2Gb022xeiHfqvTTmmT/g==")
                         };
 
                         Cracker cracker = new Cracker(userTable, email, password);
                         String[] plainTexts = cracker.run(rainbowTables);
 
-                        assert(plainTexts[0] == null);
-                        assert(plainTexts[1] != null && plainTexts[1].equals("qwerty"));
-                        assert(plainTexts[2] == null);
+                        assert (plainTexts[0] == null);
+                        assert (plainTexts[1] != null && plainTexts[1].equals("qwerty"));
+                        assert (plainTexts[2] == null);
                 }
 
                 // SHA1
                 {
                         User[] userTable = new User[] {
-                        new User("001", normalUser2, "Od+lUoMxjTGv5aP/Sg4yU+IEXkM="),
-                        new User("002", email, "LhcvnqAh1/Tme0rYqG2R37+J8ak="),
-                        new User("003", normalUser1, "IpvINWW5+7SOw7I5/cAVuc81jXc=")
+                                        new User("001", normalUser2, "Od+lUoMxjTGv5aP/Sg4yU+IEXkM="),
+                                        new User("002", email, "LhcvnqAh1/Tme0rYqG2R37+J8ak="),
+                                        new User("003", normalUser1, "IpvINWW5+7SOw7I5/cAVuc81jXc=")
                         };
 
                         Cracker cracker = new Cracker(userTable, email, password);
                         String[] plainTexts = cracker.run(rainbowTables);
 
-                        assert(plainTexts[0] != null && plainTexts[0].equals("0000"));
-                        assert(plainTexts[1] == null);
-                        assert(plainTexts[2] == null);
+                        assert (plainTexts[0] != null && plainTexts[0].equals("0000"));
+                        assert (plainTexts[1] == null);
+                        assert (plainTexts[2] == null);
                 }
 
                 // SHA256
