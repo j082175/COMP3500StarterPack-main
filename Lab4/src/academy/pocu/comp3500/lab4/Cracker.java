@@ -130,8 +130,7 @@ public final class Cracker {
         return result;
     }
 
-    private boolean printResult(final RainbowTable[] rainbowTables, final User[] userTable, int key,
-            String[] outResult) {
+    private boolean printResult(final RainbowTable[] rainbowTables, final User[] userTable, int key, String[] outResult) {
 
         boolean bCheck = false;
         for (int j = 0; j < this.userTable.length; j++) {
