@@ -4,6 +4,13 @@
       "type": "java",
       "name": "Launch Program",
       "request": "launch",
+      "mainClass": "academy.pocu.comp3500.assignment2.app.Program",
+      "projectName": "COMP3500StarterPack-main_56c2cb38"
+    },
+    {
+      "type": "java",
+      "name": "Launch Program",
+      "request": "launch",
       "mainClass": "academy.pocu.comp3500.lab4.app.Program",
       "projectName": "COMP3500StarterPack-main_30fd9966"
     },
