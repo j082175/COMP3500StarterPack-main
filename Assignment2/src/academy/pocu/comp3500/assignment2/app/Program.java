@@ -176,12 +176,8 @@ public class Program {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        int[] nums = new int[]{30, 10, 80, 90, 50, 70, 40};
-
-        Sort.quickSort(nums);
-        
-        Logger.printTo(writer, "90");
-        // log("1");
+        Logger.clear();
+        log("1");
         // Indent i1 = Logger.indent();
         // log("2");
         // Indent i2 = Logger.indent();
@@ -200,8 +196,11 @@ public class Program {
         // log("???");
         // Logger.printTo(writer);
         // Logger.clear();
+        // Logger.indent();
         // log("6");
-        // Logger.printTo(writer);
+        Logger.printTo(writer);
+        Logger.clear();
+        Logger.printTo(writer);
         writer.close();
     }
 

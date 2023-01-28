@@ -79,8 +79,11 @@ public final class Logger {
         //     indent.getStorage().removeLast();
         // }
 
-        storage.getFirst().resetIndentLevel();
-        storage.clear();
+        if (storage.getSize() != 0) {
+            storage.getFirst().resetIndentLevel();
+            storage.clear();
+        }
+
     }
 
     public static Indent indent() {
