@@ -17,28 +17,64 @@ public class Program {
         return String.format("%" + n + "s", s);
     }
 
+    private static void doMagic() {
+        Indent indent = Logger.indent();
+        {
+            log("you can also nest an indent");
+            log("like this!");
+        }
+        Logger.unindent();
+    }
+
     public static void main(String[] args) throws IOException {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(
                 "C://Users//aa//Documents//POCU//COMP3500StarterPack-main//COMP3500StarterPack-main//Assignment2//src//academy//pocu//comp3500//assignment2//mylog.log"));
 
-        int x = 10;
 
-        log("first level 1");
-
-        Indent indent = Logger.indent();
-        {
-            log("second level 1");
-            log("second level 2");
-
-            if (x % 2 == 1) {
-                indent.discard();
-            }
-        }
-        Logger.unindent();
-
-        log("first level 2");
-        Logger.printTo(writer);
+                log("hello");
+                log("world");
+                log("this is logging at the top level");
+    
+                Logger.indent();
+                {
+                    log("using indent, you can indent to organize your logs");
+                    log("call unindent() to decrease the indentation level");
+                }
+                Logger.unindent();
+    
+                Indent indent = Logger.indent();
+                {
+                    log("whatever I say here");
+                    log("is discarded!");
+                    log("too bad!");
+    
+                    indent.discard();
+                }
+                Logger.unindent();
+    
+                Logger.indent();
+                {
+                    log("this won't be discarded");
+                    log("it's true!");
+    
+                    doMagic();
+                }
+                Logger.unindent();
+    
+                log("back to the top level!");
+                log("and let's print the logs");
+    
+                Logger.printTo(writer);
+    
+                Logger.clear();
+    
+                log("log was just cleared");
+                log("so you start logging from the top level again");
+    
+                Logger.printTo(writer);
+    
+                writer.close();
 
     }
 

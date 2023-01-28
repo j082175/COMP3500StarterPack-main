@@ -1,9 +1,11 @@
 package academy.pocu.comp3500.assignment2;
 
 import academy.pocu.comp3500.assignment2.datastructure.LinkedList;
+import academy.pocu.comp3500.assignment2.datastructure.Stack;
 
 public final class Indent {
-    private LinkedList<String> linkedList = new LinkedList<>();
+    // private LinkedList<String> linkedList = new LinkedList<>();
+    private LinkedList<LinkedList<String>> storage = new LinkedList<>();
 
     private int indentLevel;
 
@@ -12,19 +14,20 @@ public final class Indent {
     }
 
     public void discard() {
-        for (int i = 0; i < 2; i++) {
-            this.linkedList.removeLast();
-        }
+        storage.removeLast();
     }
 
-    public LinkedList<String> getLinkedList() {
-        return this.linkedList;
+    public LinkedList<LinkedList<String>> getStorage() {
+        return this.storage;
     }
 
     public void setLinkedList(String text) {
         String source = padLeft(text, text.length() + indentLevel);
 
-        linkedList.addLast(source);
+        if (storage.getSize() == 0) {
+            storage.addLast(new LinkedList<>());
+        }
+        storage.getLast().add(source);
     }
 
     public void plus() {
