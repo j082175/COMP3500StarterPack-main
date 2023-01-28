@@ -127,75 +127,81 @@ public class Program {
     private static void test6() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-            log("hello");
-            log("world");
-            log("this is logging at the top level");
+        log("hello");
+        log("world");
+        log("this is logging at the top level");
 
-            Logger.indent();
-            {
-                log("using indent, you can indent to organize your logs");
-                log("call unindent() to decrease the indentation level");
-            }
-            Logger.unindent();
+        Logger.indent();
+        {
+            log("using indent, you can indent to organize your logs");
+            log("call unindent() to decrease the indentation level");
+        }
+        Logger.unindent();
 
-            Indent indent = Logger.indent();
-            {
-                log("whatever I say here");
-                log("is discarded!");
-                log("too bad!");
+        Indent indent = Logger.indent();
+        {
+            log("whatever I say here");
+            log("is discarded!");
+            log("too bad!");
 
-                indent.discard();
-            }
-            Logger.unindent();
+            indent.discard();
+        }
+        Logger.unindent();
 
-            Logger.indent();
-            {
-                log("this won't be discarded");
-                log("it's true!");
+        Logger.indent();
+        {
+            log("this won't be discarded");
+            log("it's true!");
 
-                doMagic();
-            }
-            Logger.unindent();
+            doMagic();
+        }
+        Logger.unindent();
 
-            log("back to the top level!");
-            log("and let's print the logs");
+        log("back to the top level!");
+        log("and let's print the logs");
 
-            Logger.printTo(writer);
+        Logger.printTo(writer);
 
-            Logger.clear();
+        Logger.clear();
 
-            log("log was just cleared");
-            log("so you start logging from the top level again");
+        log("log was just cleared");
+        log("so you start logging from the top level again");
 
-            Logger.printTo(writer);
+        Logger.printTo(writer);
 
-            writer.close();
+        writer.close();
     }
 
     public static void main(String[] args) throws IOException {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        log("1");
-        Logger.indent();
-        log("2");
-        Logger.indent();
-        log("3");
-        Logger.unindent();
-        log("4");
-        Logger.indent();
-        log("5");
-        Logger.indent();
-        Logger.indent();
-        Logger.indent();
-        Logger.indent();
-        Logger.indent();
-        log("?");
+        int[] nums = new int[]{30, 10, 80, 90, 50, 70, 40};
 
-        Logger.printTo(writer);
-        Logger.clear();
-        log("6");
-        Logger.printTo(writer);
+        Sort.quickSort(nums);
+        
+        Logger.printTo(writer, "90");
+        // log("1");
+        // Indent i1 = Logger.indent();
+        // log("2");
+        // Indent i2 = Logger.indent();
+        // log("3");
+        // Logger.unindent();
+        // log("4");
+        // Indent i3 = Logger.indent();
+        // log("5");
+        // Indent i4 = Logger.indent();
+        // Indent i5 = Logger.indent();
+        // Indent i6 = Logger.indent();
+        // Indent i7 = Logger.indent();
+        // Indent i8 = Logger.indent();
+        // log("?");
+        // i1.discard();
+        // log("???");
+        // Logger.printTo(writer);
+        // Logger.clear();
+        // log("6");
+        // Logger.printTo(writer);
         writer.close();
     }
 
