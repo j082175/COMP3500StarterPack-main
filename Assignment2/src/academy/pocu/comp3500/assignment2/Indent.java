@@ -40,7 +40,7 @@ public final class Indent {
         }
     }
 
-    public int get() {
+    public int getIndentLevel() {
         return this.indentLevel;
     }
 }

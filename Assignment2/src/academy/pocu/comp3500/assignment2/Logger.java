@@ -12,8 +12,6 @@ public final class Logger {
     // private static Queue<String> queue = new Queue<>();
     private static Stack<Indent> stack = new Stack<>();
 
-    private static int indentLevel;
-
     private static Indent indent = new Indent();
 
     public static void log(final String text) {
@@ -37,7 +35,7 @@ public final class Logger {
             while (iter2.hasNext()) {
                 result = iter2.next();
                 writer.write(result);
-                writer.write(System.lineSeparator());
+                writer.newLine();
             }
         }
 
@@ -72,6 +70,12 @@ public final class Logger {
         int length = indent.getStorage().getSize();
         for (int i = 0; i < length; i++) {
             indent.getStorage().removeLast();
+        }
+
+        int count = indent.getIndentLevel();
+
+        for (int i = 0; i < count / 2; i++) {
+            indent.minus();
         }
     }
 
