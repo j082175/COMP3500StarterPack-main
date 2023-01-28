@@ -43,8 +43,29 @@ public final class Logger {
 
     }
 
-    public static void printTo(final BufferedWriter writer, final String filter) {
+    public static void printTo(final BufferedWriter writer, final String filter) throws IOException {
+        int length = indent.getStorage().getSize();
 
+        if (length == 0) {
+            return;
+        }
+
+        String result = null;
+        Iterator<LinkedList<String>> iter1 = indent.getStorage().iterator();
+
+        while (iter1.hasNext()) {
+            Iterator<String> iter2 = iter1.next().iterator();
+
+            while (iter2.hasNext()) {
+
+                result = iter2.next();
+
+                if (result.contains(filter)) {
+                    writer.write(result);
+                    writer.write(System.lineSeparator());
+                }
+            }
+        }
     }
 
     public static void clear() {
