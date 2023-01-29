@@ -11,7 +11,6 @@ public final class Indent {
     private LinkedList<String> linkedList = new LinkedList<>();
 
     private Indent next;
-    private Indent before;
 
     private String data;
 
@@ -20,10 +19,17 @@ public final class Indent {
 
     private static int indentLevel;
 
+    private boolean isDiscarded;
+
     public Indent() {
+        isDiscarded = false;
         index = count;
         count++;
 
+    }
+
+    public boolean getDiscarede() {
+        return isDiscarded;
     }
 
     public void setNext(Indent i) {
@@ -34,13 +40,6 @@ public final class Indent {
         return this.next;
     }
 
-    public void setBefore(Indent i) {
-        this.before = i;
-    }
-
-    public Indent getBefore() {
-        return this.before;
-    }
 
     public void setData(String text) {
         // String source = padLeft(text, text.length() + indentLevel);
@@ -69,17 +68,29 @@ public final class Indent {
     }
 
     public void discard() {
+        
+        Indent start = this;
 
-        Indent ind = this;
-        if (ind.getLinkedList().getSize() == 0) {
+        if (start.isDiscarded == true) {
             return;
         }
 
-        while (ind.getNext() != null) {
-            ind.getLinkedList().clear();
-
-            ind = ind.getNext();
+        while (start != null) {
+            start.isDiscarded = true;
+            start = start.getNext();
         }
+
+        
+        // Indent ind = this;
+        // if (ind.getLinkedList().getSize() == 0) {
+        //     return;
+        // }
+
+        // while (ind.getNext() != null) {
+        //     ind.getLinkedList().clear();
+
+        //     ind = ind.getNext();
+        // }
 
 
         indentLevel = index;

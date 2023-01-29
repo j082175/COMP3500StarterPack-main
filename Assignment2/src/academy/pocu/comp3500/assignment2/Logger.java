@@ -16,8 +16,9 @@ public final class Logger {
 
     private static LinkedList<Indent> storage = new LinkedList<>();
 
-    private static Indent start;
-    private static Indent end = new Indent();
+    private static Indent current;
+    //private static Indent end = new Indent();
+    private static Indent origin;
 
     private static int indentLevel;
 
@@ -25,8 +26,8 @@ public final class Logger {
         return String.format("%" + n + "s", s);
     }
 
-    public static void resetEnd(Indent before) {
-        end.setBefore(before);
+    public static void setCurrent(Indent cur) {
+        current = cur;
     }
 
     public static void log(final String text) {
@@ -37,59 +38,61 @@ public final class Logger {
         // storage.getLast().setLinkedList(text);
 
 
-        if (start == null) {
-            start = new Indent();
+        if (origin == null) {
+            origin = new Indent();
+            current = origin;
 
             String s = padLeft(text, indentLevel + text.length());
-            start.setData(s);
+            current.setData(s);
 
-            start.setNext(end);
-            start.setBefore(null);
-            end.setBefore(start);
-            end.setNext(null);
+            //current.setNext(end);
+            //current.setBefore(null);
+            // end.setBefore(current);
+            // end.setNext(null);
             return;
         }
 
-        Indent obj = end.getBefore();
+        //Indent obj = end.getBefore();
 
         if (indentLevel != 0) {
+
+            if (current.getDiscarede() == true) {
+                Indent ind = new Indent();
+                current.setNext(ind);
+
+                current = current.getNext();
+            }
+
             String s = padLeft(text, indentLevel + text.length());
-            obj.setData(s);
+            current.setData(s);
         } else {
-            obj.setData(text);
+
+            if (current.getDiscarede() == true) {
+                Indent ind = new Indent();
+                current.setNext(ind);
+
+                current = current.getNext();
+                
+            }
+
+            current.setData(text);
         }
 
     }
 
     public static void printTo(final BufferedWriter writer) throws IOException {
-        // int length = storage.getSize();
-
-        // if (length == 0) {
-        // return;
-        // }
-
         String result = null;
 
-        // Iterator<Indent> iter1 = storage.iterator();
-        // while (iter1.hasNext()) {
-        // Indent q = iter1.next();
-        // int length2 = q.getQueue().getSize();
-
-        // for (int i = 0; i < length2; i++) {
-        // result = q.getQueue().dequeue();
-        // writer.write(result);
-        // writer.newLine();
-        // }
-        // }
-
-        Indent ind = start;
+        Indent ind = origin;
 
         while (ind != null) {
 
-            Iterator<String> iter = ind.getLinkedList().iterator();
-            while (iter.hasNext()) {
-                result = iter.next();
-                writer.write(result + System.lineSeparator());
+            if (!ind.getDiscarede()) {
+                Iterator<String> iter = ind.getLinkedList().iterator();
+                while (iter.hasNext()) {
+                    result = iter.next();
+                    writer.write(result + System.lineSeparator());
+                }
             }
 
             ind = ind.getNext();
@@ -98,38 +101,19 @@ public final class Logger {
     }
 
     public static void printTo(final BufferedWriter writer, final String filter) throws IOException {
-        // int length = storage.getSize();
-
-        // if (length == 0) {
-        // return;
-        // }
-
         String result = null;
-        // Iterator<Indent> iter1 = storage.iterator();
 
-        // while (iter1.hasNext()) {
-
-        // Indent q = iter1.next();
-        // int length2 = q.getQueue().getSize();
-
-        // for (int i = 0; i < length2; i++) {
-        // result = q.getQueue().dequeue();
-        // if (result.contains(filter)) {
-        // writer.write(result);
-        // writer.newLine();
-        // }
-        // }
-        // }
-
-        Indent ind = start;
+        Indent ind = origin;
 
         while (ind != null) {
 
-            Iterator<String> iter = ind.getLinkedList().iterator();
-            while (iter.hasNext()) {
-                result = iter.next();
-                if (result.contains(filter)) {
-                    writer.write(result + System.lineSeparator());
+            if (!ind.getDiscarede()) {
+                Iterator<String> iter = ind.getLinkedList().iterator();
+                while (iter.hasNext()) {
+                    result = iter.next();
+                    if (result.contains(filter)) {
+                        writer.write(result + System.lineSeparator());
+                    }
                 }
             }
 
@@ -144,8 +128,8 @@ public final class Logger {
         // storage.clear();
         // }
 
-        start = null;
-        end.setBefore(null);
+        origin = null;
+
         indentLevel = 0;
     }
 
@@ -158,14 +142,13 @@ public final class Logger {
 
         Indent indent = null;
 
-        if (start != null) {
+        if (current != null) {
             indent = new Indent();
+            current.setNext(indent);
 
-            Indent before = end.getBefore();
-            before.setNext(indent);
-            indent.setNext(end);
-            indent.setBefore(before);
-            end.setBefore(indent);
+
+            current = current.getNext();
+
         }
 
         // indent.setData(" ");

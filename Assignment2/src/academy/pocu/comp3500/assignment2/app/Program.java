@@ -21,51 +21,51 @@ public class Program {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        // log("first level 1");
+        log("first level 1");
 
-        // Indent indent = Logger.indent();
-        // {
-        // log("second level 1");
-        // log("second level 2");
+        Indent indent = Logger.indent();
+        {
+        log("second level 1");
+        log("second level 2");
 
-        // doMagic();
+        doMagic();
 
-        // log("second level 3");
-        // }
-        // Logger.unindent();
-        // indent.discard(); // ### 추가 부분 ###
-
-        // Logger.clear();
-        // log("first level 2");
-        // Logger.printTo(writer);
-        /////////////////////////////////////////////////
-        log("1");
-        Indent i1 = Logger.indent();
-        log("2");
-        Indent i2 = Logger.indent();
-        log("3");
+        log("second level 3");
+        }
         Logger.unindent();
-        log("4");
-        Indent i3 = Logger.indent();
-        log("5");
-        Indent i4 = Logger.indent();
-        Indent i5 = Logger.indent();
-        Indent i6 = Logger.indent();
-        Indent i7 = Logger.indent();
-        Indent i8 = Logger.indent();
-        log("?");
-        i1.discard();
-        log("???");
-        i3.discard();
-        Logger.printTo(writer);
-        Logger.clear();
-        Logger.indent();
-        log("6");
-        Logger.printTo(writer);
-        Logger.clear();
-        Logger.printTo(writer);
+        indent.discard(); // ### 추가 부분 ###
 
-        //test3();
+        log("first level 2");
+        Logger.clear();
+        Logger.printTo(writer);
+        /////////////////////////////////////////////////
+        // log("1");
+        // Indent i1 = Logger.indent();
+        // log("2");
+        // Indent i2 = Logger.indent();
+        // log("3");
+        // Logger.unindent();
+        // log("4");
+        // Indent i3 = Logger.indent();
+        // log("5");
+        // Indent i4 = Logger.indent();
+        // Indent i5 = Logger.indent();
+        // Indent i6 = Logger.indent();
+        // Indent i7 = Logger.indent();
+        // Indent i8 = Logger.indent();
+        // log("?");
+        // i1.discard();
+        // log("???");
+        // i3.discard();
+        // Logger.printTo(writer);
+        // Logger.clear();
+        // Logger.indent();
+        // log("6");
+        // Logger.printTo(writer);
+        // Logger.clear();
+        // Logger.printTo(writer);
+
+        //testTotal();
 
         writer.close();
     }
@@ -306,10 +306,10 @@ public class Program {
             Sort.quickSort(nums);
 
             Logger.printTo(writer1);
+            writer1.close();
 
             Logger.printTo(writer2, "90");
 
-            writer1.close();
             writer2.close();
         }
     }
