@@ -17,6 +17,58 @@ public class Program {
     private static final String quicksort1Path = "C://Users//aa//Documents//POCU//COMP3500StarterPack-main//COMP3500StarterPack-main//Assignment2//src//academy//pocu//comp3500//assignment2//quicksort1.log";
     private static final String quicksort2Path = "C://Users//aa//Documents//POCU//COMP3500StarterPack-main//COMP3500StarterPack-main//Assignment2//src//academy//pocu//comp3500//assignment2//quicksort2.log";
 
+    public static void main(String[] args) throws IOException {
+
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+
+        // log("first level 1");
+
+        // Indent indent = Logger.indent();
+        // {
+        // log("second level 1");
+        // log("second level 2");
+
+        // doMagic();
+
+        // log("second level 3");
+        // }
+        // Logger.unindent();
+        // indent.discard(); // ### 추가 부분 ###
+
+        // log("first level 2");
+        // Logger.printTo(writer);
+        /////////////////////////////////////////////////
+        // log("1");
+        // Indent i1 = Logger.indent();
+        // log("2");
+        // Indent i2 = Logger.indent();
+        // log("3");
+        // Logger.unindent();
+        // log("4");
+        // Indent i3 = Logger.indent();
+        // log("5");
+        // Indent i4 = Logger.indent();
+        // Indent i5 = Logger.indent();
+        // Indent i6 = Logger.indent();
+        // Indent i7 = Logger.indent();
+        // Indent i8 = Logger.indent();
+        // log("?");
+        // i1.discard();
+        // log("???");
+        // //i3.discard();
+        // Logger.printTo(writer);
+        // Logger.clear();
+        // Logger.indent();
+        // log("6");
+        // Logger.printTo(writer);
+        // Logger.clear();
+        // Logger.printTo(writer);
+
+        //test3();
+
+        writer.close();
+    }
+
     public static String padLeft(String s, int n) {
         return String.format("%" + n + "s", s);
     }
@@ -172,38 +224,6 @@ public class Program {
         writer.close();
     }
 
-    public static void main(String[] args) throws IOException {
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-
-        Logger.clear();
-        log("1");
-        // Indent i1 = Logger.indent();
-        // log("2");
-        // Indent i2 = Logger.indent();
-        // log("3");
-        // Logger.unindent();
-        // log("4");
-        // Indent i3 = Logger.indent();
-        // log("5");
-        // Indent i4 = Logger.indent();
-        // Indent i5 = Logger.indent();
-        // Indent i6 = Logger.indent();
-        // Indent i7 = Logger.indent();
-        // Indent i8 = Logger.indent();
-        // log("?");
-        // i1.discard();
-        // log("???");
-        // Logger.printTo(writer);
-        // Logger.clear();
-        // Logger.indent();
-        // log("6");
-        Logger.printTo(writer);
-        Logger.clear();
-        Logger.printTo(writer);
-        writer.close();
-    }
-
     private static int sum(int[] nums) {
         int sum = 0;
         for (int i = 0; i < nums.length; ++i) {
@@ -225,5 +245,71 @@ public class Program {
 
         log(String.format("return average: %f", average));
         return average;
+    }
+
+    private static void testTotal() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+
+        log("hello");
+        log("world");
+        log("this is logging at the top level");
+
+        Logger.indent();
+        {
+            log("using indent, you can indent to organize your logs");
+            log("call unindent() to decrease the indentation level");
+        }
+        Logger.unindent();
+
+        Indent indent = Logger.indent();
+        {
+            log("whatever I say here");
+            log("is discarded!");
+            log("too bad!");
+
+            indent.discard();
+        }
+        Logger.unindent();
+
+        Logger.indent();
+        {
+            log("this won't be discarded");
+            log("it's true!");
+
+            doMagic();
+        }
+        Logger.unindent();
+
+        log("back to the top level!");
+        log("and let's print the logs");
+
+        Logger.printTo(writer);
+
+        Logger.clear();
+
+        log("log was just cleared");
+        log("so you start logging from the top level again");
+
+        Logger.printTo(writer);
+
+        writer.close();
+
+        Logger.clear();
+
+        {
+            final BufferedWriter writer1 = new BufferedWriter(new FileWriter(quicksort1Path));
+            final BufferedWriter writer2 = new BufferedWriter(new FileWriter(quicksort2Path));
+
+            int[] nums = new int[] { 30, 10, 80, 90, 50, 70, 40 };
+
+            Sort.quickSort(nums);
+
+            Logger.printTo(writer1);
+
+            Logger.printTo(writer2, "90");
+
+            writer1.close();
+            writer2.close();
+        }
     }
 }

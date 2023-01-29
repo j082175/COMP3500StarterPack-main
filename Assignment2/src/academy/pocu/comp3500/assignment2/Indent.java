@@ -8,7 +8,11 @@ public final class Indent {
     // private LinkedList<String> linkedList = new LinkedList<>();
     // private LinkedList<LinkedList<String>> storage = new LinkedList<>();
 
-    private Queue<String> queue = new Queue<>();
+    private LinkedList<String> queue = new LinkedList<>();
+
+    private Indent next;
+    private Indent before;
+    private String data;
 
     private static int count;
     private int index;
@@ -20,20 +24,55 @@ public final class Indent {
         count++;
     }
 
+    public void setNext(Indent i) {
+        this.next = i;
+    }
+
+    public Indent getNext() {
+        return this.next;
+    }
+
+    public void setBefore(Indent i) {
+        this.before = i;
+    }
+
+    public Indent getBefore() {
+        return this.before;
+    }
+
+    public void setData(String text) {
+        // String source = padLeft(text, text.length() + indentLevel);
+
+        if (text == null) {
+            this.data = null;
+            return;
+        }
+
+        if (data == null) {
+            //this.data = text + System.lineSeparator();
+            queue.addLast(text);
+            return;
+        }
+
+        this.data += text;
+        //this.data += System.lineSeparator();
+    }
+
+    public String getData() {
+        return this.data;
+    }
+
     private static String padLeft(String s, int n) {
         return String.format("%" + n + "s", s);
     }
 
     public void discard() {
-        //storage.removeLast();
-
-        int length = queue.getSize();
-        for (int i = 0; i < length; i++) {
-            queue.dequeue();
-        }
+        before.setNext(null);
+        Logger.resetEnd(before);
+        indentLevel = index;
     }
 
-    public Queue<String> getQueue() {
+    public LinkedList<String> getQueue() {
         return this.queue;
     }
 
@@ -41,11 +80,12 @@ public final class Indent {
         String source = padLeft(text, text.length() + indentLevel);
 
         // if (storage.getSize() == 0) {
-        //     storage.addLast(new LinkedList<>());
+        // storage.addLast(new LinkedList<>());
         // }
         // storage.getLast().add(source);
 
-        queue.enqueue(source);
+
+        queue.addLast(source);
     }
 
     public void plus() {
