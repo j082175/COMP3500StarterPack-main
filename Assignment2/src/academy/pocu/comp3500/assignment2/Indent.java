@@ -8,13 +8,14 @@ public final class Indent {
     // private LinkedList<String> linkedList = new LinkedList<>();
     // private LinkedList<LinkedList<String>> storage = new LinkedList<>();
 
-    private LinkedList<String> queue = new LinkedList<>();
+    private LinkedList<String> linkedList = new LinkedList<>();
 
     private Indent next;
     private Indent before;
+
     private String data;
 
-    private static int count;
+    private static int count = -1;
     private int index;
 
     private static int indentLevel;
@@ -22,6 +23,7 @@ public final class Indent {
     public Indent() {
         index = count;
         count++;
+
     }
 
     public void setNext(Indent i) {
@@ -49,13 +51,13 @@ public final class Indent {
         }
 
         if (data == null) {
-            //this.data = text + System.lineSeparator();
-            queue.addLast(text);
+            // this.data = text + System.lineSeparator();
+            linkedList.addLast(text);
             return;
         }
 
         this.data += text;
-        //this.data += System.lineSeparator();
+        // this.data += System.lineSeparator();
     }
 
     public String getData() {
@@ -67,13 +69,24 @@ public final class Indent {
     }
 
     public void discard() {
-        before.setNext(null);
-        Logger.resetEnd(before);
+
+        Indent ind = this;
+        if (ind.getLinkedList().getSize() == 0) {
+            return;
+        }
+
+        while (ind.getNext() != null) {
+            ind.getLinkedList().clear();
+
+            ind = ind.getNext();
+        }
+
+
         indentLevel = index;
     }
 
-    public LinkedList<String> getQueue() {
-        return this.queue;
+    public LinkedList<String> getLinkedList() {
+        return this.linkedList;
     }
 
     public void setLinkedList(String text) {
@@ -84,8 +97,7 @@ public final class Indent {
         // }
         // storage.getLast().add(source);
 
-
-        queue.addLast(source);
+        linkedList.addLast(source);
     }
 
     public void plus() {

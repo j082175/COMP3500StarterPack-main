@@ -21,10 +21,6 @@ public final class Logger {
 
     private static int indentLevel;
 
-    public Logger() {
-        start.setBefore(end);
-    }
-
     private static String padLeft(String s, int n) {
         return String.format("%" + n + "s", s);
     }
@@ -39,6 +35,7 @@ public final class Logger {
         // storage.add(new Indent());
         // }
         // storage.getLast().setLinkedList(text);
+
 
         if (start == null) {
             start = new Indent();
@@ -86,11 +83,10 @@ public final class Logger {
         // }
 
         Indent ind = start;
-        
 
         while (ind != null) {
 
-            Iterator<String> iter = ind.getQueue().iterator();
+            Iterator<String> iter = ind.getLinkedList().iterator();
             while (iter.hasNext()) {
                 result = iter.next();
                 writer.write(result + System.lineSeparator());
@@ -105,7 +101,7 @@ public final class Logger {
         // int length = storage.getSize();
 
         // if (length == 0) {
-        //     return;
+        // return;
         // }
 
         String result = null;
@@ -113,24 +109,23 @@ public final class Logger {
 
         // while (iter1.hasNext()) {
 
-        //     Indent q = iter1.next();
-        //     int length2 = q.getQueue().getSize();
+        // Indent q = iter1.next();
+        // int length2 = q.getQueue().getSize();
 
-        //     for (int i = 0; i < length2; i++) {
-        //         result = q.getQueue().dequeue();
-        //         if (result.contains(filter)) {
-        //             writer.write(result);
-        //             writer.newLine();
-        //         }
-        //     }
+        // for (int i = 0; i < length2; i++) {
+        // result = q.getQueue().dequeue();
+        // if (result.contains(filter)) {
+        // writer.write(result);
+        // writer.newLine();
         // }
-
+        // }
+        // }
 
         Indent ind = start;
 
         while (ind != null) {
 
-            Iterator<String> iter = ind.getQueue().iterator();
+            Iterator<String> iter = ind.getLinkedList().iterator();
             while (iter.hasNext()) {
                 result = iter.next();
                 if (result.contains(filter)) {
@@ -145,12 +140,12 @@ public final class Logger {
     public static void clear() {
 
         // if (storage.getSize() != 0) {
-        //     storage.getFirst().resetIndentLevel();
-        //     storage.clear();
+        // storage.getFirst().resetIndentLevel();
+        // storage.clear();
         // }
 
         start = null;
-        end = new Indent();
+        end.setBefore(null);
         indentLevel = 0;
     }
 
@@ -173,8 +168,7 @@ public final class Logger {
             end.setBefore(indent);
         }
 
-
-        //indent.setData("  ");
+        // indent.setData(" ");
 
         indentLevel = indentLevel + 2;
 
@@ -186,7 +180,7 @@ public final class Logger {
         // Indent indent = new Indent();
         // indent.minus();
         // storage.add(indent);
-//---------------------------------------------
+        // ---------------------------------------------
         // Indent indent = end.getBefore();
 
         // String str = indent.getData();
