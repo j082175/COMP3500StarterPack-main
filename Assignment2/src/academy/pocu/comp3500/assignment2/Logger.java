@@ -21,6 +21,10 @@ public final class Logger {
 
     private static int indentLevel;
 
+    public Logger() {
+        start.setBefore(end);
+    }
+
     private static String padLeft(String s, int n) {
         return String.format("%" + n + "s", s);
     }
@@ -147,7 +151,7 @@ public final class Logger {
 
         start = null;
         end = new Indent();
-
+        indentLevel = 0;
     }
 
     public static Indent indent() {

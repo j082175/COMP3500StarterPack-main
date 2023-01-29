@@ -35,6 +35,7 @@ public class Program {
         // Logger.unindent();
         // indent.discard(); // ### 추가 부분 ###
 
+        // Logger.clear();
         // log("first level 2");
         // Logger.printTo(writer);
         /////////////////////////////////////////////////
