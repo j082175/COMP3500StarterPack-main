@@ -8,7 +8,7 @@ public final class Indent {
     // private LinkedList<String> linkedList = new LinkedList<>();
     // private LinkedList<LinkedList<String>> storage = new LinkedList<>();
 
-    //private LinkedList<String> linkedList = new LinkedList<>();
+    // private LinkedList<String> linkedList = new LinkedList<>();
 
     private Indent next;
 
@@ -17,7 +17,7 @@ public final class Indent {
     private static int count = -1;
     private int index;
 
-    private static int indentLevel;
+    private int indentLevel;
 
     private boolean isDiscarded;
 
@@ -40,7 +40,6 @@ public final class Indent {
         return this.next;
     }
 
-
     public void setData(String text) {
         // String source = padLeft(text, text.length() + indentLevel);
 
@@ -50,8 +49,8 @@ public final class Indent {
         }
 
         if (data == null) {
-             this.data = text;
-            //linkedList.addLast(text);
+            this.data = text;
+            // linkedList.addLast(text);
             return;
         }
 
@@ -68,64 +67,72 @@ public final class Indent {
     }
 
     public void discard() {
-        
+
         Indent start = this;
 
         if (start.isDiscarded == true) {
             return;
         }
 
+        int currentIndentLevel = indentLevel;
+
         while (start != null) {
-            start.isDiscarded = true;
+            if (currentIndentLevel <= start.getIndentLevel()) {
+                start.isDiscarded = true;
+
+            } else {
+                break;
+            }
             start = start.getNext();
         }
 
-        
         // Indent ind = this;
         // if (ind.getLinkedList().getSize() == 0) {
-        //     return;
+        // return;
         // }
 
         // while (ind.getNext() != null) {
-        //     ind.getLinkedList().clear();
+        // ind.getLinkedList().clear();
 
-        //     ind = ind.getNext();
+        // ind = ind.getNext();
         // }
 
-
-        indentLevel = index;
     }
 
     // public LinkedList<String> getLinkedList() {
-    //     return this.linkedList;
+    // return this.linkedList;
     // }
 
     // public void setLinkedList(String text) {
-    //     String source = padLeft(text, text.length() + indentLevel);
+    // String source = padLeft(text, text.length() + indentLevel);
 
-    //     // if (storage.getSize() == 0) {
-    //     // storage.addLast(new LinkedList<>());
-    //     // }
-    //     // storage.getLast().add(source);
+    // // if (storage.getSize() == 0) {
+    // // storage.addLast(new LinkedList<>());
+    // // }
+    // // storage.getLast().add(source);
 
-    //     linkedList.addLast(source);
+    // linkedList.addLast(source);
     // }
 
-    public void plus() {
-        Indent.indentLevel = Indent.indentLevel + 2;
+    public void plusIndentLevel() {
+        indentLevel = indentLevel + 2;
     }
 
-    public void minus() {
-        if (Indent.indentLevel >= 2) {
-            Indent.indentLevel = Indent.indentLevel - 2;
+    public void minusIndentLevel() {
+        if (indentLevel >= 2) {
+            indentLevel = indentLevel - 2;
         }
     }
 
+    public void setIndentLevel(int value) {
+        this.indentLevel = value;
+    }
+
     public int getIndentLevel() {
-        return Indent.indentLevel;
+        return indentLevel;
     }
 
     public void resetIndentLevel() {
-        Indent.indentLevel = 0;
+        indentLevel = 0;
     }
 }

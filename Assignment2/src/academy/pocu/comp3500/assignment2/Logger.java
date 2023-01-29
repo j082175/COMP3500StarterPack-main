@@ -45,6 +45,8 @@ public final class Logger {
             String s = padLeft(text, indentLevel + text.length());
             current.setData(s);
 
+            current.setIndentLevel(indentLevel);
+
             //current.setNext(end);
             //current.setBefore(null);
             // end.setBefore(current);
@@ -63,6 +65,8 @@ public final class Logger {
 
             String s = padLeft(text, indentLevel + text.length());
             current.setData(s);
+
+            current.setIndentLevel(indentLevel);
         } else {
 
             Indent ind = new Indent();
@@ -71,6 +75,7 @@ public final class Logger {
             current = current.getNext();
 
             current.setData(text);
+            current.setIndentLevel(indentLevel);
         }
 
     }
@@ -155,6 +160,7 @@ public final class Logger {
 
 
         indentLevel = indentLevel + 2;
+        current.setIndentLevel(indentLevel);
 
         return indent;
     }
@@ -172,6 +178,9 @@ public final class Logger {
         // indent.setData(null);
         // indent.setData(str);
 
-        indentLevel = indentLevel - 2;
+        if (indentLevel != 0) {
+            indentLevel = indentLevel - 2;
+        }
+
     }
 }

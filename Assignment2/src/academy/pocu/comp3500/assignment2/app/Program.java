@@ -65,7 +65,9 @@ public class Program {
         // Logger.clear();
         // Logger.printTo(writer);
 
-        testTotal();
+        // testTotal();
+
+        testCombined();
 
         writer.close();
     }
@@ -312,5 +314,45 @@ public class Program {
 
             writer2.close();
         }
+    }
+
+    private static void testCombined() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+
+        log("a");
+        Indent indent = Logger.indent();
+        log("b");
+        Indent indent2 = Logger.indent();
+        log("c");
+        log("d");
+        log("e");
+        log("f");
+        Indent indent3 = Logger.indent();
+        log("g");
+        log("h");
+        log("i");
+        Logger.unindent();
+        log("a");
+        log("b");
+        Logger.unindent();
+        log("c");
+        log("d");
+        Indent indent4 = Logger.indent();
+        log("e");
+        log("f");
+        log("g");
+        Logger.unindent();
+        log("hoho");
+
+        indent.discard();
+        log("start");
+        Indent indent5 = Logger.indent();
+        log("start2");
+        indent5.discard();
+        Logger.indent();
+        log("start3");
+
+        Logger.printTo(writer);
+        writer.close();
     }
 }
