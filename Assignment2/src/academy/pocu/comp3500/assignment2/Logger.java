@@ -56,24 +56,19 @@ public final class Logger {
 
         if (indentLevel != 0) {
 
-            if (current.getDiscarede() == true) {
-                Indent ind = new Indent();
-                current.setNext(ind);
+            Indent ind = new Indent();
+            current.setNext(ind);
 
-                current = current.getNext();
-            }
+            current = current.getNext();
 
             String s = padLeft(text, indentLevel + text.length());
             current.setData(s);
         } else {
 
-            if (current.getDiscarede() == true) {
-                Indent ind = new Indent();
-                current.setNext(ind);
+            Indent ind = new Indent();
+            current.setNext(ind);
 
-                current = current.getNext();
-                
-            }
+            current = current.getNext();
 
             current.setData(text);
         }
@@ -88,11 +83,17 @@ public final class Logger {
         while (ind != null) {
 
             if (!ind.getDiscarede()) {
-                Iterator<String> iter = ind.getLinkedList().iterator();
-                while (iter.hasNext()) {
-                    result = iter.next();
+                // Iterator<String> iter = ind.getLinkedList().iterator();
+                // while (iter.hasNext()) {
+                //     result = iter.next();
+                //     writer.write(result + System.lineSeparator());
+                // }
+
+                result = ind.getData();
+                if (result != null) {
                     writer.write(result + System.lineSeparator());
                 }
+
             }
 
             ind = ind.getNext();
@@ -108,12 +109,17 @@ public final class Logger {
         while (ind != null) {
 
             if (!ind.getDiscarede()) {
-                Iterator<String> iter = ind.getLinkedList().iterator();
-                while (iter.hasNext()) {
-                    result = iter.next();
-                    if (result.contains(filter)) {
-                        writer.write(result + System.lineSeparator());
-                    }
+                // Iterator<String> iter = ind.getLinkedList().iterator();
+                // while (iter.hasNext()) {
+                //     result = iter.next();
+                //     if (result.contains(filter)) {
+                //         writer.write(result + System.lineSeparator());
+                //     }
+                // }
+
+                result = ind.getData();
+                if (result != null && result.contains(filter)) {
+                    writer.write(result + System.lineSeparator());
                 }
             }
 
@@ -136,10 +142,6 @@ public final class Logger {
     public static Indent indent() {
         // 들여쓰기는 빈칸 2개
 
-        // Indent indent = new Indent();
-        // indent.plus();
-        // storage.add(indent);
-
         Indent indent = null;
 
         if (current != null) {
@@ -151,7 +153,6 @@ public final class Logger {
 
         }
 
-        // indent.setData(" ");
 
         indentLevel = indentLevel + 2;
 

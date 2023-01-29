@@ -21,23 +21,23 @@ public class Program {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        log("first level 1");
+        // log("first level 1");
 
-        Indent indent = Logger.indent();
-        {
-        log("second level 1");
-        log("second level 2");
+        // Indent indent = Logger.indent();
+        // {
+        // log("second level 1");
+        // log("second level 2");
 
-        doMagic();
+        // doMagic();
 
-        log("second level 3");
-        }
-        Logger.unindent();
-        indent.discard(); // ### 추가 부분 ###
+        // log("second level 3");
+        // }
+        // Logger.unindent();
+        // //indent.discard(); // ### 추가 부분 ###
 
-        log("first level 2");
-        Logger.clear();
-        Logger.printTo(writer);
+        // log("first level 2");
+
+        // Logger.printTo(writer);
         /////////////////////////////////////////////////
         // log("1");
         // Indent i1 = Logger.indent();
@@ -65,7 +65,7 @@ public class Program {
         // Logger.clear();
         // Logger.printTo(writer);
 
-        //testTotal();
+        testTotal();
 
         writer.close();
     }
