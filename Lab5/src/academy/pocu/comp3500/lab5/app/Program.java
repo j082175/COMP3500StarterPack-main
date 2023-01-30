@@ -140,11 +140,11 @@ public class Program {
 
         byte[] signature = decodeFromHexString(TEST_1_TEST_2_5000_SIGNATURE);
 
-        //boolean wrongAccountTransferResult = bank.transfer(receiverPublicKey, senderPublicKey, AMOUNT, signature);
-        //assert (!wrongAccountTransferResult);
+        boolean wrongAccountTransferResult = bank.transfer(receiverPublicKey, senderPublicKey, AMOUNT, signature);
+        assert (!wrongAccountTransferResult);
 
-        //boolean wrongAmountTransferResult = bank.transfer(senderPublicKey, receiverPublicKey, WRONG_AMOUNT, signature);
-        //assert (!wrongAmountTransferResult);
+        boolean wrongAmountTransferResult = bank.transfer(senderPublicKey, receiverPublicKey, WRONG_AMOUNT, signature);
+        assert (!wrongAmountTransferResult);
 
         boolean transferResult = bank.transfer(senderPublicKey, receiverPublicKey, AMOUNT, signature);
         assert (transferResult);

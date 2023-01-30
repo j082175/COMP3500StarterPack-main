@@ -13,7 +13,6 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -57,31 +56,37 @@ public class Bank {
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
 
-                MessageDigest md = MessageDigest.getInstance("SHA-256");
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-                byte[] byteArray = ByteBuffer.allocate(8).putLong(amount).array();
+        byte[] byteArray = ByteBuffer.allocate(8).putLong(amount).array();
 
-                md.update(from);
-                md.update(to);
-                md.update(byteArray);
+        md.update(from);
+        md.update(to);
+        md.update(byteArray);
 
-                PublicKey senderPub = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(from));
+        PublicKey senderPub = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(from));
 
-                String sigStr = encodeToHexString(signature);
+        String sigStr = encodeToHexString(signature);
 
-                byte[] decryptByte = decrypt(sigStr, senderPub);
-                byte[] result = md.digest();
+        byte[] decryptByte;
+        try {
+            decryptByte = decrypt(sigStr, senderPub);
+        } catch (Exception e) {
+            return false;
+        }
 
-                String compare1 = encodeToHexString(decryptByte);
-                String compare2 = encodeToHexString(result);
+        byte[] result = md.digest();
 
-                if (compare1.equals(compare2)) {
+        String compare1 = encodeToHexString(decryptByte);
+        String compare2 = encodeToHexString(result);
 
-                    hashMap.replace(to, hashMap.get(to) + amount);
-                    hashMap.replace(from, hashMap.get(from) - amount);
+        if (compare1.equals(compare2)) {
 
-                    return true;
-                }
+            hashMap.replace(to, hashMap.get(to) + amount);
+            hashMap.replace(from, hashMap.get(from) - amount);
+
+            return true;
+        }
 
         return false;
     }
