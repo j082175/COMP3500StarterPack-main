@@ -56,13 +56,17 @@ public class Bank {
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
 
-                if (!hashMap.containsKey(from) || !hashMap.containsKey(to)) {
-                    return false;
-                }
+        if (!hashMap.containsKey(from)) {
+            return false;
+        }
 
-                if (amount < 0) {
-                    return false;
-                }
+        if (!hashMap.containsKey(to)) {
+            return false;
+        }
+
+        if (amount <= 0) {
+            return false;
+        }
 
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
@@ -101,7 +105,6 @@ public class Bank {
             } else {
                 return false;
             }
-
 
             return true;
         }

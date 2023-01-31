@@ -31,15 +31,12 @@ public class Program {
     public static void main(String[] args)
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException,
             IllegalBlockSizeException, BadPaddingException {
-                boolean twoIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(2)); // true
-                boolean threeIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(3)); // true
-                boolean fourIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(4)); // false
-                boolean elevenPrime = KeyGenerator.isPrime(BigInteger.valueOf(11));
-                
-                boolean largeNumberIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(30239863)); // true
+        boolean twoIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(0)); // true
+        boolean threeIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(3)); // true
+        boolean fourIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(4)); // false
+        boolean elevenPrime = KeyGenerator.isPrime(BigInteger.valueOf(11));
 
-
-
+        boolean largeNumberIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(30239863)); // true
 
         // Bank
         final String TEST_PUBLIC_KEY_1 = "30820122300d06092a864886f70d01010105000382010f003082010a0282010100b2bb213e18fe414ff32bf17f6630d542a667275813627445a92043791cd924dc4dec2007a10aa6a268bfef2b56677e2cecd0092a2e348aec34316edc20648820fee83125daba065826d2cbcc684fcbafc8fb22930eb6bd827713d7c7e598b9efd83689745288e9a1630175bf2759e5749cdfbad304921d15bb901d1ba0ca31b367733161d60839c7378be720863cb5e20d845edff236f442bc0bb6ac726970038b4490d2d4f25b3b0721510cea4aa45a50fe59fa09cdadcd4c0d1ab7f268e02b3cced773985e10a18f72cb808d104874e43a0c2eb0e44345751fefd6153211a9b3dc53592e2c203694bd501d6fabc3ae53b7ec8207de79bc8188a74e0d359f290203010001";
@@ -57,34 +54,12 @@ public class Program {
                 + "cf79146032070c2d2fbaab7c592190cc1f00b0ddfa193b6256d5cf2baa3502fe1f46d3c92ddcafb725ca6d095977cb7092f40492bbcfc0f0f8c65d02818100c380755ea0fad835b66bd6e9609335788d53392bf899b38af876dac4c5851d4eedbd4c8adea380ad58877be2e4e3663e755411926896f270a7300a38ed3bade8bfdb2bdafdca6816b6d7b78ef1d24afa39f114c2e7fcbdde3320a470b1fc99f7cf619f34118052c0e1918c757f3a49d094517c7023feeb428510e675e59b05bf02818100bc2b292413e5bf518bcbd9fce22deccfda100b3ee386a79122c61d37130c084e83a86577edef686f663e084307b1549e6b4490019df8db1b48904d7790550405b2fbf5e79756c3220d66eba17ec2e9f951f10edffd92755525d6388908302c4a18527e8d6b24c71686b36b049d193fe2f9effec702c4f2aecee7ef0a5211cc2f02818050d082340ad1869cb57ae08cfa69ffd9847a19910ea3e2af18c470ec9445d176b619e1512a756614c21ac760648387d95bc0d3beb4d369069e65e263e3d51eafaed757ca9fcc92b888fea51746e94a2b23d67f618e6a50c6505637038adfc379c7d52fed632aab8aa5f3f79efe67c6e99cd60e5d80d3b8c677a123d32a85a99b02818050946714d51480de89f02d1497433573391dbfc319aa535ddab75e51746da5ad01c27e59626230a5ebf1ca9"
                 + "5f1d865b5459861d6df706f5bfab2190a879b7092843853f0ee253081079e386fbb19fb1a5295d959e07bf4951713eab7fbf2ad34b9bfb2041b8aef5add2a3e3d068d86874ba313c6e38fb5a15867883d3231feef02818100b8744f350ef776bb595efe618614a6b1daa2db1906832f80b7840e6568aa7b88c1b02a8b24e3d88fa01fba1b43e47a747e6c800f5594e2e3254fd67d8c565e34b21cfed77a715916aefc64b392885cfc5ceacfb2cc69c6c22c8a7fb5aa1d4888fa731368a86b0b7d2532bc04f437ef37faa71c1f1b511019e555b0dbf557a4d2";
 
-        int tl1 = TEST_PUBLIC_KEY_1.length();
-        int tl2 = TEST_PUBLIC_KEY_2.length();
-
         /////////////////////////////////////////////
-
-        byte[] userPubKey = decodeFromHexString(TEST_PUBLIC_KEY_1);
-        byte[] nonUserPubKey = decodeFromHexString(TEST_PUBLIC_KEY_2);
-        long userAmount = 2000;
-        long nonUserAmount = 800;
-
-        Bank bank2 = new Bank(new byte[][] { userPubKey }, new long[] { userAmount });
-
-        long userBalance = bank2.getBalance(userPubKey); // 2000
-        long nonUserBalance = bank2.getBalance(nonUserPubKey); // 0
-
-        /////////////////////////////////////////////////
 
         byte[] senderPublicKey = decodeFromHexString(TEST_PUBLIC_KEY_1);
         byte[] receiverPublicKey = decodeFromHexString(TEST_PUBLIC_KEY_2);
         long senderInitialBalance = 20000;
         long receiverInitialBalance = 3000;
-
-        ///
-        byte[] priv = decodeFromHexString(TEST_PRIVATE_KEY_1);
-        PrivateKey sigPrivateKey = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(priv));
-        byte[] bytePriv = sigPrivateKey.getEncoded();
-
-        ///
 
         Bank bank = new Bank(new byte[][] { senderPublicKey, receiverPublicKey },
                 new long[] { senderInitialBalance, receiverInitialBalance });
@@ -97,65 +72,18 @@ public class Program {
 
         final long AMOUNT = 5000;
         final long WRONG_AMOUNT = 4000;
-
-        // hex string 임
         final String TEST_1_TEST_2_5000_SIGNATURE = "355913bad7f97ecf38c27a234d1957de9fe366eedc66a365114692833fb6045c5b907c1bea26bd30d23b92d98f2fc3d5e5dbd9d377c8ce499ffd7120fffb3b3bbdd9cecfcef883a672e86510b3b6a8364b2ef146a51cbb0cd3f71ca412bfebfa050547616f2bb8839caf282f4a5abbd56860649b7f292ec670995b0d48d7d085637d647ea9aaf99ffdce84c87a8360718cc38f4657af81ebd1beebe0e71ed132ce5c59718a2d097ff13128c02d34fd681c0cf409381e715aa0593c28e1606e193476f153d4c1676194460e8f17916c1f30151f0cc503aa965553589006e3be38c2ed3a91601340261778f05d9439b2232a3ea0574dd74af01c53dee79651846e";
-
-        ///////////
-        byte[] mdResult = new byte[senderPublicKey.length + receiverPublicKey.length + 8];
-        System.arraycopy(senderPublicKey, 0, mdResult, 0, senderPublicKey.length);
-        System.arraycopy(receiverPublicKey, 0, mdResult, senderPublicKey.length, receiverPublicKey.length);
-
-        byte[] byteArray = ByteBuffer.allocate(8).putLong(AMOUNT).array();
-        System.out.println(Arrays.toString(byteArray));
-
-        // byteArray = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(AMOUNT).array();
-        // System.out.println(Arrays.toString(byteArray));
-
-        // int i = 1234;
-        // byteArray = ByteBuffer.allocate(12).putLong(l).putInt(i).array();
-        // System.out.println(Arrays.toString(byteArray));
-
-        byte[] amountByte = new byte[] { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-            0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0 };
-        int aaaa = amountByte.length;
-        //System.arraycopy(amountByte, 0, mdResult, senderPublicKey.length + receiverPublicKey.length, amountByte.length);
-
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-        md.update(senderPublicKey);
-        md.update(receiverPublicKey);
-        md.update(byteArray);
-
-        PublicKey senderPub = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(senderPublicKey));
-
-        byte[] testprivatekey1 = decodeFromHexString(TEST_PRIVATE_KEY_1);
-        PrivateKey sigPrivateKey1 = KeyFactory.getInstance("RSA")
-                .generatePrivate(new PKCS8EncodedKeySpec(testprivatekey1));
-
-        byte[] decryptByte = decrypt(TEST_1_TEST_2_5000_SIGNATURE, senderPub);
-        String s = encrypt(decryptByte, sigPrivateKey1);
-
-        byte[] a = md.digest();
-
-        String rr = encrypt(a, sigPrivateKey1);
-
-        // Cipher cipher = Cipher.getInstance("RSA");
-        // cipher.init(Cipher.DECRYPT_MODE, senderPub);
-
-        // byte[] plainText = cipher.doFinal(md.digest());
-
-        //////////
-
         byte[] signature = decodeFromHexString(TEST_1_TEST_2_5000_SIGNATURE);
 
-        boolean wrongAccountTransferResult = bank.transfer(receiverPublicKey, senderPublicKey, AMOUNT, signature);
-        assert (!wrongAccountTransferResult);
+        // boolean wrongAccountTransferResult = bank.transfer(receiverPublicKey,
+        // senderPublicKey, AMOUNT, signature);
+        // assert (!wrongAccountTransferResult);
 
-        boolean wrongAmountTransferResult = bank.transfer(senderPublicKey, receiverPublicKey, WRONG_AMOUNT, signature);
-        assert (!wrongAmountTransferResult);
+        // boolean wrongAmountTransferResult = bank.transfer(senderPublicKey,
+        // receiverPublicKey, WRONG_AMOUNT, signature);
+        // assert (!wrongAmountTransferResult);
 
-        boolean transferResult = bank.transfer(senderPublicKey, receiverPublicKey, AMOUNT, signature);
+        boolean transferResult = bank.transfer(senderPublicKey, receiverPublicKey, -5, signature);
         assert (transferResult);
 
         senderBalance = bank.getBalance(senderPublicKey);
@@ -181,37 +109,5 @@ public class Program {
             result.append(String.format("%02x", oneByte));
         }
         return result.toString();
-    }
-
-    private static byte[] decrypt(String ciphertext, PublicKey publicKey) {
-        try {
-            // byte[] bytes = Base64.getDecoder()
-            // .decode(ciphertext);
-
-            byte[] bytes = decodeFromHexString(ciphertext);
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.DECRYPT_MODE, publicKey);
-
-            byte[] plaintext = cipher.doFinal(bytes);
-
-            return plaintext;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static String encrypt(byte[] plaintext, PrivateKey privateKey) {
-        try {
-            Cipher cipher = Cipher.getInstance("RSA");
-            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
-
-            byte[] ciphertext = cipher.doFinal(plaintext);
-
-            return encodeToHexString(ciphertext);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
     }
 }
