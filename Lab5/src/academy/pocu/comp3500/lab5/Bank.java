@@ -60,7 +60,7 @@ public class Bank {
         }
 
         if (!hashMap.containsKey(to)) {
-            throw new Exception();
+            hashMap.put(to, (long)0);
         }
 
         if (amount <= 0) {
