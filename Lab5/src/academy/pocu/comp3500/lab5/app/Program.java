@@ -34,12 +34,25 @@ public class Program {
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException,
             IllegalBlockSizeException, BadPaddingException {
 
-        boolean twoIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(-1)); // true
+    for (int i = 0; i < 100; i++) {
+        if (KeyGenerator.isPrime(new BigInteger(Integer.toString(i)))) {
+            System.out.println(i);
+        }
+    }
+
+        boolean aa = KeyGenerator.isPrime(new BigInteger("-1")); // false
+        boolean oneIsPrime = KeyGenerator.isPrime(new BigInteger("1")); // false
+        boolean twoIsPrime = KeyGenerator.isPrime(new BigInteger("2")); // true
         boolean threeIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(3)); // true
         boolean fourIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(4)); // false
-        boolean elevenPrime = KeyGenerator.isPrime(BigInteger.valueOf(11));
+        boolean elevenPrime = KeyGenerator.isPrime(BigInteger.valueOf(733)); // true
 
         boolean largeNumberIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(30239863)); // true
+        boolean largeNumberIsPrime2 = KeyGenerator.isPrime(new BigInteger("531646452524134133434232111")); // true
+        boolean largeNumberIsPrime3 = KeyGenerator.isPrime(new BigInteger("5316464525241341334342321111")); // false
+
+        boolean prime1 = KeyGenerator
+                .isPrime(new BigInteger("999999999999999999999999999999999999999999999999999999999999997"));
 
         // Bank
         final String TEST_PUBLIC_KEY_1 = "30820122300d06092a864886f70d01010105000382010f003082010a0282010100b2bb213e18fe414ff32bf17f6630d542a667275813627445a92043791cd924dc4dec2007a10aa6a268bfef2b56677e2cecd0092a2e348aec34316edc20648820fee83125daba065826d2cbcc684fcbafc8fb22930eb6bd827713d7c7e598b9efd83689745288e9a1630175bf2759e5749cdfbad304921d15bb901d1ba0ca31b367733161d60839c7378be720863cb5e20d845edff236f442bc0bb6ac726970038b4490d2d4f25b3b0721510cea4aa45a50fe59fa09cdadcd4c0d1ab7f268e02b3cced773985e10a18f72cb808d104874e43a0c2eb0e44345751fefd6153211a9b3dc53592e2c203694bd501d6fabc3ae53b7ec8207de79bc8188a74e0d359f290203010001";
