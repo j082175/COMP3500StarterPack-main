@@ -34,18 +34,21 @@ public class Program {
             throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException,
             IllegalBlockSizeException, BadPaddingException {
 
-    for (int i = 0; i < 100; i++) {
-        if (KeyGenerator.isPrime(new BigInteger(Integer.toString(i)))) {
-            System.out.println(i);
+        for (int i = 0; i < 1000; i++) {
+            if (KeyGenerator.isPrime(new BigInteger(Integer.toString(i)))) {
+                System.out.println(i);
+            }
         }
-    }
 
-        boolean aa = KeyGenerator.isPrime(new BigInteger("-1")); // false
+        boolean aa = KeyGenerator.isPrime(new BigInteger("0")); // false
         boolean oneIsPrime = KeyGenerator.isPrime(new BigInteger("1")); // false
         boolean twoIsPrime = KeyGenerator.isPrime(new BigInteger("2")); // true
         boolean threeIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(3)); // true
+        boolean threeIsPrime2 = KeyGenerator.isPrime(new BigInteger("3")); // true
         boolean fourIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(4)); // false
+        boolean fourIsPrime2 = KeyGenerator.isPrime(new BigInteger("4")); // false
         boolean elevenPrime = KeyGenerator.isPrime(BigInteger.valueOf(733)); // true
+        boolean elevenPrime2 = KeyGenerator.isPrime(new BigInteger("733")); // true
 
         boolean largeNumberIsPrime = KeyGenerator.isPrime(BigInteger.valueOf(30239863)); // true
         boolean largeNumberIsPrime2 = KeyGenerator.isPrime(new BigInteger("531646452524134133434232111")); // true

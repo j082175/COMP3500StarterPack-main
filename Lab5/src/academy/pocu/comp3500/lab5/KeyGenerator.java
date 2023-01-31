@@ -19,13 +19,17 @@ public class KeyGenerator {
         // return true;
         // }
 
-        // if (number.intValue() == 1) {
-        //     return false;
-        // }
+        if (number.intValue() == 1) {
+            return false;
+        }
 
-        // if (number.intValue() == 2) {
-        //     return true;
-        // }
+        if (number.intValue() == 2) {
+            return true;
+        }
+
+        if (number.intValue() == 3) {
+            return true;
+        }
 
         // if (number.remainder(BigInteger.TWO) == BigInteger.ZERO) {
         //     return false;
