@@ -114,7 +114,7 @@ public class Program {
         assert (senderBalance == senderInitialBalance - AMOUNT);
         assert (receiverBalance == receiverInitialBalance + AMOUNT);
 
-        byte[] r = null;
+        byte[] r = new byte[1];
         Bank bank2 = new Bank(new byte[][] { senderPublicKey, r },
                 new long[] { senderInitialBalance, receiverInitialBalance });
 
