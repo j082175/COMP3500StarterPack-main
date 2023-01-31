@@ -30,7 +30,7 @@ public class KeyGenerator {
             return false;
         }
 
-        if (MillerRabin.isProbablePrime(number, 10)) {
+        if (MillerRabin.isProbablePrime(number, 1000)) {
             return true;
         }
 
