@@ -68,6 +68,10 @@ public class Bank {
             return false;
         }
 
+        if (to == null) {
+            return false;
+        }
+
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
         byte[] byteArray = ByteBuffer.allocate(8).putLong(amount).array();

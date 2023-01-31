@@ -40,6 +40,7 @@ public class Program {
             }
         }
 
+
         boolean aa = KeyGenerator.isPrime(new BigInteger("0")); // false
         boolean oneIsPrime = KeyGenerator.isPrime(new BigInteger("1")); // false
         boolean twoIsPrime = KeyGenerator.isPrime(new BigInteger("2")); // true
@@ -104,7 +105,7 @@ public class Program {
 
         byte[] dummy = { 1, 2, 3 };
 
-        boolean transferResult = bank.transfer(senderPublicKey, dummy, AMOUNT, signature);
+        boolean transferResult = bank.transfer(senderPublicKey, receiverPublicKey, AMOUNT, signature);
         assert (transferResult);
 
         senderBalance = bank.getBalance(senderPublicKey);
@@ -112,6 +113,12 @@ public class Program {
 
         assert (senderBalance == senderInitialBalance - AMOUNT);
         assert (receiverBalance == receiverInitialBalance + AMOUNT);
+
+        byte[] r = null;
+        Bank bank2 = new Bank(new byte[][] { senderPublicKey, r },
+                new long[] { senderInitialBalance, receiverInitialBalance });
+
+                boolean tr2 = bank2.transfer(senderPublicKey, r, AMOUNT, signature);
     }
 
     private static byte[] decodeFromHexString(String hexString) {
@@ -132,65 +139,4 @@ public class Program {
         return result.toString();
     }
 
-    ////
-
-    public static long addmod(long x, long y, long m) {
-        x %= m;
-        y %= m;
-        return (x >= m - y ? x - (m - y) : x + y);
-    }
-
-    // calculate (x * y) % m; overlow-safe
-    public static long mulmod(long x, long y, long m) {
-        x %= m;
-        y %= m;
-        long r = 0;
-        while (y > 0) {
-            if (y % 2 == 1)
-                r = addmod(r, x, m);
-            x = addmod(x, x, m);
-            y /= 2;
-        }
-        return r;
-    }
-
-    // calculate x^y % m; overflow-safe
-    public static long powmod(long x, long y, long m) {
-        x %= m;
-        long r = 1;
-        while (y > 0) {
-            if (y % 2 == 1)
-                r = mulmod(r, x, m);
-            x = mulmod(x, x, m);
-            y /= 2;
-        }
-        return r;
-    }
-
-    // true for probable prime, false for composite
-    public static boolean miller_rabin(long n, long a) {
-        long d = n - 1;
-        while (d % 2 == 0) {
-            if (powmod(a, d, n) == n - 1)
-                return true;
-            d /= 2;
-        }
-        long tmp = powmod(a, d, n);
-        return tmp == n - 1 || tmp == 1;
-    }
-
-    public static boolean is_prime(long n) {
-        if (n <= 1)
-            return false;
-        if (n <= Long.parseLong("10000000000")) {
-            for (long i = 2; i * i <= n; i++)
-                if (n % i == 0)
-                    return false;
-            return true;
-        }
-        for (long a : primeTest)
-            if (!miller_rabin(n, a))
-                return false;
-        return true;
-    }
 }

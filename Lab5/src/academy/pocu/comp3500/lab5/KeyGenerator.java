@@ -85,14 +85,12 @@ public class KeyGenerator {
         for (int i = 0; i < k; i++) {
 
             // We need to really check n-1 which is equivalent to -1.
-            if (curValue.equals(n.subtract(BigInteger.ONE)))
+            if (curValue.equals(n.subtract(BigInteger.ONE))) {
                 return true;
-
-            // Square this previous number - here I am just doubling the
-            // exponent. A more efficient implementation would store the
-            // value of the exponentiation and square it mod n.
-            else
+            } else {
                 curValue = curValue.modPow(two, n);
+            }
+
         }
 
         // If none of our tests pass, we return false. The number is
