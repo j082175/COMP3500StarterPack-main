@@ -5,19 +5,12 @@ import java.util.Random;
 
 public class KeyGenerator {
     // public static boolean[] prime;
-    static long primeTest[] = { 2, 325, 9375, 28178, 450775, 9780504, 1795265022 };
 
     public static boolean isPrime(final BigInteger number) {
 
         if (number.compareTo(BigInteger.ZERO) <= 0) {
             return false;
         }
-
-        // long val = number.longValue();
-
-        // if (is_prime(number.longValue())) {
-        // return true;
-        // }
 
         if (number.intValue() == 1) {
             return false;
@@ -31,163 +24,94 @@ public class KeyGenerator {
             return true;
         }
 
-        // if (number.remainder(BigInteger.TWO) == BigInteger.ZERO) {
-        //     return false;
-        // }
-
-        // if (MillerRabin.isProbablePrime(number, 1000)) {
-        //     return true;
-        // }
-
-        
-        // Output our result...run MillerRabin 50 times.
-        if (MillerRabin(number, 50))
+        if (millerRabin(number, 50))
             return true;
         else
             return false;
 
-        //return false;
     }
 
-    // public static long addmod(long x, long y, long m) {
-    //     x %= m;
-    //     y %= m;
-    //     return (x >= m - y ? x - (m - y) : x + y);
-    // }
+    public static boolean fermatTest(BigInteger n, Random r) {
 
-    // // calculate (x * y) % m; overlow-safe
-    // public static long mulmod(long x, long y, long m) {
-    //     x %= m;
-    //     y %= m;
-    //     long r = 0;
-    //     while (y > 0) {
-    //         if (y % 2 == 1)
-    //             r = addmod(r, x, m);
-    //         x = addmod(x, x, m);
-    //         y /= 2;
-    //     }
-    //     return r;
-    // }
-
-    // // calculate x^y % m; overflow-safe
-    // public static long powmod(long x, long y, long m) {
-    //     x %= m;
-    //     long r = 1;
-    //     while (y > 0) {
-    //         if (y % 2 == 1)
-    //             r = mulmod(r, x, m);
-    //         x = mulmod(x, x, m);
-    //         y /= 2;
-    //     }
-    //     return r;
-    // }
-
-    // // true for probable prime, false for composite
-    // public static boolean miller_rabin(long n, long a) {
-    //     long d = n - 1;
-    //     while (d % 2 == 0) {
-    //         if (powmod(a, d, n) == n - 1)
-    //             return true;
-    //         d /= 2;
-    //     }
-    //     long tmp = powmod(a, d, n);
-    //     return tmp == n - 1 || tmp == 1;
-    // }
-
-    // public static boolean is_prime(long n) {
-    //     if (n <= 1)
-    //         return false;
-    //     if (n <= Long.parseLong("10000000000")) {
-    //         for (long i = 2; i * i <= n; i++)
-    //             if (n % i == 0)
-    //                 return false;
-    //         return true;
-    //     }
-    //     for (long a : primeTest)
-    //         if (!miller_rabin(n, a))
-    //             return false;
-    //     return true;
-    // }
-
-    public static boolean FermatTest(BigInteger n, Random r) {
-        
         // Ensures that temp > 1 and temp < n.
         BigInteger temp = BigInteger.ZERO;
         do {
-            temp = new BigInteger(n.bitLength()-1, r);
+            temp = new BigInteger(n.bitLength() - 1, r);
         } while (temp.compareTo(BigInteger.ONE) <= 0);
-        
+
         // Just calculate temp^*(n-1) mod n
         BigInteger ans = temp.modPow(n.subtract(BigInteger.ONE), n);
-        
+
         // Return true iff it passes the Fermat Test!
         return (ans.equals(BigInteger.ONE));
     }
-    
-    private static boolean MyMillerRabin(BigInteger n, Random r) {
-        
+
+    private static boolean mr(BigInteger n, Random r) {
+
         // Ensures that temp > 1 and temp < n.
         BigInteger temp = BigInteger.ZERO;
         do {
-            temp = new BigInteger(n.bitLength()-1, r);
+            temp = new BigInteger(n.bitLength() - 1, r);
         } while (temp.compareTo(BigInteger.ONE) <= 0);
-        
+
         // Screen out n if our random number happens to share a factor with n.
-        if (!n.gcd(temp).equals(BigInteger.ONE)) return false;
-        
+        if (!n.gcd(temp).equals(BigInteger.ONE))
+            return false;
+
         // For debugging, prints out the integer to test with.
-        //System.out.println("Testing with " + temp);
-        
+        // System.out.println("Testing with " + temp);
+
         BigInteger base = n.subtract(BigInteger.ONE);
-        BigInteger TWO = new BigInteger("2");
-        
+        BigInteger two = new BigInteger("2");
+
         // Figure out the largest power of two that divides evenly into n-1.
-        int k=0;
-        while ( (base.mod(TWO)).equals(BigInteger.ZERO)) {
-            base = base.divide(TWO);
+        int k = 0;
+        while ((base.mod(two)).equals(BigInteger.ZERO)) {
+            base = base.divide(two);
             k++;
         }
-        
+
         // This is the odd value r, as described in our text.
-        //System.out.println("base is " + base);
-        
-        BigInteger curValue = temp.modPow(base,n);
-        
+        // System.out.println("base is " + base);
+
+        BigInteger curValue = temp.modPow(base, n);
+
         // If this works out, we just say it's prime.
         if (curValue.equals(BigInteger.ONE))
             return true;
-            
-        // Otherwise, we will check to see if this value successively 
+
+        // Otherwise, we will check to see if this value successively
         // squared ever yields -1.
-        for (int i=0; i<k; i++) {
-            
+        for (int i = 0; i < k; i++) {
+
             // We need to really check n-1 which is equivalent to -1.
             if (curValue.equals(n.subtract(BigInteger.ONE)))
                 return true;
-                
-            // Square this previous number - here I am just doubling the 
+
+            // Square this previous number - here I am just doubling the
             // exponent. A more efficient implementation would store the
             // value of the exponentiation and square it mod n.
             else
-                curValue = curValue.modPow(TWO, n);
+                curValue = curValue.modPow(two, n);
         }
-        
-        // If none of our tests pass, we return false. The number is 
+
+        // If none of our tests pass, we return false. The number is
         // definitively composite if we ever get here.
         return false;
     }
-    
-    public static boolean MillerRabin(BigInteger n, int numTimes) {
-        
+
+    public static boolean millerRabin(BigInteger n, int numTimes) {
+
         Random r = new Random();
-        
+
         // Run Miller-Rabin numTimes number of times.
-        for (int i=0; i<numTimes; i++) 
-            if (!MyMillerRabin(n,r)) return false;
-            
+        for (int i = 0; i < numTimes; i++)
+            if (!mr(n, r)) {
+                return false;
+            }
+
         // If we get here, we assume n is prime. This will be incorrect with
         // a probability no greater than 1/4^numTimes.
         return true;
     }
-
 }

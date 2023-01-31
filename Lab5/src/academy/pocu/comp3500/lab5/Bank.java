@@ -60,9 +60,9 @@ public class Bank {
             return false;
         }
 
-        // if (!hashMap.containsKey(to)) {
-        //     return false;
-        // }
+        if (!hashMap.containsKey(to)) {
+            return false;
+        }
 
         if (amount <= 0) {
             return false;
