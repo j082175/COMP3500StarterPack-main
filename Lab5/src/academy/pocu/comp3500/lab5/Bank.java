@@ -56,11 +56,7 @@ public class Bank {
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
 
-        if (!hashMap.containsKey(from)) {
-            return false;
-        }
-
-        if (!hashMap.containsKey(to)) {
+        if (!hashMap.containsKey(from) || !hashMap.containsKey(to)) {
             return false;
         }
 
@@ -68,7 +64,7 @@ public class Bank {
             return false;
         }
 
-        if (from.length != to.length) {
+        if (signature == null) {
             return false;
         }
 
