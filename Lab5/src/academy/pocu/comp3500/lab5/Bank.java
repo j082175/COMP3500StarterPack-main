@@ -56,6 +56,14 @@ public class Bank {
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
 
+                if (!hashMap.containsKey(from) || !hashMap.containsKey(to)) {
+                    return false;
+                }
+
+                if (amount < 0) {
+                    return false;
+                }
+
         MessageDigest md = MessageDigest.getInstance("SHA-256");
 
         byte[] byteArray = ByteBuffer.allocate(8).putLong(amount).array();
@@ -82,8 +90,18 @@ public class Bank {
 
         if (compare1.equals(compare2)) {
 
-            hashMap.replace(to, hashMap.get(to) + amount);
-            hashMap.replace(from, hashMap.get(from) - amount);
+            if (hashMap.get(from) >= amount) {
+
+                if (hashMap.get(to) + amount >= 0) {
+                    hashMap.replace(to, hashMap.get(to) + amount);
+                    hashMap.replace(from, hashMap.get(from) - amount);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+
 
             return true;
         }
