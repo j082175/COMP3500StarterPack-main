@@ -115,8 +115,9 @@ public class Program {
         assert (receiverBalance == receiverInitialBalance + AMOUNT);
 
         byte[] r = new byte[1];
-        Bank bank2 = new Bank(new byte[][] { senderPublicKey, r },
+        Bank bank2 = new Bank(new byte[][] { senderPublicKey, receiverPublicKey },
                 new long[] { senderInitialBalance, receiverInitialBalance });
+
 
                 boolean tr2 = bank2.transfer(senderPublicKey, r, AMOUNT, signature);
     }

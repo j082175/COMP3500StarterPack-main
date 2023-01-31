@@ -56,15 +56,15 @@ public class Bank {
             throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
             IllegalBlockSizeException, BadPaddingException {
 
-        if (!hashMap.containsKey(from) || !hashMap.containsKey(to)) {
+        if (!hashMap.containsKey(from)) {
             return false;
+        }
+
+        if (!hashMap.containsKey(to)) {
+            throw new InvalidKeyException();
         }
 
         if (amount <= 0) {
-            return false;
-        }
-
-        if (signature == null) {
             return false;
         }
 
