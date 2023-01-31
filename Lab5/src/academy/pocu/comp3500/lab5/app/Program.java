@@ -31,8 +31,7 @@ public class Program {
     static long primeTest[] = { 2, 325, 9375, 28178, 450775, 9780504, 1795265022 };
 
     public static void main(String[] args)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidKeySpecException,
-            IllegalBlockSizeException, BadPaddingException {
+            throws Exception {
 
         for (int i = 0; i < 1000; i++) {
             if (KeyGenerator.isPrime(new BigInteger(Integer.toString(i)))) {
