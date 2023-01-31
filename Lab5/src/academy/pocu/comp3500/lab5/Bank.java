@@ -68,15 +68,7 @@ public class Bank {
             return false;
         }
 
-        if (to == null) {
-            return false;
-        }
-
-        if (to.length == 0) {
-            return false;
-        }
-
-        if (to.length == 1 && to[0] == 0) {
+        if (from.length != to.length) {
             return false;
         }
 
