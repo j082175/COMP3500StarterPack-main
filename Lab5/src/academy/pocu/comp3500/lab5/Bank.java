@@ -53,15 +53,14 @@ public class Bank {
     }
 
     public boolean transfer(final byte[] from, byte[] to, final long amount, final byte[] signature)
-            throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException,
-            IllegalBlockSizeException, BadPaddingException {
+            throws Exception {
 
         if (!hashMap.containsKey(from)) {
             return false;
         }
 
         if (!hashMap.containsKey(to)) {
-            throw new InvalidKeyException();
+            throw new Exception();
         }
 
         if (amount <= 0) {
