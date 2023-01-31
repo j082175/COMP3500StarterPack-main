@@ -2,12 +2,9 @@ package academy.pocu.comp3500.lab5;
 
 import java.math.BigInteger;
 
-import academy.pocu.comp3500.assignment2.datastructure.ArrayList;
-
 public class KeyGenerator {
     // public static boolean[] prime;
     static long primeTest[]= {2,325,9375,28178,450775,9780504,1795265022};
-    public static ArrayList<Boolean> prime;
 
     public static boolean isPrime(final BigInteger number) {
 
