@@ -21,7 +21,7 @@ public class Program {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        testZip();
+        testCombined();
 
         /////////////////////////////////////////////////
         // log("1");
@@ -340,7 +340,7 @@ public class Program {
         writer.close();
     }
 
-    private static void tayhyunjoTest1() throws IOException {
+    private static void testtaehyunjo1() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
         log("first level 1");
@@ -355,7 +355,7 @@ public class Program {
             log("second level 3");
         }
         Logger.unindent();
-        // indent.discard(); // ### 추가 부분 ###
+        indent.discard(); // ### 추가 부분 ###
 
         log("first level 2");
 
@@ -363,7 +363,7 @@ public class Program {
         writer.close();
     }
 
-    private static void tayhyunjoTest2() throws IOException {
+    private static void testtaehyunjo2() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
         log("first level 1");
         Indent indent0 = Logger.indent();
@@ -389,31 +389,31 @@ public class Program {
     private static void testZip() throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-            Indent level1 = Logger.indent();
+        Indent level1 = Logger.indent();
+        {
+            log("Richard the Third");
+            log("Best bib and tucker");
+
+            Indent level2 = Logger.indent();
             {
-                log("Richard the Third");
-                log("Best bib and tucker");
-
-                Indent level2 = Logger.indent();
-                {
-                    log("Which witch is which?");
-                }
-                Logger.unindent();
-
-                log("You can lead a horse to water but you can't make it drink");
-                log("Chinless wonder");
-                log("(In the) nick of time");
-                log("Double entendre");
+                log("Which witch is which?");
             }
             Logger.unindent();
 
-            log("Cut off without a penny");
-            log("Let not poor Nelly starve");
+            log("You can lead a horse to water but you can't make it drink");
+            log("Chinless wonder");
+            log("(In the) nick of time");
+            log("Double entendre");
+        }
+        Logger.unindent();
 
-            level1.discard();
+        log("Cut off without a penny");
+        log("Let not poor Nelly starve");
 
-            Logger.printTo(writer);
+        level1.discard();
 
-            writer.close();
+        Logger.printTo(writer);
+
+        writer.close();
     }
 }
