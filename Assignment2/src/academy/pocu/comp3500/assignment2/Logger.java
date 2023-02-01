@@ -147,6 +147,11 @@ public final class Logger {
     public static Indent indent() {
         // 들여쓰기는 빈칸 2개
 
+        if (origin == null) {
+            origin = new Indent();
+            current = origin;
+        }
+
         Indent indent = null;
 
         if (current != null) {

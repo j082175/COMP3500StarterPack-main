@@ -21,23 +21,8 @@ public class Program {
 
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
-        log("first level 1");
+        testZip();
 
-        Indent indent = Logger.indent();
-        {
-            log("second level 1");
-            log("second level 2");
-
-            doMagic();
-
-            log("second level 3");
-        }
-        Logger.unindent();
-        indent.discard(); // ### 추가 부분 ###
-
-        log("first level 2");
-
-        Logger.printTo(writer);
         /////////////////////////////////////////////////
         // log("1");
         // Indent i1 = Logger.indent();
@@ -64,12 +49,11 @@ public class Program {
         // Logger.printTo(writer);
         // Logger.clear();
         // Logger.printTo(writer);
+        // writer.close();
 
         // testTotal();
 
         // testCombined();
-
-        writer.close();
     }
 
     public static String padLeft(String s, int n) {
@@ -354,5 +338,82 @@ public class Program {
 
         Logger.printTo(writer);
         writer.close();
+    }
+
+    private static void tayhyunjoTest1() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+
+        log("first level 1");
+
+        Indent indent = Logger.indent();
+        {
+            log("second level 1");
+            log("second level 2");
+
+            doMagic();
+
+            log("second level 3");
+        }
+        Logger.unindent();
+        // indent.discard(); // ### 추가 부분 ###
+
+        log("first level 2");
+
+        Logger.printTo(writer);
+        writer.close();
+    }
+
+    private static void tayhyunjoTest2() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        log("first level 1");
+        Indent indent0 = Logger.indent();
+        log("second level 1");
+        log("second level 2");
+        Indent indent1 = Logger.indent();
+        log("third level 1");
+        log("third level 2");
+        Logger.unindent();
+        log("second level 3");
+        Logger.unindent();
+        log("first level 2");
+        Indent indent2 = Logger.indent();
+        log("second level 4");
+        Indent indent3 = Logger.indent();
+        log("third level 3");
+
+        indent0.discard();
+        Logger.printTo(writer);
+        writer.close();
+    }
+
+    private static void testZip() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+
+            Indent level1 = Logger.indent();
+            {
+                log("Richard the Third");
+                log("Best bib and tucker");
+
+                Indent level2 = Logger.indent();
+                {
+                    log("Which witch is which?");
+                }
+                Logger.unindent();
+
+                log("You can lead a horse to water but you can't make it drink");
+                log("Chinless wonder");
+                log("(In the) nick of time");
+                log("Double entendre");
+            }
+            Logger.unindent();
+
+            log("Cut off without a penny");
+            log("Let not poor Nelly starve");
+
+            level1.discard();
+
+            Logger.printTo(writer);
+
+            writer.close();
     }
 }
