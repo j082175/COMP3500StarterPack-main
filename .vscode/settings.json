@@ -6,19 +6,20 @@
     "c:\\Users\\aa\\Downloads\\jakarta.xml.bind-api-4.0.0.jar"
   ],
   "java.project.sourcePaths": [
-    "Assignment1\\src",
-    "Lab2\\src",
-    "Lab3\\src",
-    "Lab4\\src",
-    "Assignment2\\src",
-    "Assignment3\\src",
-    "Assignment4\\src",
-    "Lab5\\src",
-    "Lab6\\src",
-    "Lab7\\src",
-    "Lab8\\src",
-    "Lab9\\src",
-    "Lab10\\src",
-    "Lab11\\src"
+    "Lab9/src",
+    "Lab8/src",
+    "Lab7/src",
+    "Lab6/src",
+    "Lab5/src",
+    "Lab4/src",
+    "Lab3/src",
+    "Lab2/src",
+    "Lab11/src",
+    "Lab10/src",
+    "Assignment4/src",
+    "Assignment3/src",
+    "Assignment2/src",
+    "Assignment1/src",
+    "Lab6"
   ]
 }
