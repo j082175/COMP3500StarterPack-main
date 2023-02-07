@@ -10,9 +10,9 @@ public class Program {
         Player player2 = new Player(2, "player2", 12);
         Player player3 = new Player(3, "player3", 17);
         Player player4 = new Player(4, "player4", 14);
-        
-        League league = new League(new Player[]{player1, player2, player3, player4});
-        
+
+        League league = new League(new Player[] { player1, player2 });
+
         Player player3Match = league.findMatchOrNull(player2); // player4
         Player player4Match = league.findMatchOrNull(player4); // player2
     }

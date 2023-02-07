@@ -27,10 +27,6 @@ public class League {
 
         if (hashMap.containsKey(player.getId())) {
 
-            if (this.players.length == 1) {
-                return null;
-            }
-
             SortAndFind.quickSort(players);
 
             int index = SortAndFind.find(players, player);
@@ -80,8 +76,6 @@ public class League {
         if (hashMap.containsKey(player.getId())) {
             return false;
         }
-
-
 
         return true;
     }
