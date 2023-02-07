@@ -122,15 +122,15 @@ public class League {
         // return false;
         // }
 
-        if (this.players.size() == 1) {
-            if (this.players.get(0).getRating() < player.getRating()) {
-                this.players.add(player);
-            } else {
-                this.players.add(0, player);
-            }
+        // if (this.players.size() == 1) {
+        //     if (this.players.get(0).getRating() < player.getRating()) {
+        //         this.players.add(player);
+        //     } else {
+        //         this.players.add(0, player);
+        //     }
 
-            return true;
-        }
+        //     return true;
+        // }
 
         ArrayList<Player> arrayList = new ArrayList<>();
         boolean isCheck = false;
