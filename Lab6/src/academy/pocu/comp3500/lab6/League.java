@@ -8,7 +8,9 @@ public class League {
     private Player[] players;
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
 
-    public League() {}
+    public League() {
+        
+    }
 
     public League(Player[] players) {
         this.players = players;
