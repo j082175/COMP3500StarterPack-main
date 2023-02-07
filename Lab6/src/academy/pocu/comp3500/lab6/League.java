@@ -16,46 +16,42 @@ public class League {
 
         // SortAscending.quickSort(players);
 
-        for (int i = 0; i < players.length; i++) {
-            this.hashMap.put(players[i].getId(), i);
-        }
+        // for (int i = 0; i < players.length; i++) {
+        // this.hashMap.put(players[i].getId(), i);
+        // }
     }
 
     public Player findMatchOrNull(final Player player) {
         Player p1;
         Player p2;
 
-        if (hashMap.containsKey(player.getId())) {
+        SortAndFind.quickSort(players);
 
-            // SortAndFind.quickSort(players);
+        // int index = hashMap.get(player.getId());
 
-            // int index = SortAndFind.find(players, player);
-
-            int index = hashMap.get(player.getId());
-
-            if (players.length == 1) {
-                return null;
-            }
-
-            if (index == 0) {
-                return players[index + 1];
-            }
-
-            if (index == players.length - 1) {
-                return players[index - 1];
-            }
-
-            p1 = players[index - 1];
-            p2 = players[index + 1];
-
-            if (player.getRating() - p1.getRating() > p2.getRating() - player.getRating()) {
-                return p2;
-            } else {
-                return p1;
-            }
+        if (players.length == 1) {
+            return null;
         }
 
-        return null;
+        int index = SortAndFind.find(players, player);
+
+        if (index == 0) {
+            return players[index + 1];
+        }
+
+        if (index == players.length - 1) {
+            return players[index - 1];
+        }
+
+        p1 = players[index - 1];
+        p2 = players[index + 1];
+
+        if (player.getRating() - p1.getRating() > p2.getRating() - player.getRating()) {
+            return p2;
+        } else {
+            return p1;
+        }
+
     }
 
     public Player[] getTop(final int count) {
