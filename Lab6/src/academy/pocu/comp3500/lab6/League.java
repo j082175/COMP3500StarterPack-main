@@ -24,7 +24,6 @@ public class League {
                 this.players.add(index, players[i]);
             }
 
-
         }
 
         // SortAndFind.quickSort(players);
@@ -117,17 +116,11 @@ public class League {
             return true;
         }
 
-        // int index = SortAndFind.find(players, player); // logn
+        // int index = SortAndFind.find2(players, player); // logn
 
-        // if (index != -1) {
-        //     return false;
+        // if (index == -1) {
+        // return false;
         // }
-
-        int index = SortAndFind.find2(players, player); // logn
-
-        if (index == -1) {
-            return false;
-        }
 
         if (this.players.size() == 1) {
             if (this.players.get(0).getRating() < player.getRating()) {
@@ -138,10 +131,30 @@ public class League {
 
             return true;
         }
-        
 
+        ArrayList<Player> arrayList = new ArrayList<>();
+        boolean isCheck = false;
 
-        this.players.add(index, player);
+        for (int i = 0; i < this.players.size(); i++) {
+            if (this.players.get(i).getId() == player.getId()) {
+                return false;
+            }
+
+            if (this.players.get(i).getRating() > player.getRating() && !isCheck) {
+                arrayList.add(player);
+                isCheck = true;
+            }
+
+            arrayList.add(this.players.get(i));
+        }
+
+        if (!isCheck) {
+            arrayList.add(player);
+        }
+
+        this.players = arrayList;
+
+        // this.players.add(index, player);
 
         return true;
     }
@@ -151,7 +164,7 @@ public class League {
             return false;
         }
 
-        int index = SortAndFind.find(players, player); //logn
+        int index = SortAndFind.find(players, player); // logn
 
         if (index == -1) {
             return false;

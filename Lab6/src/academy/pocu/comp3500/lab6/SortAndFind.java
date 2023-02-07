@@ -5,14 +5,12 @@ import java.util.ArrayList;
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 
 public class SortAndFind {
-    private static int in = 0;
 
     public static int find2(ArrayList<Player> players, Player player) {
-        in = 0;
-        return findRecursive2(players, 0, players.size() - 1, player);
+        return findRecursive2(players, 0, players.size() - 1, player, 0);
     }
 
-    private static int findRecursive2(ArrayList<Player> players, int start, int end, Player player) {
+    private static int findRecursive2(ArrayList<Player> players, int start, int end, Player player, int in) {
 
         int s = (start + end) / 2; // 중간 값 (middle)
 
@@ -35,9 +33,9 @@ public class SortAndFind {
         } // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
 
         else if (player.getRating() < players.get(s).getRating()) {
-            return findRecursive2(players, start, s - 1, player);
+            return findRecursive2(players, start, s - 1, player, in);
         } else if (player.getRating() > players.get(s).getRating()) {
-            return findRecursive2(players, s + 1, end, player);
+            return findRecursive2(players, s + 1, end, player, in);
         }
 
         return s;
@@ -99,7 +97,7 @@ public class SortAndFind {
         return pivotPos;
     }
 
-    private static void swap(ArrayList<Player> players, int i, int j) {
+    public static void swap(ArrayList<Player> players, int i, int j) {
         Player p1 = players.get(i);
         players.set(i, players.get(j));
         players.set(j, p1);
