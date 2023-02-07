@@ -13,8 +13,18 @@ public class League {
     }
 
     public League(Player[] players) {
+
+        int max = 0;
         for (int i = 0; i < players.length; i++) {
-            this.players.add(players[i]);
+            if (max < players[i].getRating()) {
+                this.players.add(this.players.size(), players[i]);
+                max = players[i].getRating();
+            } else {
+                int index = SortAndFind.find2(this.players, players[i]);
+                this.players.add(index, players[i]);
+            }
+
+
         }
 
         // SortAndFind.quickSort(players);
@@ -36,7 +46,7 @@ public class League {
             return null;
         }
 
-        SortAndFind.quickSort(players);
+        // SortAndFind.quickSort(players);
 
         // int index = hashMap.get(player.getId());
 
@@ -53,7 +63,7 @@ public class League {
         p1 = players.get(index - 1);
         p2 = players.get(index + 1);
 
-        if (player.getRating() - p1.getRating() >= p2.getRating() - player.getRating()) {
+        if (Math.abs(player.getRating() - p1.getRating()) >= Math.abs(p2.getRating() - player.getRating())) {
             return p2;
         } else {
             return p1;
@@ -65,8 +75,6 @@ public class League {
         if (this.players.size() == 0) {
             return new Player[0];
         }
-
-        SortAndFind.quickSort(players);
 
         Player[] p1 = new Player[count];
 
@@ -81,8 +89,6 @@ public class League {
         if (this.players.size() == 0) {
             return new Player[0];
         }
-
-        SortAndFind.quickSort(players);
 
         Player[] p1 = new Player[count];
 

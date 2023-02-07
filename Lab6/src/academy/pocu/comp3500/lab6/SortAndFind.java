@@ -5,6 +5,39 @@ import java.util.ArrayList;
 import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 
 public class SortAndFind {
+    private static int in = 0;
+
+    public static int find2(ArrayList<Player> players, Player player) {
+        in = 0;
+        // if (players.size() == 1) {
+        // return 1;
+        // }
+
+        return findRecursive2(players, 0, players.size() - 1, player);
+    }
+
+    private static int findRecursive2(ArrayList<Player> players, int start, int end, Player player) {
+
+        int s = (start + end) / 2; // 중간 값 (middle)
+
+        if (s != 0) {
+            if (players.get(s).getRating() > player.getRating()
+                    && players.get(s - 1).getRating() < player.getRating()) {
+                in = s;
+            }
+        }
+
+        if (start >= end) // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
+            return in; // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
+
+        else if (player.getRating() < players.get(s).getRating()) {
+            return findRecursive2(players, start, s - 1, player);
+        } else if (player.getRating() > players.get(s).getRating()) {
+            return findRecursive2(players, s + 1, end, player);
+        }
+
+        return s;
+    }
 
     public static int find(ArrayList<Player> players, Player player) {
         return findRecursive(players, 0, players.size() - 1, player);
