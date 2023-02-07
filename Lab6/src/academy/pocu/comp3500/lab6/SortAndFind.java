@@ -20,6 +20,10 @@ public class SortAndFind {
 
         int s = (start + end) / 2; // 중간 값 (middle)
 
+        if (players.get(s).getId() == player.getId()) {
+            return -1;
+        }
+
         if (s != 0) {
             if (players.get(s).getRating() > player.getRating()
                     && players.get(s - 1).getRating() < player.getRating()) {

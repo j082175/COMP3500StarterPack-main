@@ -117,11 +117,11 @@ public class League {
             return true;
         }
 
-        int index = SortAndFind.find(players, player); // logn
+        // int index = SortAndFind.find(players, player); // logn
 
-        if (index != -1) {
-            return false;
-        }
+        // if (index != -1) {
+        //     return false;
+        // }
 
         if (this.players.size() == 1) {
             if (this.players.get(0).getRating() < player.getRating()) {
@@ -133,7 +133,11 @@ public class League {
             return true;
         }
         
-        index = SortAndFind.find2(players, player); // logn
+        int index = SortAndFind.find2(players, player); // logn
+
+        if (index == -1) {
+            return false;
+        }
 
         this.players.add(index, player);
 
@@ -145,7 +149,7 @@ public class League {
             return false;
         }
 
-        int index = SortAndFind.find(players, player);
+        int index = SortAndFind.find(players, player); //logn
 
         if (index == -1) {
             return false;
