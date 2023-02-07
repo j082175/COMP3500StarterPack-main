@@ -122,6 +122,11 @@ public class League {
         if (index != -1) {
             return false;
         }
+
+        if (this.players.size() == 1) {
+            this.players.add(player);
+            return true;
+        }
         
         index = SortAndFind.find2(players, player); // logn
 
