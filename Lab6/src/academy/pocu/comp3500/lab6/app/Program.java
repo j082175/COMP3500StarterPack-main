@@ -17,11 +17,11 @@ public class Program {
         Player player3 = new Player(3, "player3", 11);
         Player player4 = new Player(4, "player4", 18);
         Player player5 = new Player(5, "player5", 10);
-        
-        League league = new League(new Player[]{player1, player2, player3, player4, player5});
-        
+
+        League league = new League(new Player[] { player1 });
+
         Player newPlayer = new Player(3, "player6", 13);
-        
+
         boolean success = league.join(newPlayer); // true
         success = league.join(newPlayer); // false
         success = league.join(player2); // false

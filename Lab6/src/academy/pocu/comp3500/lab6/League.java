@@ -124,7 +124,12 @@ public class League {
         }
 
         if (this.players.size() == 1) {
-            this.players.add(player);
+            if (this.players.get(0).getRating() < player.getRating()) {
+                this.players.add(player);
+            } else {
+                this.players.add(0, player);
+            }
+
             return true;
         }
         
