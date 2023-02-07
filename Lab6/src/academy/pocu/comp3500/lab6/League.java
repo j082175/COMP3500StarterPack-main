@@ -117,13 +117,15 @@ public class League {
             return true;
         }
 
-        int index = SortAndFind.find(players, player);
+        int index = SortAndFind.find(players, player); // logn
 
         if (index != -1) {
             return false;
         }
+        
+        index = SortAndFind.find2(players, player); // logn
 
-        this.players.add(player);
+        this.players.add(index, player);
 
         return true;
     }
