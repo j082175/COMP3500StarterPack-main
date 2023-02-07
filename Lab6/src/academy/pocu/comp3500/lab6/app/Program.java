@@ -20,7 +20,7 @@ public class Program {
 
         League league = new League(new Player[] { player1, player2, player3, player4, player5 });
 
-        Player[] topPlayers = league.getTop(6); // player4, player2, player1
+        Player[] bottomPlayers = league.getBottom(6); // player5, player3, player1
 
         test1();
     }
