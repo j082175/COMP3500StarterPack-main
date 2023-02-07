@@ -14,7 +14,7 @@ public class League {
     public League(Player[] players) {
         this.players = players;
 
-        // SortAscending.quickSort(players);
+        SortAndFind.quickSort(players);
 
         // for (int i = 0; i < players.length; i++) {
         // this.hashMap.put(players[i].getId(), i);
@@ -25,13 +25,17 @@ public class League {
         Player p1;
         Player p2;
 
-        SortAndFind.quickSort(players);
-
-        // int index = hashMap.get(player.getId());
+        if (players.length == 0) {
+            return null;
+        }
 
         if (players.length == 1) {
             return null;
         }
+
+        SortAndFind.quickSort(players);
+
+        // int index = hashMap.get(player.getId());
 
         int index = SortAndFind.find(players, player);
 
