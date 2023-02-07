@@ -33,6 +33,15 @@ public class Program {
         success = league.join(newPlayer3); // true
         success = league.join(newPlayer4); // true
 
+        success = league.join(player1);
+        success = league.join(player2);
+        success = league.join(player3);
+        success = league.join(player4);
+        success = league.join(player5);
+        success = league.join(new Player(20, "a", 33));
+        success = league.join(new Player(20, "a", 33));
+
+
         test1();
     }
 

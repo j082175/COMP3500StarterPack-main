@@ -9,10 +9,6 @@ public class SortAndFind {
 
     public static int find2(ArrayList<Player> players, Player player) {
         in = 0;
-        // if (players.size() == 1) {
-        // return 1;
-        // }
-
         return findRecursive2(players, 0, players.size() - 1, player);
     }
 

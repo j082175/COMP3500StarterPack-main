@@ -123,6 +123,12 @@ public class League {
         //     return false;
         // }
 
+        int index = SortAndFind.find2(players, player); // logn
+
+        if (index == -1) {
+            return false;
+        }
+
         if (this.players.size() == 1) {
             if (this.players.get(0).getRating() < player.getRating()) {
                 this.players.add(player);
@@ -133,11 +139,7 @@ public class League {
             return true;
         }
         
-        int index = SortAndFind.find2(players, player); // logn
 
-        if (index == -1) {
-            return false;
-        }
 
         this.players.add(index, player);
 
