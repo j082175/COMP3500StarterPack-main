@@ -8,6 +8,8 @@ public class League {
     private Player[] players;
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
 
+    public League() {}
+
     public League(Player[] players) {
         this.players = players;
 
@@ -47,11 +49,23 @@ public class League {
     }
 
     public Player[] getTop(final int count) {
-        return players;
+        Player[] p1 = new Player[count];
+
+        for (int i = 0; i < count; i++) {
+            p1[i] = this.players[players.length - 1 - i];
+        }
+
+        return p1;
     }
 
     public Player[] getBottom(final int count) {
-        return players;
+        Player[] p1 = new Player[count];
+
+        for (int i = 0; i < count; i++) {
+            p1[i] = this.players[i];
+        }
+
+        return p1;
     }
 
     public boolean join(final Player player) {
