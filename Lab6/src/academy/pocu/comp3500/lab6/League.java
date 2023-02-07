@@ -112,6 +112,11 @@ public class League {
     }
 
     public boolean join(final Player player) {
+        if (this.players.size() == 0) {
+            this.players.add(player);
+            return true;
+        }
+
         int index = SortAndFind.find(players, player);
 
         if (index != -1) {
@@ -124,6 +129,10 @@ public class League {
     }
 
     public boolean leave(final Player player) {
+        if (this.players.size() == 0) {
+            return false;
+        }
+
         int index = SortAndFind.find(players, player);
 
         if (index == -1) {
