@@ -18,13 +18,20 @@ public class Program {
         Player player4 = new Player(4, "player4", 18);
         Player player5 = new Player(5, "player5", 10);
 
-        League league = new League(new Player[] { player1 });
+        League league = new League(new Player[] { player1, player2, player3, player4, player5 });
 
-        Player newPlayer = new Player(3, "player6", 13);
+        Player newPlayer = new Player(6, "player6", 13);
+        Player newPlayer2 = new Player(7, "player7", 23);
+        Player newPlayer3 = new Player(8, "player8", 24);
+        Player newPlayer4 = new Player(9, "player9", 25);
 
         boolean success = league.join(newPlayer); // true
         success = league.join(newPlayer); // false
         success = league.join(player2); // false
+
+        success = league.join(newPlayer2); // true
+        success = league.join(newPlayer3); // true
+        success = league.join(newPlayer4); // true
 
         test1();
     }

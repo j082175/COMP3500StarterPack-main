@@ -27,8 +27,12 @@ public class SortAndFind {
             }
         }
 
-        if (start >= end) // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
+        if (start >= end) {
+            if (players.get(s).getRating() < player.getRating()) {
+                in = s + 1;
+            }
             return in; // 충족시키지 못해 여기로 왔으면 못찾음(-1) 리턴
+        } // 마지막 하나로 압축됐는데 위 1번 탈출 조건을
 
         else if (player.getRating() < players.get(s).getRating()) {
             return findRecursive2(players, start, s - 1, player);
