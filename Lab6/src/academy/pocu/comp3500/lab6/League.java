@@ -15,9 +15,9 @@ public class League {
 
         SortAscending.quickSort(players);
 
-        for (int i = 0; i < players.length; i++) {
-            this.hashMap.put(players[i].getId(), i);
-        }
+        // for (int i = 0; i < players.length; i++) {
+        //     this.hashMap.put(players[i].getId(), i);
+        // }
     }
 
     public Player findMatchOrNull(final Player player) {
@@ -69,6 +69,12 @@ public class League {
     }
 
     public boolean join(final Player player) {
+        if (hashMap.containsKey(player.getId())) {
+            return false;
+        }
+
+
+
         return true;
     }
 
