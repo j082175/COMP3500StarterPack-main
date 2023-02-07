@@ -23,10 +23,10 @@ public class SortAscending {
 
         int i = left;
         for (int j = left; j < right; ++j) {
-                if (players[j].getRating() < pivot) {
-                        swap(players, i, j);
-                        ++i;
-                }
+            if (players[j].getRating() < pivot) {
+                swap(players, i, j);
+                ++i;
+            }
         }
 
         int pivotPos = i;
