@@ -27,9 +27,15 @@ public class League {
 
         if (hashMap.containsKey(player.getId())) {
 
-            SortAndFind.quickSort(players);
+            // SortAndFind.quickSort(players);
 
-            int index = SortAndFind.find(players, player);
+            // int index = SortAndFind.find(players, player);
+
+            int index = hashMap.get(player.getId());
+
+            if (players.length == 1) {
+                return null;
+            }
 
             if (index == 0) {
                 return players[index + 1];
