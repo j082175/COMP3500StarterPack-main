@@ -12,15 +12,15 @@ public class Program {
 
     public static void main(String[] args) {
 
-        Player player1 = new Player(1, "player1", 9);
-        Player player2 = new Player(2, "player2", 12);
-        Player player3 = new Player(3, "player3", 17);
-        Player player4 = new Player(4, "player4", 14);
+        Player player1 = new Player(1, "player1", 12);
+        Player player2 = new Player(2, "player2", 17);
+        Player player3 = new Player(3, "player3", 11);
+        Player player4 = new Player(4, "player4", 18);
+        Player player5 = new Player(5, "player5", 10);
 
-        League league = new League(new Player[] { player1, player2, player3, player4 });
+        League league = new League(new Player[] { player1, player2, player3, player4, player5 });
 
-        Player player3Match = league.findMatchOrNull(player3); // player4
-        Player player4Match = league.findMatchOrNull(player4); // player2
+        Player[] topPlayers = league.getTop(0); // player4, player2, player1
 
         test1();
     }
