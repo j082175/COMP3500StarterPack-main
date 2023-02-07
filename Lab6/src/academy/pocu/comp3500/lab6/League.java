@@ -84,7 +84,7 @@ public class League {
 
         Player[] p1 = new Player[c];
 
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < c; i++) {
             p1[i] = this.players.get(players.size() - 1 - i);
         }
 
