@@ -9,7 +9,6 @@ public class League {
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
 
     public League() {
-
     }
 
     public League(Player[] players) {
@@ -27,7 +26,14 @@ public class League {
         Player p2;
 
         if (hashMap.containsKey(player.getId())) {
-            int index = hashMap.get(player.getId());
+
+            if (this.players.length == 1) {
+                return null;
+            }
+
+            SortAndFind.quickSort(players);
+
+            int index = SortAndFind.find(players, player);
 
             if (index == 0) {
                 return players[index + 1];
