@@ -9,17 +9,17 @@ public class League {
     private HashMap<Integer, Integer> hashMap = new HashMap<>();
 
     public League() {
-        
+
     }
 
     public League(Player[] players) {
         this.players = players;
 
-        SortAscending.quickSort(players);
+        // SortAscending.quickSort(players);
 
-        // for (int i = 0; i < players.length; i++) {
-        //     this.hashMap.put(players[i].getId(), i);
-        // }
+        for (int i = 0; i < players.length; i++) {
+            this.hashMap.put(players[i].getId(), i);
+        }
     }
 
     public Player findMatchOrNull(final Player player) {
