@@ -12,7 +12,9 @@ public class Program {
 
     public static void main(String[] args) {
 
-        // findMatchTest();
+        //test2();
+
+        //findMatchTest();
 
         Player player1 = new Player(1, "player1", 20);
         Player player2 = new Player(2, "player2", 10);
@@ -48,14 +50,19 @@ public class Program {
                 player15, player16, player17, player18, player19, player20, player21, player22, player23, player24,
                 player25, player26, player27 });
 
+        League league2 = new League(new Player[] { player1, player1, player2 });
+
+        Player p1 = league2.findMatchOrNull(player1);
+        Player p2 = league2.findMatchOrNull(player2);
+
         Player player1Match = league.findMatchOrNull(player1); // player12
         Player player2Match = league.findMatchOrNull(player2); // player9
         Player player3Match = league.findMatchOrNull(player3); // player14
         Player player4Match = league.findMatchOrNull(player4); // player8
-        Player player5Match = league.findMatchOrNull(player5); // player11
+        Player player5Match = league.findMatchOrNull(player5); // player18
         Player player6Match = league.findMatchOrNull(player6); // player13
         Player player7Match = league.findMatchOrNull(player7); // player14
-        Player player8Match = league.findMatchOrNull(player8); // player15
+        Player player8Match = league.findMatchOrNull(player8); // player4
         Player player9Match = league.findMatchOrNull(player9); // player2
         Player player10Match = league.findMatchOrNull(player10); // player19
         Player player11Match = league.findMatchOrNull(player11); // player5
@@ -284,5 +291,59 @@ public class Program {
         int distanceToRight = Math.abs(sorted.get(targetIndex + 1) - targetRating);
 
         return distanceToLeft < distanceToRight ? sorted.get(targetIndex - 1) : sorted.get(targetIndex + 1);
+    }
+
+    public static void test2() {
+        Player player1 = new Player(1, "player1", 864);
+        Player player2 = new Player(2, "player2", 496);
+        Player player3 = new Player(3, "player3", 913);
+        Player player4 = new Player(4, "player4", 818);
+        Player player5 = new Player(4, "player5", 218);
+        Player player6 = new Player(4, "player6", 93);
+        Player player7 = new Player(4, "player7", 510);
+        Player player8 = new Player(4, "player8", 542);
+        Player player9 = new Player(4, "player9", 879);
+        Player player10 = new Player(4, "player10", 719);
+
+        League league = new League(new Player[] { player1, player1, player2, player3, player4,
+                player5, player6, player7, player8, player9, player10 });
+
+        Player player1Match = league.findMatchOrNull(player1); // player9
+        Player player2Match = league.findMatchOrNull(player2); // player7
+        Player player3Match = league.findMatchOrNull(player3); // player9
+        Player player4Match = league.findMatchOrNull(player4); // player8
+        Player player5Match = league.findMatchOrNull(player5); // player11
+        Player player6Match = league.findMatchOrNull(player6); // player13
+        Player player7Match = league.findMatchOrNull(player7); // player14
+        Player player8Match = league.findMatchOrNull(player8); // player15
+        Player player9Match = league.findMatchOrNull(player9); // player2
+        Player player10Match = league.findMatchOrNull(player10); // player19
+    }
+
+    public static void test3() {
+        Player player1 = new Player(1, "player1", 496);
+        Player player2 = new Player(2, "player2", 146);
+        Player player3 = new Player(3, "player3", 786);
+        Player player4 = new Player(4, "player4", 518);
+        Player player5 = new Player(4, "player5", 902);
+        Player player6 = new Player(4, "player6", 631);
+        Player player7 = new Player(4, "player7", 790);
+        Player player8 = new Player(4, "player8", 922);
+        Player player9 = new Player(4, "player9", 307);
+        Player player10 = new Player(4, "player10", 40);
+
+        League league = new League(new Player[] { player1, player1, player2, player3, player4,
+                player5, player6, player7, player8, player9, player10 });
+
+        Player player1Match = league.findMatchOrNull(player1); // player9
+        Player player2Match = league.findMatchOrNull(player2); // player7
+        Player player3Match = league.findMatchOrNull(player3); // player9
+        Player player4Match = league.findMatchOrNull(player4); // player8
+        Player player5Match = league.findMatchOrNull(player5); // player11
+        Player player6Match = league.findMatchOrNull(player6); // player13
+        Player player7Match = league.findMatchOrNull(player7); // player14
+        Player player8Match = league.findMatchOrNull(player8); // player15
+        Player player9Match = league.findMatchOrNull(player9); // player2
+        Player player10Match = league.findMatchOrNull(player10); // player19
     }
 }
