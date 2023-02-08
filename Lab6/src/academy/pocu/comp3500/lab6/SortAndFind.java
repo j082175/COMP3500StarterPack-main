@@ -6,7 +6,49 @@ import academy.pocu.comp3500.lab6.leagueofpocu.Player;
 
 public class SortAndFind {
 
+    public static boolean searchJoin(ArrayList<Player> players, Player player) {
+
+        return searchJoinRecursive(players, 0, players.size() - 1, player, new ArrayList<>(), false);
+    }
+
+    private static boolean searchJoinRecursive(ArrayList<Player> players, int start, int end, Player player, ArrayList<Player> newArrayList, boolean isCheck) {
+
+        int s = (start + end) / 2; // 중간 값 (middle)
+
+        if (players.get(s).getId() == player.getId()) {
+            return false;
+        }
+
+        if (players.get(s).getRating() > player.getRating() && !isCheck) {
+            // newArrayList.add(player);
+            // isCheck = true;
+
+            players.add(s, player);
+        }
+
+        // newArrayList.add(players.get(s));
+
+        if (start >= end) {
+            // if (!isCheck) {
+            //     newArrayList.add(player);
+            // }
+
+            players = newArrayList;
+            
+            return true;
+        }
+
+        else if (player.getRating() < players.get(s).getRating()) {
+            return searchJoinRecursive(players, start, s - 1, player, newArrayList, isCheck);
+        } else if (player.getRating() > players.get(s).getRating()) {
+            return searchJoinRecursive(players, s + 1, end, player, newArrayList, isCheck);
+        }
+
+        return true;
+    }
+
     public static int find2(ArrayList<Player> players, Player player) {
+        
         return findRecursive2(players, 0, players.size() - 1, player, 0);
     }
 

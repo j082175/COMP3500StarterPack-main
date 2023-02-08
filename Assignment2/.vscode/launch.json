@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch Program",
+      "request": "launch",
+      "mainClass": "academy.pocu.comp3500.assignment2.app.Program",
+      "projectName": "Assignment2_8be00e8e"
+    },
+    {
+      "type": "java",
+      "name": "My App",
+      "request": "launch",
+      "mainClass": "App",
+      "projectName": "Program",
+      "vmArgs": "-enableassertions"
+    }
+  ]
+}

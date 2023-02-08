@@ -19,6 +19,7 @@ public class Program {
 
     public static void main(String[] args) throws IOException {
 
+
         BufferedWriter writer = new BufferedWriter(new FileWriter(path));
 
         testCombined();
