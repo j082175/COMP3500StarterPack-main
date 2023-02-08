@@ -46,13 +46,57 @@ public class League {
         Node result = this.origin.findNode(player);
 
         if (result.left == null && result.right == null) {
-            return result.previous.value;
+            Node node1 = result.previous;
+
+            if (node1.previous == null) {
+                return node1.value;
+            }
+
+            int leftValue = node1.value.getRating() - result.value.getRating();
+
+            Node node2 = node1;
+            while (node2.previous != null) {
+                node2 = node2.previous;
+            }
+
+            int rightValue = node2.value.getRating() - result.value.getRating();
+
+            if (Math.abs(leftValue) < Math.abs(rightValue)) {
+                return node1.value;
+            } else if (Math.abs(leftValue) == Math.abs(rightValue)) {
+                if (leftValue > 0) {
+                    return node1.value;
+                } else {
+                    return node2.value;
+                }
+            } else {
+                return node2.value;
+            }
+
+
         }
 
         if (result.left == null) {
             Node node = result.right;
             while (node.left != null) {
                 node = node.left;
+            }
+
+            if (result.previous != null) {
+                int rightValue = result.previous.value.getRating() - result.value.getRating();
+                int leftValue = node.value.getRating() - result.value.getRating();
+
+                if (Math.abs(leftValue) < Math.abs(rightValue)) {
+                    return node.value;
+                } else if (Math.abs(leftValue) == Math.abs(rightValue)) {
+                    if (rightValue > 0) {
+                        return result.previous.value;
+                    } else {
+                        return node.value;
+                    }
+                } else {
+                    return result.previous.value;
+                }
             }
 
             return node.value;
@@ -63,6 +107,24 @@ public class League {
             while (node.right != null) {
                 node = node.right;
             }
+
+            if (result.previous != null) {
+                int rightValue = result.previous.value.getRating() - result.value.getRating();
+                int leftValue = node.value.getRating() - result.value.getRating();
+
+                if (Math.abs(leftValue) < Math.abs(rightValue)) {
+                    return node.value;
+                } else if (Math.abs(leftValue) == Math.abs(rightValue)) {
+                    if (rightValue > 0) {
+                        return result.previous.value;
+                    } else {
+                        return node.value;
+                    }
+                } else {
+                    return result.previous.value;
+                }
+            }
+            
 
             return node.value;
         }

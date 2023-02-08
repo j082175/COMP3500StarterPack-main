@@ -10,37 +10,36 @@ public class BinarySearchTree {
     }
 
     public boolean insert(Player value) {
-        // if (root == null) {
-        //     root = new Node(value);
-        //     return true;
-        // }
+        boolean[] isSame = new boolean[1];
+        Node result = insertRecursive(root, value, isSame);
 
-        return insertRecursive(root, value);
-    }
-
-    private boolean insertRecursive(Node n, Player value) {
-        Node current = n;
-
-        if (current == null) {
-            current = new Node(value);
-
-            return true;
-        }
-
-        if (value.getRating() < current.value.getRating()) {
-            //current.left.previous = current;
-            return insertRecursive(current.left, value);
-
-
-        } else if (value.getRating() > current.value.getRating()) {
-            //current.right.previous = current;
-            return insertRecursive(current.right, value);
-
-
-        } else {
-            // value already exists in the tree
+        if (isSame[0] == true) {
             return false;
         }
+
+        root = result;
+        return true;
+    }
+
+    private Node insertRecursive(Node current, Player value, boolean[] isSame) {
+
+        if (current == null) {
+            return new Node(value);
+          }
+      
+          if (value.getRating() < current.value.getRating()) {
+            current.left = insertRecursive(current.left, value, isSame);
+            current.left.previous = current;
+          } else if (value.getRating() > current.value.getRating()) {
+            current.right = insertRecursive(current.right, value, isSame);
+            current.right.previous = current;
+          } else {
+            // value already exists in the tree
+            isSame[0] = true;
+            return current;
+          }
+      
+          return current;
 
     }
 

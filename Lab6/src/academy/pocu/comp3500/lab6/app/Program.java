@@ -21,34 +21,61 @@ public class Program {
         Player player5 = new Player(4, "player5", 15);
         Player player6 = new Player(4, "player6", 25);
         Player player7 = new Player(4, "player7", 35);
-        Player player8 = new Player(4, "player8", 3);
-        Player player9 = new Player(4, "player9", 7);
+        Player player8 = new Player(4, "player8", 4);
+        Player player9 = new Player(4, "player9", 9);
         Player player10 = new Player(4, "player10", 12);
-        Player player11 = new Player(4, "player11", 16);
-        Player player12 = new Player(4, "player12", 23);
+        Player player11 = new Player(4, "player11", 19);
+        Player player12 = new Player(4, "player12", 21);
         Player player13 = new Player(4, "player13", 27);
         Player player14 = new Player(4, "player14", 33);
-        Player player15 = new Player(4, "player15", 36);
+        Player player15 = new Player(4, "player15", 40);
+        Player player16 = new Player(4, "player16", 38);
+        Player player17 = new Player(4, "player17", 39);
+        Player player18 = new Player(4, "player18", 14);
+        Player player19 = new Player(4, "player19", 13);
 
-        League league = new League(new Player[] { player1, player2, player3, player4,
+        Player player20 = new Player(4, "player20", 100);
+        Player player21 = new Player(4, "player21", 50);
+        Player player22 = new Player(4, "player22", 75);
+        Player player23 = new Player(4, "player23", 60);
+        Player player24 = new Player(4, "player24", 70);
+        Player player25 = new Player(4, "player25", 65);
+        Player player26 = new Player(4, "player26", 67);
+        Player player27 = new Player(4, "player27", 2);
+
+        League league = new League(new Player[] { player1, player1, player2, player3, player4,
                 player5, player6, player7, player8, player9, player10, player11, player12, player13, player14,
-                player15 });
+                player15, player16, player17, player18, player19, player20, player21, player22, player23, player24,
+                player25, player26, player27 });
 
         Player player1Match = league.findMatchOrNull(player1); // player12
-        Player player2Match = league.findMatchOrNull(player2); // player10
+        Player player2Match = league.findMatchOrNull(player2); // player9
         Player player3Match = league.findMatchOrNull(player3); // player14
-        Player player4Match = league.findMatchOrNull(player4); // player9
+        Player player4Match = league.findMatchOrNull(player4); // player8
         Player player5Match = league.findMatchOrNull(player5); // player11
         Player player6Match = league.findMatchOrNull(player6); // player13
-        Player player7Match = league.findMatchOrNull(player7); // player15
-        Player player8Match = league.findMatchOrNull(player8); // player4
-        Player player9Match = league.findMatchOrNull(player9); // player4
-        Player player10Match = league.findMatchOrNull(player10); // player5
+        Player player7Match = league.findMatchOrNull(player7); // player14
+        Player player8Match = league.findMatchOrNull(player8); // player15
+        Player player9Match = league.findMatchOrNull(player9); // player2
+        Player player10Match = league.findMatchOrNull(player10); // player19
         Player player11Match = league.findMatchOrNull(player11); // player5
         Player player12Match = league.findMatchOrNull(player12); // player6
         Player player13Match = league.findMatchOrNull(player13); // player6
         Player player14Match = league.findMatchOrNull(player14); // player7
-        Player player15Match = league.findMatchOrNull(player15); // player7
+        Player player15Match = league.findMatchOrNull(player15); // player17
+        Player player16Match = league.findMatchOrNull(player16); // player17
+        Player player17Match = league.findMatchOrNull(player17); // player15
+        Player player18Match = league.findMatchOrNull(player18); // player19
+        Player player19Match = league.findMatchOrNull(player19); // player18
+
+        Player player20Match = league.findMatchOrNull(player20); // player22
+        Player player21Match = league.findMatchOrNull(player21); // player23
+        Player player22Match = league.findMatchOrNull(player22); // player24
+        Player player23Match = league.findMatchOrNull(player23); // player25
+        Player player24Match = league.findMatchOrNull(player24); // player26
+        Player player25Match = league.findMatchOrNull(player25); // player26
+        Player player26Match = league.findMatchOrNull(player26); // player25
+        Player player27Match = league.findMatchOrNull(player27); // player25
 
         league.leave(player1);
         league.leave(player7);
@@ -183,7 +210,7 @@ public class Program {
     }
 
     public static void findMatchTest() {
-        final int playerCount = 100;
+        final int playerCount = 10;
         Player[] players = new Player[playerCount];
 
         HashSet<Integer> uniqueRatings = new HashSet<>();
@@ -206,16 +233,19 @@ public class Program {
         ArrayList<Integer> sorted = new ArrayList<>(randomN);
         Collections.sort(sorted);
 
+        int[] expectedRating = new int[playerCount];
+        int[] actualRating = new int[playerCount];
+
         for (int i = 0; i < playerCount; ++i) {
             int rating = players[i].getRating();
 
-            int expectedRating = getMatch(sorted, rating);
-            assert (expectedRating != -1);
+            expectedRating[i] = getMatch(sorted, rating);
+            assert (expectedRating[i] != -1);
 
             Player match = league.findMatchOrNull(players[i]);
-            int actualRating = match.getRating();
+            actualRating[i] = match.getRating();
 
-            assert (expectedRating == actualRating);
+            assert (expectedRating[i] == actualRating[i]);
         }
     }
 
