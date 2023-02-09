@@ -57,7 +57,7 @@ public class BinarySearchTree {
             return null;
         }
 
-        if (value == current.value) {
+        if (value.getId() == current.value.getId()) {
             return current;
         }
 
