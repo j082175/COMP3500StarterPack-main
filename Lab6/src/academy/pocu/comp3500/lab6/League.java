@@ -42,7 +42,7 @@ public class League {
         }
 
         if (this.size == 2) {
-            if (origin.root.value == player) {
+            if (origin.root.value.getId() == player.getId()) {
                 if (origin.root.left != null) {
                     return origin.root.left.value;
                 } else {

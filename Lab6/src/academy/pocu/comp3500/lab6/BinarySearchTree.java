@@ -27,7 +27,12 @@ public class BinarySearchTree {
             return new Node(value);
         }
 
-        if (value.getRating() < current.value.getRating()) {
+        if (value.getId() == current.value.getId()) {
+            isSame[0] = true;
+            return current;
+        }
+
+        if (value.getRating() <= current.value.getRating()) {
             current.left = insertRecursive(current.left, value, isSame);
             current.left.previous = current;
         } else if (value.getRating() > current.value.getRating()) {
@@ -64,107 +69,82 @@ public class BinarySearchTree {
     }
 
     public boolean deleteNode(Player player) {
-        return deleteRecursive(root, player);
+        Node node = deleteRecursive(root, player);
+
+        if (node == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    private boolean deleteRecursive(Node node, Player player) {
-        // pointer to store the parent of the current node
-        Node parent = null;
- 
-        // start with the root node
-        Node curr = node;
- 
-        // search key in the BST and set its parent pointer
-        while (curr != null && curr.value.getRating() != player.getRating())
-        {
-            // update the parent to the current node
-            parent = curr;
- 
-            // if the given key is less than the current node, go to the left subtree;
-            // otherwise, go to the right subtree
-            if (player.getRating() < curr.value.getRating()) {
-                curr = curr.left;
-            }
-            else {
-                curr = curr.right;
-            }
+    private Node deleteRecursive(Node node, Player player) {
+        // 기본 케이스: 키가 트리에서 발견되지 않음
+        if (node == null) {
+            return null;
         }
- 
-        // return if the key is not found in the tree
-        if (curr == null) {
-            return false;
-        }
- 
-        // Case 1: node to be deleted has no children, i.e., it is a leaf node
-        if (curr.left == null && curr.right == null)
-        {
-            // if the node to be deleted is not a root node, then set its
-            // parent left/right child to null
-            if (curr != node)
-            {
-                if (parent.left == curr) {
-                    parent.left = null;
-                }
-                else {
-                    parent.right = null;
-                }
+
+        // 주어진 키가 루트 노드보다 작으면 왼쪽 하위 트리에 대해 반복
+        if (player.getRating() < node.value.getRating()) {
+            Node node2 = deleteRecursive(node.left, player);
+
+            if (node2 == null) {
+                return null;
             }
-            // if the tree has only a root node, set it to null
-            else {
-                node = null;
+
+            node.left = node2;
+
+        }
+
+        // 주어진 키가 루트 노드보다 크면 오른쪽 하위 트리에 대해 반복
+        else if (player.getRating() > node.value.getRating()) {
+            Node node2 = deleteRecursive(node.right, player);
+
+            if (node2 == null) {
+                return null;
             }
+
+            node.right = node2;
         }
- 
-        // Case 2: node to be deleted has two children
-        else if (curr.left != null && curr.right != null)
-        {
-            // find its inorder successor node
-            Node successor = getMinimumKey(curr.right);
- 
-            // store successor value
-            Player val = successor.value;
- 
-            // recursively delete the successor. Note that the successor
-            // will have at most one child (right child)
-            deleteRecursive(node, successor.value);
- 
-            // copy value of the successor to the current node
-            curr.value = val;
-        }
- 
-        // Case 3: node to be deleted has only one child
+
+        // 키 발견
         else {
-            // choose a child node
-            Node child = (curr.left != null)? curr.left: curr.right;
- 
-            // if the node to be deleted is not a root node, set its parent
-            // to its child
-            if (curr != node)
-            {
-                if (curr == parent.left) {
-                    parent.left = child;
-                }
-                else {
-                    parent.right = child;
-                }
+            // 사례 1: 삭제할 노드에 자식이 없음(리프 노드)
+            if (node.left == null && node.right == null) {
+                // 루트를 null로 업데이트
+                return null;
             }
- 
-            // if the node to be deleted is a root node, then set the root to the child
+
+            // 사례 2: 삭제할 노드에 두 개의 자식이 있는 경우
+            else if (node.left != null && node.right != null) {
+                // 순서가 없는 선행 노드를 찾습니다.
+                Node predecessor = findMaximumKey(node.left);
+
+                // 선행 노드의 값을 현재 노드에 복사
+                node.value = predecessor.value;
+
+                // 선행 작업을 재귀적으로적으로 삭제합니다. 참고로
+                // 선행 작업에는 최대 하나의 자식(왼쪽 자식)이 있습니다.
+                node.left = deleteRecursive(node.left, predecessor.value);
+            }
+
+            // Case 3: 삭제할 노드에 자식이 하나만 있는 경우
             else {
+                // 자식 노드 선택
+                Node child = (node.left != null) ? node.left : node.right;
                 node = child;
             }
         }
- 
-        return true;
+
+        return node;
 
     }
 
-    public static Node getMinimumKey(Node curr)
-    {
-        while (curr.left != null) {
-            curr = curr.left;
+    public static Node findMaximumKey(Node ptr) {
+        while (ptr.right != null) {
+            ptr = ptr.right;
         }
-        return curr;
+        return ptr;
     }
 
     public void traverseInOrderBottom(Node startNode, Player[] players, int[] index) {
