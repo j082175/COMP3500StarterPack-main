@@ -25,21 +25,21 @@ public class BinarySearchTree {
 
         if (current == null) {
             return new Node(value);
-          }
-      
-          if (value.getRating() < current.value.getRating()) {
+        }
+
+        if (value.getRating() < current.value.getRating()) {
             current.left = insertRecursive(current.left, value, isSame);
             current.left.previous = current;
-          } else if (value.getRating() > current.value.getRating()) {
+        } else if (value.getRating() > current.value.getRating()) {
             current.right = insertRecursive(current.right, value, isSame);
             current.right.previous = current;
-          } else {
+        } else {
             // value already exists in the tree
             isSame[0] = true;
             return current;
-          }
-      
-          return current;
+        }
+
+        return current;
 
     }
 
