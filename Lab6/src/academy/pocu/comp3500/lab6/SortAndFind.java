@@ -11,8 +11,7 @@ public class SortAndFind {
         return searchJoinRecursive(players, 0, players.size() - 1, player, new ArrayList<>(), false);
     }
 
-    private static boolean searchJoinRecursive(ArrayList<Player> players, int start, int end, Player player,
-            ArrayList<Player> newArrayList, boolean isCheck) {
+    private static boolean searchJoinRecursive(ArrayList<Player> players, int start, int end, Player player, ArrayList<Player> newArrayList, boolean isCheck) {
 
         int s = (start + end) / 2; // 중간 값 (middle)
 

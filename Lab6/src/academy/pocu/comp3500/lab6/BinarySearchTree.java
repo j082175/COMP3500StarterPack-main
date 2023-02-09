@@ -69,74 +69,137 @@ public class BinarySearchTree {
     }
 
     public boolean deleteNode(Player player) {
-        Node node = deleteRecursive(root, player);
+        Node goal = findNode(player);
+        boolean[] isCheck = new boolean[1];
+        Node result = deleteRecursive(goal, player, isCheck);
 
-        if (node == null) {
+        if (isCheck[0] == true) {
             return false;
         } else {
             return true;
         }
+
     }
 
-    private Node deleteRecursive(Node node, Player player) {
-        // 기본 케이스: 키가 트리에서 발견되지 않음
-        if (node == null) {
+    private Node deleteRecursive(Node goal, Player player, boolean[] isCheck) {
+
+        if (goal == null) {
+            isCheck[0] = true;
             return null;
         }
 
-        // 주어진 키가 루트 노드보다 작으면 왼쪽 하위 트리에 대해 반복
-        if (player.getRating() < node.value.getRating()) {
-            Node node2 = deleteRecursive(node.left, player);
+        // goal 의 모든 자식이 없을경우
+        if (goal.left == null && goal.right == null) {
 
-            if (node2 == null) {
+            if (goal.previous == null) {
+                root = null;
                 return null;
             }
 
-            node.left = node2;
+            if (goal.value.getId() == goal.previous.value.getId()) {
+                
+                if (goal.previous.left == goal) {
+                    goal.previous.left = null;
+                    return goal;
+                } else {
+                    goal.previous.right = null;
+                    return goal;
+                }
+            }
 
+            if (goal.previous.value.getRating() > goal.value.getRating()) {
+
+                goal.previous.left = null;
+            } else {
+
+                goal.previous.right = null;
+            }
+
+            return goal;
         }
 
-        // 주어진 키가 루트 노드보다 크면 오른쪽 하위 트리에 대해 반복
-        else if (player.getRating() > node.value.getRating()) {
-            Node node2 = deleteRecursive(node.right, player);
-
-            if (node2 == null) {
-                return null;
+        // goal 의 왼쪽 자식이 없을경우
+        if (goal.left == null) {
+            Node node = goal.right;
+            while (node.left != null) {
+                node = node.left;
             }
 
-            node.right = node2;
+            // if (goal.previous.value.getRating() < goal.value.getRating()) {
+            //     goal.previous.right = goal.right;
+            // } else {
+            //     goal.previous.left = goal.right;
+            // }
+
+            // goal.value = node.value;
+
+            // // node.previous.right = node.right;
+
+            // if (node.previous.right == node) {
+            //     if (node.right != null) {
+            //         node.previous.right = node.right;
+            //     } else {
+            //         node.previous.right = node.left;
+            //     }
+            // }
+
+            goal.value = node.value;
+
+            return deleteRecursive(node, player, isCheck);
         }
 
-        // 키 발견
-        else {
-            // 사례 1: 삭제할 노드에 자식이 없음(리프 노드)
-            if (node.left == null && node.right == null) {
-                // 루트를 null로 업데이트
-                return null;
+        // goal 의 오른쪽 자식이 없을경우
+        if (goal.right == null) {
+            Node node = goal.left;
+            while (node.right != null) {
+                node = node.right;
             }
+            
+            // if (goal.previous.value.getRating() < goal.value.getRating()) {
+            //     goal.previous.right = goal.left;
+            // } else {
+            //     goal.previous.left = goal.left;
+            // }
+            
+            // goal.value = node.value;
 
-            // 사례 2: 삭제할 노드에 두 개의 자식이 있는 경우
-            else if (node.left != null && node.right != null) {
-                // 순서가 없는 선행 노드를 찾습니다.
-                Node predecessor = findMaximumKey(node.left);
+            // if (node.previous.left == node) {
+            //     if (node.right != null) {
+            //         node.previous.left = node.right;
+            //     } else {
+            //         node.previous.left = node.left;
+            //     }
+            // } 
 
-                // 선행 노드의 값을 현재 노드에 복사
-                node.value = predecessor.value;
+            goal.value = node.value;
 
-                // 선행 작업을 재귀적으로적으로 삭제합니다. 참고로
-                // 선행 작업에는 최대 하나의 자식(왼쪽 자식)이 있습니다.
-                node.left = deleteRecursive(node.left, predecessor.value);
-            }
-
-            // Case 3: 삭제할 노드에 자식이 하나만 있는 경우
-            else {
-                // 자식 노드 선택
-                Node child = (node.left != null) ? node.left : node.right;
-                node = child;
-            }
+            return deleteRecursive(node, player, isCheck);
         }
 
-        return node;
+        // goal 의 모든 자식이 있을경우
+        {
+            Node node = goal.right;
+            while (node.left != null) {
+                node = node.left;
+            }
+
+            goal.value = node.value;
+
+            // if (node.right == null) {
+            //     node.previous.right = node.right;
+            //     return goal;
+            // }
+
+            // if (node.previous.value.getRating() > node.right.value.getRating()) {
+            //     node.previous.left = node.right;
+            // } else {
+            //     node.previous.right = node.right;
+            // }
+
+            // // node.previous.right = node.right; //hacksim
+
+            return deleteRecursive(node, player, isCheck);
+        }
 
     }
 
