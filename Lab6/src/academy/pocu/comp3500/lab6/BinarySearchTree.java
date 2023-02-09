@@ -71,7 +71,7 @@ public class BinarySearchTree {
     public boolean deleteNode(Player player) {
         Node goal = findNode(player);
         boolean[] isCheck = new boolean[1];
-        Node result = deleteRecursive(goal, player, isCheck);
+        deleteRecursive(goal, player, isCheck);
 
         if (isCheck[0] == true) {
             return false;
@@ -125,24 +125,6 @@ public class BinarySearchTree {
                 node = node.left;
             }
 
-            // if (goal.previous.value.getRating() < goal.value.getRating()) {
-            //     goal.previous.right = goal.right;
-            // } else {
-            //     goal.previous.left = goal.right;
-            // }
-
-            // goal.value = node.value;
-
-            // // node.previous.right = node.right;
-
-            // if (node.previous.right == node) {
-            //     if (node.right != null) {
-            //         node.previous.right = node.right;
-            //     } else {
-            //         node.previous.right = node.left;
-            //     }
-            // }
-
             goal.value = node.value;
 
             return deleteRecursive(node, player, isCheck);
@@ -153,23 +135,7 @@ public class BinarySearchTree {
             Node node = goal.left;
             while (node.right != null) {
                 node = node.right;
-            }
-            
-            // if (goal.previous.value.getRating() < goal.value.getRating()) {
-            //     goal.previous.right = goal.left;
-            // } else {
-            //     goal.previous.left = goal.left;
-            // }
-            
-            // goal.value = node.value;
-
-            // if (node.previous.left == node) {
-            //     if (node.right != null) {
-            //         node.previous.left = node.right;
-            //     } else {
-            //         node.previous.left = node.left;
-            //     }
-            // } 
+            } 
 
             goal.value = node.value;
 
@@ -185,22 +151,8 @@ public class BinarySearchTree {
 
             goal.value = node.value;
 
-            // if (node.right == null) {
-            //     node.previous.right = node.right;
-            //     return goal;
-            // }
-
-            // if (node.previous.value.getRating() > node.right.value.getRating()) {
-            //     node.previous.left = node.right;
-            // } else {
-            //     node.previous.right = node.right;
-            // }
-
-            // // node.previous.right = node.right; //hacksim
-
             return deleteRecursive(node, player, isCheck);
         }
-
     }
 
     public static Node findMaximumKey(Node ptr) {
@@ -221,7 +173,6 @@ public class BinarySearchTree {
             players[index[0]] = startNode.value;
             ++index[0];
         }
-        // v.push_back(startNode->Data);
         traverseInOrderBottom(startNode.right, players, index);
 
         return;
@@ -238,7 +189,6 @@ public class BinarySearchTree {
             players[index[0]] = startNode.value;
             ++index[0];
         }
-        // v.push_back(startNode->Data);
         traverseInOrderTop(startNode.left, players, index);
 
         return;
