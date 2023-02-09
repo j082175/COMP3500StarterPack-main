@@ -36,9 +36,7 @@ public class SortAndFind {
             players = newArrayList;
 
             return true;
-        }
-
-        else if (player.getRating() < players.get(s).getRating()) {
+        } else if (player.getRating() < players.get(s).getRating()) {
             return searchJoinRecursive(players, start, s - 1, player, newArrayList, isCheck);
         } else if (player.getRating() > players.get(s).getRating()) {
             return searchJoinRecursive(players, s + 1, end, player, newArrayList, isCheck);
