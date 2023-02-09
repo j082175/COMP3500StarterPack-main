@@ -252,7 +252,13 @@ public class League {
             return new Player[0];
         }
 
-        Player[] p1 = new Player[count];
+        int c = count;
+
+        if (count > this.size) {
+            c = this.size;
+        }
+
+        Player[] p1 = new Player[c];
         int[] index = new int[1];
         origin.traverseInOrderTop(origin.root, p1, index);
 
@@ -282,7 +288,13 @@ public class League {
             return new Player[0];
         }
 
-        Player[] p1 = new Player[count];
+        int c = count;
+
+        if (count > this.size) {
+            c = this.size;
+        }
+
+        Player[] p1 = new Player[c];
         int[] index = new int[1];
         origin.traverseInOrderBottom(origin.root, p1, index);
 
@@ -290,12 +302,12 @@ public class League {
     }
 
     public boolean join(final Player player) {
-
+        ++size;
         return origin.insert(player);
     }
 
     public boolean leave(final Player player) {
-
+        --size;
         return origin.deleteNode(player);
     }
 }

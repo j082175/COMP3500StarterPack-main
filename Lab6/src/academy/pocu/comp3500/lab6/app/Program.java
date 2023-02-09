@@ -50,7 +50,9 @@ public class Program {
                 player15, player16, player17, player18, player19, player20, player21, player22, player23, player24,
                 player25, player26, player27 });
 
-        League league2 = new League(new Player[] { player1, player2, new Player(0, null, 20) });
+        League league2 = new League(new Player[] {});
+        league2.join(player27);
+        league2.join(player1);
 
         Player p1 = league2.findMatchOrNull(player1);
         Player p2 = league2.findMatchOrNull(player2);
