@@ -302,8 +302,13 @@ public class League {
     }
 
     public boolean join(final Player player) {
-        ++size;
-        return origin.insert(player);
+
+        if (origin.insert(player)) {
+            ++size;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean leave(final Player player) {

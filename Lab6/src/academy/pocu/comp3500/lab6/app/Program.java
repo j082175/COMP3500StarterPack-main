@@ -20,38 +20,38 @@ public class Program {
         Player player2 = new Player(2, "player2", 10);
         Player player3 = new Player(3, "player3", 30);
         Player player4 = new Player(4, "player4", 5);
-        Player player5 = new Player(4, "player5", 15);
-        Player player6 = new Player(4, "player6", 25);
-        Player player7 = new Player(4, "player7", 35);
-        Player player8 = new Player(4, "player8", 4);
-        Player player9 = new Player(4, "player9", 9);
-        Player player10 = new Player(4, "player10", 12);
-        Player player11 = new Player(4, "player11", 19);
-        Player player12 = new Player(4, "player12", 21);
-        Player player13 = new Player(4, "player13", 27);
-        Player player14 = new Player(4, "player14", 33);
-        Player player15 = new Player(4, "player15", 40);
-        Player player16 = new Player(4, "player16", 38);
-        Player player17 = new Player(4, "player17", 39);
-        Player player18 = new Player(4, "player18", 14);
-        Player player19 = new Player(4, "player19", 13);
+        Player player5 = new Player(5, "player5", 15);
+        Player player6 = new Player(6, "player6", 25);
+        Player player7 = new Player(7, "player7", 35);
+        Player player8 = new Player(8, "player8", 4);
+        Player player9 = new Player(9, "player9", 9);
+        Player player10 = new Player(10, "player10", 12);
+        Player player11 = new Player(11, "player11", 19);
+        Player player12 = new Player(12, "player12", 21);
+        Player player13 = new Player(13, "player13", 27);
+        Player player14 = new Player(14, "player14", 33);
+        Player player15 = new Player(15, "player15", 40);
+        Player player16 = new Player(16, "player16", 38);
+        Player player17 = new Player(17, "player17", 39);
+        Player player18 = new Player(18, "player18", 14);
+        Player player19 = new Player(19, "player19", 13);
 
-        Player player20 = new Player(4, "player20", 100);
-        Player player21 = new Player(4, "player21", 50);
-        Player player22 = new Player(4, "player22", 75);
-        Player player23 = new Player(4, "player23", 60);
-        Player player24 = new Player(4, "player24", 70);
-        Player player25 = new Player(4, "player25", 65);
-        Player player26 = new Player(4, "player26", 67);
-        Player player27 = new Player(4, "player27", 2);
+        Player player20 = new Player(20, "player20", 100);
+        Player player21 = new Player(21, "player21", 50);
+        Player player22 = new Player(22, "player22", 75);
+        Player player23 = new Player(23, "player23", 60);
+        Player player24 = new Player(24, "player24", 70);
+        Player player25 = new Player(25, "player25", 65);
+        Player player26 = new Player(26, "player26", 67);
+        Player player27 = new Player(27, "player27", 2);
 
         League league = new League(new Player[] { player1, player1, player2, player3, player4,
                 player5, player6, player7, player8, player9, player10, player11, player12, player13, player14,
                 player15, player16, player17, player18, player19, player20, player21, player22, player23, player24,
                 player25, player26, player27 });
 
-        League league2 = new League(new Player[] {});
-        league2.join(player27);
+        League league2 = new League(new Player[] { player1, player2, player3 });
+        league2.join(player4);
         league2.join(player1);
 
         Player p1 = league2.findMatchOrNull(player1);
