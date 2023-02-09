@@ -32,8 +32,10 @@ public class League {
         origin = new BinarySearchTree();
 
         for (int i = 0; i < players.length; i++) {
-            origin.insert(players[i]);
-            ++size;
+            if (origin.insert(players[i])) {
+                ++size;
+            }
+
         }
 
     }
@@ -41,6 +43,18 @@ public class League {
     public Player findMatchOrNull(final Player player) {
         if (this.size == 0 || this.size == 1) {
             return null;
+        }
+
+        if (this.size == 2) {
+            if (origin.root.value == player) {
+                if (origin.root.left != null) {
+                    return origin.root.left.value;
+                } else {
+                    return origin.root.right.value;
+                }
+            } else {
+                return origin.root.value;
+            }
         }
 
         Node result = this.origin.findNode(player);
