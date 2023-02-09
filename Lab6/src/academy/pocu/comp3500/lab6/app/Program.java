@@ -50,7 +50,7 @@ public class Program {
                 player15, player16, player17, player18, player19, player20, player21, player22, player23, player24,
                 player25, player26, player27 });
 
-        League league2 = new League(new Player[] { player1, player1, player2 });
+        League league2 = new League(new Player[] { player1, player2 });
 
         Player p1 = league2.findMatchOrNull(player1);
         Player p2 = league2.findMatchOrNull(player2);
@@ -84,7 +84,7 @@ public class Program {
         Player player26Match = league.findMatchOrNull(player26); // player25
         Player player27Match = league.findMatchOrNull(player27); // player25
 
-        league.leave(player1);
+        league.leave(new Player(0, "33", 1212121));
         league.leave(player7);
 
         // Player player1 = new Player(1, "player1", 12);

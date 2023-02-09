@@ -64,69 +64,107 @@ public class BinarySearchTree {
     }
 
     public boolean deleteNode(Player player) {
-        return deleteRecursive(player);
+        return deleteRecursive(root, player);
     }
 
-    private boolean deleteRecursive(Player player) {
-        Node goal = findNode(player);
-
-        if (goal == null) {
+    private boolean deleteRecursive(Node node, Player player) {
+        // pointer to store the parent of the current node
+        Node parent = null;
+ 
+        // start with the root node
+        Node curr = node;
+ 
+        // search key in the BST and set its parent pointer
+        while (curr != null && curr.value.getRating() != player.getRating())
+        {
+            // update the parent to the current node
+            parent = curr;
+ 
+            // if the given key is less than the current node, go to the left subtree;
+            // otherwise, go to the right subtree
+            if (player.getRating() < curr.value.getRating()) {
+                curr = curr.left;
+            }
+            else {
+                curr = curr.right;
+            }
+        }
+ 
+        // return if the key is not found in the tree
+        if (curr == null) {
             return false;
         }
-
-        if (goal.left == null && goal.right == null) {
-
-            if (goal.previous.value.getRating() > goal.value.getRating()) {
-
-                goal.previous.value = goal.value;
-
-                goal.previous.left = null;
-            } else {
-                goal.previous.value = goal.value;
-
-                goal.previous.right = null;
-            }
-
-            return true;
-        }
-
-        if (goal.left == null) {
-            Node node = goal.right;
-            while (node.left != null) {
-                node = node.left;
-            }
-
-            goal.value = node.value;
-
-            node.previous.left = null;
-            return true;
-        }
-
-        if (goal.right == null) {
-            Node node = goal.left;
-            while (node.right != null) {
-                node = node.right;
-            }
-
-            goal.value = node.value;
-
-            node.previous.right = null;
-            return true;
-        }
-
+ 
+        // Case 1: node to be deleted has no children, i.e., it is a leaf node
+        if (curr.left == null && curr.right == null)
         {
-            Node node = goal.right;
-            while (node.left != null) {
-                node = node.left;
+            // if the node to be deleted is not a root node, then set its
+            // parent left/right child to null
+            if (curr != node)
+            {
+                if (parent.left == curr) {
+                    parent.left = null;
+                }
+                else {
+                    parent.right = null;
+                }
             }
-
-            goal.value = node.value;
-
-            node.previous.left = node.right;
-
-            return true;
+            // if the tree has only a root node, set it to null
+            else {
+                node = null;
+            }
         }
+ 
+        // Case 2: node to be deleted has two children
+        else if (curr.left != null && curr.right != null)
+        {
+            // find its inorder successor node
+            Node successor = getMinimumKey(curr.right);
+ 
+            // store successor value
+            Player val = successor.value;
+ 
+            // recursively delete the successor. Note that the successor
+            // will have at most one child (right child)
+            deleteRecursive(node, successor.value);
+ 
+            // copy value of the successor to the current node
+            curr.value = val;
+        }
+ 
+        // Case 3: node to be deleted has only one child
+        else {
+            // choose a child node
+            Node child = (curr.left != null)? curr.left: curr.right;
+ 
+            // if the node to be deleted is not a root node, set its parent
+            // to its child
+            if (curr != node)
+            {
+                if (curr == parent.left) {
+                    parent.left = child;
+                }
+                else {
+                    parent.right = child;
+                }
+            }
+ 
+            // if the node to be deleted is a root node, then set the root to the child
+            else {
+                node = child;
+            }
+        }
+ 
+        return true;
 
+    }
+
+    public static Node getMinimumKey(Node curr)
+    {
+        while (curr.left != null) {
+            curr = curr.left;
+        }
+        return curr;
     }
 
     public void traverseInOrderBottom(Node startNode, Player[] players, int[] index) {
