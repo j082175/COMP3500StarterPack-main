@@ -22,18 +22,6 @@ public class League {
             return null;
         }
 
-        // if (this.size == 2) {
-        //     if (origin.root.value.getId() == player.getId()) {
-        //         if (origin.root.left != null) {
-        //             return origin.root.left.value;
-        //         } else {
-        //             return origin.root.right.value;
-        //         }
-        //     } else {
-        //         return origin.root.value;
-        //     }
-        // }
-
         Node result = this.origin.findNode(player);
 
         if (result.left == null && result.right == null) {
