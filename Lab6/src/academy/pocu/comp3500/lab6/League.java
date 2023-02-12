@@ -22,30 +22,30 @@ public class League {
             return null;
         }
 
-        if (this.size == 2) {
-            if (origin.root.value.getId() == player.getId()) {
-                if (origin.root.left != null) {
-                    return origin.root.left.value;
-                } else {
-                    return origin.root.right.value;
-                }
-            } else {
-                return origin.root.value;
-            }
-        }
+        // if (this.size == 2) {
+        //     if (origin.root.value.getId() == player.getId()) {
+        //         if (origin.root.left != null) {
+        //             return origin.root.left.value;
+        //         } else {
+        //             return origin.root.right.value;
+        //         }
+        //     } else {
+        //         return origin.root.value;
+        //     }
+        // }
 
         Node result = this.origin.findNode(player);
 
         if (result.left == null && result.right == null) {
-            Node node1 = result.previous;
+            Node node = result.previous;
 
-            if (node1.previous == null) {
-                return node1.value;
+            if (node.previous == null) {
+                return node.value;
             }
 
-            int leftValue = node1.value.getRating() - result.value.getRating();
+            int leftValue = node.value.getRating() - result.value.getRating();
 
-            Node node2 = node1;
+            Node node2 = node;
 
             if (node2.value.getRating() < result.value.getRating()) {
                 while (node2.previous != null && node2.previous.right == node2) {
@@ -68,10 +68,10 @@ public class League {
             int rightValue = node2.value.getRating() - result.value.getRating();
 
             if (Math.abs(leftValue) < Math.abs(rightValue)) {
-                return node1.value;
+                return node.value;
             } else if (Math.abs(leftValue) == Math.abs(rightValue)) {
                 if (leftValue > 0) {
-                    return node1.value;
+                    return node.value;
                 } else {
                     return node2.value;
                 }
@@ -183,13 +183,13 @@ public class League {
             return new Player[0];
         }
 
-        int c = count;
+        int size = count;
 
         if (count > this.size) {
-            c = this.size;
+            size = this.size;
         }
 
-        Player[] p1 = new Player[c];
+        Player[] p1 = new Player[size];
         int[] index = new int[1];
         origin.traverseInOrderTop(origin.root, p1, index);
 
@@ -201,13 +201,13 @@ public class League {
             return new Player[0];
         }
 
-        int c = count;
+        int size = count;
 
         if (count > this.size) {
-            c = this.size;
+            size = this.size;
         }
 
-        Player[] p1 = new Player[c];
+        Player[] p1 = new Player[size];
         int[] index = new int[1];
         origin.traverseInOrderBottom(origin.root, p1, index);
 

@@ -155,13 +155,6 @@ public class BinarySearchTree {
         }
     }
 
-    public static Node findMaximumKey(Node ptr) {
-        while (ptr.right != null) {
-            ptr = ptr.right;
-        }
-        return ptr;
-    }
-
     public void traverseInOrderBottom(Node startNode, Player[] players, int[] index) {
 
         if (startNode == null) {
