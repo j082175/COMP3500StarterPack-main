@@ -19,6 +19,7 @@ public class Player extends PlayerBase{
     public Move getNextMove(char[][] board, Move opponentMove) {
         // TODO Auto-generated method stub
         return null;
+
     }
 
     
