@@ -24,18 +24,6 @@ public final class Indent {
     }
 
     public void setData(String text) {
-
-        // if (text == null) {
-        // this.data = null;
-        // return;
-        // }
-
-        // if (data == null) {
-        // this.data = text;
-        // return;
-        // }
-
-        // this.data += text;
         this.data = text;
     }
 

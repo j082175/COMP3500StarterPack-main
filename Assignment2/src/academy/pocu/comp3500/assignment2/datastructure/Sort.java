@@ -1,6 +1,5 @@
 package academy.pocu.comp3500.assignment2.datastructure;
 
-import academy.pocu.comp3500.assignment2.Indent;
 import academy.pocu.comp3500.assignment2.Logger;
 
 import static academy.pocu.comp3500.assignment2.Logger.log;

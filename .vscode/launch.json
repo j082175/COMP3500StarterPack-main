@@ -4,7 +4,7 @@
       "type": "java",
       "name": "Launch Program",
       "request": "launch",
-      "mainClass": "academy.pocu.comp3500.lab6.app.Program",
+      "mainClass": "academy.pocu.comp3500.assignment3.app.Program",
       "projectName": "COMP3500StarterPack-main_56c2cb38"
     }
   ]
