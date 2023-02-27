@@ -18,7 +18,9 @@ public class Player extends PlayerBase {
         // TODO Auto-generated method stub
         //return getNextMove(board, new Move(3, 6, 3, 4));
 
-        return new Move(3, 6, 3, 4);
+        // return new Move(3, 6, 3, 4);
+
+        return getNextMove(board, null);
     }
 
     @Override

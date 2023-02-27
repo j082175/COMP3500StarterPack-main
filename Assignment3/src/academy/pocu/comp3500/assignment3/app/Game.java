@@ -56,6 +56,7 @@ final class Game {
         }
 
         this.board = createNewBoard();
+        // this.board = createBoard2();
     }
 
     public void nextTurn() {
@@ -507,5 +508,14 @@ final class Game {
         }
 
         return false;
+    }
+
+    private static char[][] createBoard2() {
+        char[][] board = new char[8][8];
+
+        board[3][4] = 'K';
+        board[6][5] = 'k';
+
+        return board;
     }
 }
