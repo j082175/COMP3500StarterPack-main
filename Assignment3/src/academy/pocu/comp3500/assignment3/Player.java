@@ -44,7 +44,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 5, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -422,7 +422,8 @@ public class Player extends PlayerBase {
         }
 
         if (isMaximizingPlayer) {
-            int bestScore = -INFINITY;
+            // int bestScore = -INFINITY;
+            int bestScore = score;
             ArrayList<Move> possibleMoves = getPossibleMoves(board, maximizingPlayerColor);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
@@ -435,7 +436,8 @@ public class Player extends PlayerBase {
             }
             return bestScore;
         } else {
-            int bestScore = INFINITY;
+            // int bestScore = INFINITY;
+            int bestScore = score;
             ArrayList<Move> possibleMoves = getPossibleMoves(board, getOpponentColor(maximizingPlayerColor));
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
