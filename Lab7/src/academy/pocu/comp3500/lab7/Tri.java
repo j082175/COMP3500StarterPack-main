@@ -11,7 +11,8 @@ public class Tri {
     }
 
     private Node inputRecursive(Node node, String data) {
-        if (data == "") {
+        if (data.equals("")) {
+            node.isEnd = true;
             return node;
         }
 
@@ -20,7 +21,7 @@ public class Tri {
 
         if (ch >= 97 && ch <= 122) {
         } else {
-            ch = (char)(ch + 32);
+            ch = (char) (ch + 32);
         }
 
         if (node == null) {
@@ -28,7 +29,7 @@ public class Tri {
             node.data = ' ';
             node.nodes = new ArrayList<>();
             node.nodes.add(new Node(ch));
-            Node node2 = inputRecursive(node.nodes.get(node.nodes.size() - 1), data2);
+            inputRecursive(node.nodes.get(node.nodes.size() - 1), data2);
             return node;
 
         }
@@ -40,7 +41,6 @@ public class Tri {
 
         for (int i = 0; i < node.nodes.size(); i++) {
             if (node.nodes.get(i).data == ch) {
-                // node.nodes.set(i, inputRecursive(node.nodes.get(i), data2));
                 inputRecursive(node.nodes.get(i), data2);
                 return node;
             }
@@ -51,4 +51,37 @@ public class Tri {
 
         return node;
     }
+
+    public boolean isExist(String str) {
+        return isExistRecursive(node, str);
+    }
+
+    private boolean isExistRecursive(Node node, String str) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node.isEnd == true) {
+            return true;
+        }
+
+        if (str.equals("")) {
+            return false;
+        }
+
+        char ch = str.charAt(0);
+        String str2 = str.substring(1);
+
+
+        for (int i = 0; i < node.nodes.size(); i++) {
+            if (node.nodes.get(i).data == ch) {
+                return isExistRecursive(node.nodes.get(i), str2);
+            }
+        }
+
+
+
+        return false;
+    }
+
 }

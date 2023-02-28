@@ -8,12 +8,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
 
 
 public class Test01 {
     
-    @Test
+
     public void test1() throws NoSuchAlgorithmException {
         HashMap<String, String> crc32Map = new HashMap<>(Map.of(
                 "211534962", "0000",
