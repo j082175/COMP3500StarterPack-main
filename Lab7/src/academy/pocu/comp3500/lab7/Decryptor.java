@@ -1,78 +1,93 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Decryptor {
 
-    private final String[] arr;
+    private final String[] codeWords2;
+    private final String[] sortedCodeWords2;
     private final ArrayList<String> arrayList = new ArrayList<>();
-    private final String[] sortedArr;
     private final Tri tri = new Tri();
 
     public Decryptor(final String[] codeWords) {
-        arr = new String[codeWords.length];
-        sortedArr = new String[arr.length];
+        codeWords2 = new String[codeWords.length];
+        sortedCodeWords2 = new String[codeWords2.length];
 
         for (int i = 0; i < codeWords.length; i++) {
             char[] charArr = codeWords[i].toLowerCase().toCharArray();
             String str2 = new String(charArr);
 
-            arrayList.add(str2);
-            arr[i] = str2;
+            // arrayList.add(str2);
+            codeWords2[i] = str2;
 
-            // Arrays.sort(charArr);
+            // tri.inputData(codeWords2[i]);
+
             sortString(charArr);
-
             String str3 = new String(charArr);
-            sortedArr[i] = str3;
-            // tri.inputData(str3);
+            sortedCodeWords2[i] = str3;
         }
 
-        // Arrays.sort(sortedArr);
-        sortStringArr(sortedArr);
+        // sortStringArr(sortedCodeWords2);
 
-        for (int i = 0; i < codeWords.length; i++) {
-            tri.inputData(sortedArr[i]);
-        }
+/*        for (int i = 0; i < codeWords.length; i++) {
+            tri.inputData(sortedCodeWords2[i]);
+        }*/
 
     }
 
     public String[] findCandidates(final String word) {
-        String str = word.toLowerCase();
-        char[] charArr = str.toCharArray();
-        // Arrays.sort(charArr);
-        sortString(charArr);
-        String str2 = new String(charArr);
 
-        boolean result = tri.isExist(str2);
+        String compare = charToString(word.toLowerCase().toCharArray());
+
+        ArrayList<String> a = new ArrayList<>();
+
+        for (int i = 0; i < codeWords2.length; i++) {
+            if (compare.equals(sortedCodeWords2[i])) {
+                a.add(codeWords2[i]);
+            }
+        }
+
+        String[] result = new String[a.size()];
+        for (int i = 0; i < a.size(); i++) {
+            result[i] = a.get(i);
+        }
+
+        return result;
+
+
+        /*String str = charToString(word.toCharArray());
+
+        ArrayList<String> nodeArrayList = new ArrayList<>();
+        boolean result = tri.isExist(str, nodeArrayList); // logn
 
         List<String> resultStr = new ArrayList<>();
         // String[] resultStr = new String[arr.length];
 
         if (result) {
-            for (int i = 0; i < arr.length; i++) {
+            for (int i = 0; i < codeWords2.length; i++) { // n
                 char[] ch2 = arrayList.get(i).toCharArray();
                 // Arrays.sort(ch2);
                 sortString(ch2);
                 String ss = new String(ch2);
 
-                if (ss.equals(str2)) {
-                    resultStr.add(arr[i]);
+                if (ss.equals(str)) {
+                    resultStr.add(codeWords2[i]);
                     // resultStr[i] = arr[i];
                 }
             }
 
-            String[] s = new String[resultStr.size()];
+            String[] s = new String[resultStr.size()]; // n
             for (int i = 0; i < resultStr.size(); i++) {
                 s[i] = resultStr.get(i);
             }
 
             return s;
-        }
+        }*/
 
 
-        return new String[0];
+        // return new String[0];
     }
 
     private void sortString(char[] charArr) {
@@ -144,5 +159,10 @@ public class Decryptor {
         strings[right] = temp2;
 
         return i;
+    }
+
+    private String charToString(char[] charArr) {
+        sortString(charArr);
+        return new String(charArr);
     }
 }

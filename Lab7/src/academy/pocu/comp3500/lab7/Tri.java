@@ -1,12 +1,16 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Stack;
 
 public class Tri {
 
     private Node node;
+    private HashSet<String> hashSet = new HashSet<>();
 
     public void inputData(String data) {
+        hashSet.add(data);
         this.node = inputRecursive(this.node, data);
     }
 
@@ -52,16 +56,18 @@ public class Tri {
         return node;
     }
 
-    public boolean isExist(String str) {
-        return isExistRecursive(node, str);
+    public boolean isExist(String str, ArrayList<String> arrayList) {
+        String total = "";
+        return isExistRecursive(node, str, arrayList, total);
     }
 
-    private boolean isExistRecursive(Node node, String str) {
+    private boolean isExistRecursive(Node node, String str, ArrayList<String> arrayList, String total) {
         if (node == null) {
             return false;
         }
 
         if (node.isEnd == true) {
+            arrayList.add(total);
             return true;
         }
 
@@ -72,13 +78,41 @@ public class Tri {
         char ch = str.charAt(0);
         String str2 = str.substring(1);
 
-        int left = 0;
+        Stack<Node> stack = new Stack<>();
+
+        stack.push(node);
+
+        int depth = 1;
+
+        while (!stack.empty()) {
+            Node next = stack.pop();
+            depth--;
+
+            if (next.data != ' ') {
+                total += next.data;
+            }
+
+            if (next.isEnd) {
+                arrayList.add(total);
+            }
+
+            if (next.nodes.size() == 0) {
+
+            }
+
+            for (Node child : next.nodes) {
+                stack.push(child);
+                ++depth;
+            }
+        }
+
+/*        int left = 0;
         int right = node.nodes.size() - 1;
         while (left <= right) {
             int mid = (left + right) / 2;
 
             if (node.nodes.get(mid).data == ch) {
-                return isExistRecursive(node.nodes.get(mid), str2);
+                return isExistRecursive(node.nodes.get(mid), str2, arrayList);
             }
 
             if (node.nodes.get(mid).data < ch) {
@@ -87,12 +121,6 @@ public class Tri {
             }
 
             right = mid - 1;
-        }
-
-/*        for (int i = 0; i < node.nodes.size(); i++) {
-            if (node.nodes.get(i).data == ch) {
-                return isExistRecursive(node.nodes.get(i), str2);
-            }
         }*/
 
 
