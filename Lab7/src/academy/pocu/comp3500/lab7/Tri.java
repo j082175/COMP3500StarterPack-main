@@ -1,7 +1,6 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class Tri {
 
@@ -59,13 +58,13 @@ public class Tri {
         return array;
     }
 
-    private boolean isExistRecursive(Node node, String str, String compareStr, boolean isCheck, String total, ArrayList<String> array) {
+    private void isExistRecursive(Node node, String str, String compareStr, boolean isCheck, String total, ArrayList<String> array) {
         if (node == null) {
-            return false;
+            return;
         }
 
         if (str.equals("")) {
-            return false;
+            return;
         }
 
         if (node.data != ' ') {
@@ -85,7 +84,7 @@ public class Tri {
 
             } else {
                 isCheck = false;
-                return false;
+                return;
             }
         }
 
@@ -98,7 +97,7 @@ public class Tri {
                     total = "";
 
                     compareStr = str;
-                    return true;
+                    return;
                 }
             }
         }
@@ -107,50 +106,5 @@ public class Tri {
             isExistRecursive(node.nodes.get(i), str, compareStr, isCheck, total, array);
         }
 
-/*        Stack<Node> stack = new Stack<>();
-
-        stack.push(node);
-
-        while (!stack.empty()) {
-            Node next = stack.pop();
-
-            if (next.data != ' ') {
-                total += next.data;
-            }
-
-            if (next.isEnd) {
-                arrayList.add(total);
-            }
-
-            if (next.nodes.size() == 0) {
-
-            }
-
-            for (Node child : next.nodes) {
-                stack.push(child);
-            }
-        }*/
-
-/*        int left = 0;
-        int right = node.nodes.size() - 1;
-        while (left <= right) {
-            int mid = (left + right) / 2;
-
-            if (node.nodes.get(mid).data == ch) {
-                return isExistRecursive(node.nodes.get(mid), str2);
-            }
-
-            if (node.nodes.get(mid).data < ch) {
-                left = mid + 1;
-                continue;
-            }
-
-            right = mid - 1;
-        }*/
-
-
-
-        return false;
     }
-
 }
