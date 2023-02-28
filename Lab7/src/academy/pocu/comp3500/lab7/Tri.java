@@ -53,37 +53,58 @@ public class Tri {
         return node;
     }
 
-    public boolean isExist(String str, ArrayList<String> arrayList) {
-        String total = "";
-        return isExistRecursive(node, str, arrayList, total);
+    public ArrayList<String> isExist(String str) {
+        ArrayList<String> array = new ArrayList<>();
+        isExistRecursive(node, str, str, false, new String(), array);
+        return array;
     }
 
-    private boolean isExistRecursive(Node node, String str, ArrayList<String> arrayList, String total) {
+    private boolean isExistRecursive(Node node, String str, String compareStr, boolean isCheck, String total, ArrayList<String> array) {
         if (node == null) {
             return false;
-        }
-
-        if (node.isEnd == true) {
-            arrayList.add(total);
-            return true;
         }
 
         if (str.equals("")) {
             return false;
         }
 
-        char ch = str.charAt(0);
-        String str2 = str.substring(1);
+        if (node.data != ' ') {
+            if (compareStr.contains(String.valueOf(node.data))) {
+                compareStr = compareStr.replace(node.data, '-');
+                isCheck = true;
+                total += node.data;
 
-        Stack<Node> stack = new Stack<>();
+
+            } else {
+                isCheck = false;
+                return false;
+            }
+        }
+
+        if (node.isEnd == true) {
+            if (isCheck) {
+
+                if (total.length() == str.length()) {
+                    // total 저장
+                    array.add(total);
+                    total = "";
+
+                    compareStr = str;
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < node.nodes.size(); i++) {
+            isExistRecursive(node.nodes.get(i), str, compareStr, isCheck, total, array);
+        }
+
+/*        Stack<Node> stack = new Stack<>();
 
         stack.push(node);
 
-        int depth = 1;
-
         while (!stack.empty()) {
             Node next = stack.pop();
-            depth--;
 
             if (next.data != ' ') {
                 total += next.data;
@@ -99,9 +120,8 @@ public class Tri {
 
             for (Node child : next.nodes) {
                 stack.push(child);
-                ++depth;
             }
-        }
+        }*/
 
 /*        int left = 0;
         int right = node.nodes.size() - 1;
@@ -109,7 +129,7 @@ public class Tri {
             int mid = (left + right) / 2;
 
             if (node.nodes.get(mid).data == ch) {
-                return isExistRecursive(node.nodes.get(mid), str2, arrayList);
+                return isExistRecursive(node.nodes.get(mid), str2);
             }
 
             if (node.nodes.get(mid).data < ch) {

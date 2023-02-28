@@ -5,6 +5,8 @@ import academy.pocu.comp3500.lab7.Decryptor;
 public class Program {
 
     public static void main(String[] args) {
+        String aa = "fewfewafawe";
+        aa.replace('f', '-');
 
 /*        Tri tri = new Tri();
         tri.inputData("aah");

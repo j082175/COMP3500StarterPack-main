@@ -27,7 +27,7 @@ public class Decryptor {
             sortedCodeWords2[i] = str3;*/
         }
 
-        sortStringArr(codeWords2);
+        // sortStringArr(codeWords2);
 
         for (int i = 0; i < codeWords.length; i++) {
             tri.inputData(codeWords2[i]);
@@ -39,9 +39,7 @@ public class Decryptor {
 
         String compare = charToString(word.toLowerCase().toCharArray());
 
-        ArrayList<String> a = new ArrayList<>();
-
-        boolean is = tri.isExist(compare, a);
+        ArrayList<String> listResult = tri.isExist(compare);
 
 /*        for (int i = 0; i < codeWords2.length; i++) {
             if (compare.equals(sortedCodeWords2[i])) {
@@ -49,9 +47,9 @@ public class Decryptor {
             }
         }*/
 
-        String[] result = new String[a.size()];
-        for (int i = 0; i < a.size(); i++) {
-            result[i] = a.get(i);
+        String[] result = new String[listResult.size()];
+        for (int i = 0; i < listResult.size(); i++) {
+            result[i] = listResult.get(i);
         }
 
         return result;
