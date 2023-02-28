@@ -7,7 +7,7 @@ class ProgramTest {
     @Test
     void main() {
 
-        B06_TEST();
+
         String[] codeWords = new String[]{"cat", "CATS", "AcTS", "SCAN", "acre", "aNTS"};
 
         Decryptor decryptor = new Decryptor(codeWords);
@@ -46,6 +46,8 @@ class ProgramTest {
         assert (candidates.length == 2);
         assert (candidates[0].equals("cats") || candidates[0].equals("acts"));
         assert (candidates[1].equals("cats") || candidates[1].equals("acts"));
+
+        B06_TEST();
     }
 
     private static void B06_TEST() {
