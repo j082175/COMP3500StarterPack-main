@@ -1,8 +1,6 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 
 public class Decryptor {
 
@@ -24,16 +22,16 @@ public class Decryptor {
 
             // tri.inputData(codeWords2[i]);
 
-            sortString(charArr);
+/*            sortString(charArr);
             String str3 = new String(charArr);
-            sortedCodeWords2[i] = str3;
+            sortedCodeWords2[i] = str3;*/
         }
 
-        // sortStringArr(sortedCodeWords2);
+        sortStringArr(codeWords2);
 
-/*        for (int i = 0; i < codeWords.length; i++) {
-            tri.inputData(sortedCodeWords2[i]);
-        }*/
+        for (int i = 0; i < codeWords.length; i++) {
+            tri.inputData(codeWords2[i]);
+        }
 
     }
 
@@ -43,11 +41,13 @@ public class Decryptor {
 
         ArrayList<String> a = new ArrayList<>();
 
-        for (int i = 0; i < codeWords2.length; i++) {
+        boolean is = tri.isExist(compare, a);
+
+/*        for (int i = 0; i < codeWords2.length; i++) {
             if (compare.equals(sortedCodeWords2[i])) {
                 a.add(codeWords2[i]);
             }
-        }
+        }*/
 
         String[] result = new String[a.size()];
         for (int i = 0; i < a.size(); i++) {

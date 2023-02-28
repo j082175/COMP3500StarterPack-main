@@ -1,16 +1,13 @@
 package academy.pocu.comp3500.lab7;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Stack;
 
 public class Tri {
 
     private Node node;
-    private HashSet<String> hashSet = new HashSet<>();
 
     public void inputData(String data) {
-        hashSet.add(data);
         this.node = inputRecursive(this.node, data);
     }
 
