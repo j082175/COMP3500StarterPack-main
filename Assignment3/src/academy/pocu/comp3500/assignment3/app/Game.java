@@ -516,6 +516,9 @@ final class Game {
         board[3][3] = 'K';
         board[5][3] = 'k';
 
+        board[0][2] = 'N';
+        board[7][5] = 'n';
+
 /*        board[7][2] = 'n';
         board[7][4] = 'k';
         board[4][5] = 'K';*/
