@@ -70,7 +70,15 @@ public class Tri {
 
         if (node.data != ' ') {
             if (compareStr.contains(String.valueOf(node.data))) {
-                compareStr = compareStr.replace(node.data, '-');
+                char[] charr = compareStr.toCharArray();
+                for (int i = 0; i < charr.length; i++) {
+                    if (charr[i] == node.data) {
+                        charr[i] = '-';
+                        break;
+                    }
+                }
+                compareStr = new String(charr);
+
                 isCheck = true;
                 total += node.data;
 

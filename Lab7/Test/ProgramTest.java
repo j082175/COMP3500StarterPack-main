@@ -48,6 +48,7 @@ class ProgramTest {
         assert (candidates[1].equals("cats") || candidates[1].equals("acts"));
 
         B06_TEST();
+        test2();
     }
 
     private static void B06_TEST() {
@@ -58,5 +59,26 @@ class ProgramTest {
 
         assert (candidates.length == 1);
         assert (candidates[0].equals("jio"));
+    }
+
+    void test2(){
+        String[] codeWords = new String[]{
+                "aaabcbcbaaabbbcccc",
+                "aaabbbbbcccaaabccc",
+                "aaabbbcccaaabbbccc",
+                "aaaabbbcccbbbcaacc",
+                "aaabbbbccbcaaabccc",
+                "aacabbbcccaacabbcb",
+                "aaccabbbcbccbaacab",
+                "aacaccbcaacbabbcbb",
+                "aabcccQWERTccaaaa",
+                "aaacbOIUKJHbbabcca",
+                "aacabHJKBNMbbcaaab",
+                "aaabbJKLIOPaabbbccc",
+        };
+        Decryptor decryptor = new Decryptor(codeWords);
+        String[] candidates = decryptor.findCandidates("aaabbbcccaaabbbccc");
+        assert (candidates.length == 8);
+
     }
 }
