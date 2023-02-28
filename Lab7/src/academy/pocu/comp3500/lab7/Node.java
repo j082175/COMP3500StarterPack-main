@@ -8,7 +8,8 @@ public class Node {
     public boolean isEnd = false;
 
 
-    public Node() {}
+    public Node() {
+    }
 
     public Node(char data) {
         this.data = data;

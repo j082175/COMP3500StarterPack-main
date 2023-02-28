@@ -7,9 +7,12 @@ public class Decryptor {
 
     private final String[] arr;
     private final ArrayList<String> arrayList = new ArrayList<>();
+    private final String[] sortedArr;
     private final Tri tri = new Tri();
     public Decryptor(final String[] codeWords) {
         arr = new String[codeWords.length];
+        sortedArr = new String[arr.length];
+
         for (int i = 0; i < codeWords.length; i++) {
             char[] charArr = codeWords[i].toLowerCase().toCharArray();
             String str2 = new String(charArr);
@@ -19,9 +22,15 @@ public class Decryptor {
 
             Arrays.sort(charArr);
             String str3 = new String(charArr);
-            tri.inputData(str3);
+            sortedArr[i] = str3;
+            // tri.inputData(str3);
         }
-        // Arrays.sort(arr);
+
+        Arrays.sort(sortedArr);
+
+        for (int i = 0; i < codeWords.length; i++) {
+            tri.inputData(sortedArr[i]);
+        }
 
     }
 
