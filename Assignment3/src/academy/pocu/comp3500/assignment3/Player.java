@@ -3,8 +3,10 @@ package academy.pocu.comp3500.assignment3;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -55,7 +57,8 @@ public class Player extends PlayerBase {
         char color = isWhite() ? 'W' : 'B';
 
         // 현재 상태에서 가능한 모든 수를 구합니다.
-        ArrayList<Move> possibleMoves = getPossibleMoves(board, color);
+        // ArrayList<Move> possibleMoves = getPossibleMoves(board, color);
+        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, color, -1, -1);
 
         ArrayList<Move> sameMoves = new ArrayList<>();
 
@@ -124,6 +127,12 @@ public class Player extends PlayerBase {
     private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
+        int priority = -1;
+        ArrayList<Integer> bestMove = new ArrayList<>();
+        ArrayList<Move> bestMoveContainer = new ArrayList<>();
+
+
+
         Map<Character, Integer> mapColor;
         int left;
         int right;
@@ -148,333 +157,560 @@ public class Player extends PlayerBase {
         int opponentRight = opponentLeft + 25;
 
 
-        int x = row;
-        int y = col;
+/*        int x = row;
+        int y = col;*/
 
         /*for (int x = lessMin; x < lessMax; x++) {
             for (int y = lessMin; y < lessMax; y++) {*/
 
-        char piece = board[y][x];
-        if (piece >= opponentLeft && piece <= opponentRight) {
-            return possibleMoves;
+        for (int y = lessMin; y < lessMax; y++) {
+            for (int x = lessMin; x < lessMax; x++) {
+                char piece = board[y][x];
+                if (piece >= opponentLeft && piece <= opponentRight) {
+                    // return possibleMoves;
+                    continue;
+                }
+
+                switch (piece) {
+                    case 'P':
+                    case 'p': {
+                        int afterY;
+                        if (color == 'B') {
+                            afterY = y + 1;
+                        } else {
+                            afterY = y - 1;
+                        }
+
+                        int pawnStart;
+                        if (color == 'W') {
+                            pawnStart = 6;
+                        } else {
+                            pawnStart = 1;
+                        }
+
+                        if ((afterY >= lessMin && afterY < lessMax) && board[afterY][x] == 0) {
+                            possibleMoves.add(new Move(x, y, x, afterY));
+
+                            if (y == pawnStart && (afterY + 1 < lessMax) && board[afterY + 1][x] == 0) {
+                                possibleMoves.add(new Move(x, y, x, afterY + 1));
+                            }
+                        }
+
+
+                        int afterXleft = x - 1;
+                        int afterXright = x + 1;
+
+                        if (afterXleft >= lessMin && afterXleft < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
+
+                            // 공격적 경우의 수 중
+                            if (board[afterY][afterXleft] == 'k' + chooser) {
+                                priority = 60;
+                                bestMove.add(mapW.get('k'));
+                                bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                            }
+
+                            if (board[afterY][afterXleft] == 'q' + chooser) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 59) {
+                                    priority = 59;
+                                    bestMove.set(0, mapW.get('q'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                } else {
+                                    priority = 59;
+                                    bestMove.add(mapW.get('q'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                }
+
+                            }
+
+                            if (board[afterY][afterXleft] == 'r' + chooser) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 58) {
+                                    priority = 58;
+                                    bestMove.set(0, mapW.get('r'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                } else {
+                                    priority = 58;
+                                    bestMove.add(mapW.get('r'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser  && priority < 57) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('b')) {
+                                    priority = 57;
+                                    bestMove.set(0, mapW.get('b'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                } else {
+                                    priority = 57;
+                                    bestMove.add(mapW.get('b'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXleft] == 'p' + chooser  && priority < 56) {
+                                if (bestMove.size() != 0) {
+                                    priority = 56;
+                                    bestMove.set(0, mapW.get('p'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                } else {
+                                    priority = 56;
+                                    bestMove.add(mapW.get('p'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                }
+                            }
+
+                            possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                            // return possibleMoves;
+                        }
+
+                        if (afterXright < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
+
+                            // 공격적 경우의 수 중
+                            if (board[afterY][afterXright] == 'k' + chooser) {
+                                if (bestMove.size() == 0) {
+                                    priority = 60;
+                                    bestMove.add(mapW.get('k'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                } else {
+                                    priority = 60;
+                                    bestMove.set(0, mapW.get('k'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXright] == 'q' + chooser) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q')  && priority < 59) {
+                                    priority = 59;
+                                    bestMove.set(0, mapW.get('q'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                } else {
+                                    priority = 59;
+                                    bestMove.add(mapW.get('q'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXright] == 'r' + chooser) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r')  && priority < 58) {
+                                    priority = 58;
+                                    bestMove.set(0, mapW.get('r'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                } else {
+                                    priority = 58;
+                                    bestMove.add(mapW.get('r'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXright] == 'b' + chooser || board[afterY][afterXright] == 'n' + chooser) {
+                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('b')  && priority < 57) {
+                                    priority = 57;
+                                    bestMove.set(0, mapW.get('b'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                } else {
+                                    priority = 57;
+                                    bestMove.add(mapW.get('b'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                }
+                            }
+
+                            if (board[afterY][afterXright] == 'p' + chooser) {
+                                if (bestMove.size() != 0 && priority < 56) {
+                                    priority = 56;
+                                    bestMove.set(0, mapW.get('p'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                } else {
+                                    priority = 56;
+                                    bestMove.add(mapW.get('p'));
+                                    bestMoveContainer.clear();
+                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                }
+                            }
+
+                            possibleMoves.add(new Move(x, y, afterXright, afterY));
+                            // return possibleMoves;
+                        }
+
+
+                        break;
+                    }
+
+
+                    case 'K':
+                    case 'k': {
+                        int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+                        int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterY = y + yCase[i];
+                            int afterX = x + xCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+                                    // 공격적 경우의 수 중
+                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (bestMove.size() != 0 && priority < 1) {
+                                            priority = 1;
+                                            bestMove.set(0, mapW.get('k'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        } else {
+                                            priority = 1;
+                                            bestMove.add(mapW.get('k'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        }
+
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'Q':
+                    case 'q': {
+                        int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+                        int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                        // 공격적 경우의 수 중
+                                        if (board[afterY][afterX] == 'k' + chooser) {
+                                            if (bestMove.size() != 0 && priority < 10) {
+                                                priority = 10;
+                                                bestMove.add(mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 10;
+                                                bestMove.set(0, mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        if (board[afterY][afterX] == 'q' + chooser) {
+                                            if (bestMove.size() != 0 && priority < 9) {
+                                                priority = 9;
+                                                bestMove.set(0, mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 9;
+                                                bestMove.add(mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                        break;
+                                    }
+
+                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                        break;
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    afterX += xCase[i];
+                                    afterY += yCase[i];
+
+                                }
+
+
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'R':
+                    case 'r': {
+                        int[] xCase = new int[]{0, -1, 1, 0};
+                        int[] yCase = new int[]{-1, 0, 0, 1};
+
+                        for (int i = 0; i < 4; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                        // 공격적 경우의 수 중
+                                        if (board[afterY][afterX] == 'k' + chooser) {
+                                            if (bestMove.size() != 0 && priority < 20) {
+                                                priority = 20;
+                                                bestMove.add(mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 20;
+                                                bestMove.set(0, mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        if (board[afterY][afterX] == 'q' + chooser) {
+                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 19) {
+                                                priority = 19;
+                                                bestMove.set(0, mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 19;
+                                                bestMove.add(mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+
+                                        }
+
+                                        if (board[afterY][afterX] == 'r' + chooser) {
+                                            if (bestMove.size() != 0  && priority < 18) {
+                                                priority = 18;
+                                                bestMove.set(0, mapW.get('r'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 18;
+                                                bestMove.add(mapW.get('r'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                        break;
+                                    }
+
+                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                        break;
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    afterX += xCase[i];
+                                    afterY += yCase[i];
+                                }
+
+
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'B':
+                    case 'b': {
+                        int[] xCase = new int[]{-1, -1, 1, 1};
+                        int[] yCase = new int[]{-1, 1, -1, 1};
+
+                        for (int i = 0; i < 4; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                        // 공격적 경우의 수 중
+                                        if (board[afterY][afterX] == 'k' + chooser) {
+                                            if (bestMove.size() != 0 && priority < 30) {
+                                                priority = 30;
+                                                bestMove.add(mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 30;
+                                                bestMove.set(0, mapW.get('k'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        if (board[afterY][afterX] == 'q' + chooser) {
+                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 29) {
+                                                priority = 29;
+                                                bestMove.set(0, mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 29;
+                                                bestMove.add(mapW.get('q'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        if (board[afterY][afterX] == 'r' + chooser) {
+                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 28) {
+                                                priority = 28;
+                                                bestMove.set(0, mapW.get('r'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 28;
+                                                bestMove.add(mapW.get('r'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                            if (bestMove.size() != 0 && priority < 27) {
+                                                priority = 27;
+                                                bestMove.set(0, mapW.get('b'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            } else {
+                                                priority = 27;
+                                                bestMove.add(mapW.get('b'));
+                                                bestMoveContainer.clear();
+                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            }
+                                        }
+
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                        break;
+                                    }
+
+                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                        break;
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    afterX += xCase[i];
+                                    afterY += yCase[i];
+                                }
+
+
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'N':
+                    case 'n': {
+                        int[] xCase = new int[]{2, 2, -2, -2, 1, 1, -1, -1};
+                        int[] yCase = new int[]{-1, 1, -1, 1, 2, -2, 2, -2};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+
+// 공격적 경우의 수 중
+                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (bestMove.size() != 0) {
+                                            priority = 30;
+                                            bestMove.add(mapW.get('k'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        } else if (priority < 30){
+                                            priority = 30;
+                                            bestMove.set(0, mapW.get('k'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        }
+                                    }
+
+                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                        if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 29) {
+                                            priority = 29;
+                                            bestMove.set(0, mapW.get('q'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        } else {
+                                            priority = 29;
+                                            bestMove.add(mapW.get('q'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        }
+                                    }
+
+                                    if (board[afterY][afterX] == 'r' + chooser) {
+                                        if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 28) {
+                                            priority = 28;
+                                            bestMove.set(0, mapW.get('r'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        } else {
+                                            priority = 28;
+                                            bestMove.add(mapW.get('r'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        }
+                                    }
+
+                                    if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                        if (bestMove.size() != 0 && priority < 17) {
+                                            priority = 27;
+                                            bestMove.set(0, mapW.get('b'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        } else {
+                                            priority = 27;
+                                            bestMove.add(mapW.get('b'));
+                                            bestMoveContainer.clear();
+                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                        }
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                }
+            }
         }
 
-        switch (piece) {
-            case 'P':
-            case 'p': {
-                int afterY;
-                if (color == 'B') {
-                    afterY = y + 1;
-                } else {
-                    afterY = y - 1;
-                }
 
-                int pawnStart;
-                if (color == 'W') {
-                    pawnStart = 6;
-                } else {
-                    pawnStart = 1;
-                }
 
-                if ((afterY >= lessMin && afterY < lessMax) && board[afterY][x] == 0) {
-                    possibleMoves.add(new Move(x, y, x, afterY));
-
-                    if (y == pawnStart && (afterY + 1 < lessMax) && board[afterY + 1][x] == 0) {
-                        possibleMoves.add(new Move(x, y, x, afterY + 1));
-                    }
-                }
-
-
-                int afterXleft = x - 1;
-                int afterXright = x + 1;
-
-                if (afterXleft >= lessMin && afterXleft < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
-
-                    // 공격적 경우의 수 중
-                    if (board[afterY][afterXleft] == 'k' + chooser) {
-                        possibleMoves.clear();
-                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                        return possibleMoves;
-                    }
-
-                    if (board[afterY][afterXleft] == 'q' + chooser) {
-                        possibleMoves.clear();
-                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                        return possibleMoves;
-                    }
-
-                    if (board[afterY][afterXleft] == 'r' + chooser) {
-                        possibleMoves.clear();
-                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                        return possibleMoves;
-                    }
-
-                    if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser) {
-                        possibleMoves.clear();
-                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                        return possibleMoves;
-                    }
-
-                    if (board[afterY][afterXleft] == 'p' + chooser) {
-                        possibleMoves.clear();
-                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                        return possibleMoves;
-                    }
-
-                    possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                    return possibleMoves;
-                }
-
-                if (afterXright < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
-
-                    // 공격적
-                    possibleMoves.clear();
-                    possibleMoves.add(new Move(x, y, afterXright, afterY));
-                    return possibleMoves;
-                }
-
-
-                break;
-            }
-
-
-            case 'K':
-            case 'k': {
-                int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
-                int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
-
-                for (int i = 0; i < 8; i++) {
-                    int afterY = y + yCase[i];
-                    int afterX = x + xCase[i];
-
-                    if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                        if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
-                            // 공격적 경우의 수 중
-                            if (board[afterY][afterX] == 'k' + chooser) {
-                                possibleMoves.clear();
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                return possibleMoves;
-                            }
-
-                            possibleMoves.add(new Move(x, y, afterX, afterY));
-                        }
-                    }
-                }
-
-                break;
-            }
-
-            case 'Q':
-            case 'q': {
-                int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
-                int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
-
-                for (int i = 0; i < 8; i++) {
-                    int afterX = x + xCase[i];
-                    int afterY = y + yCase[i];
-
-                    if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                        while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
-
-                                // 공격적 경우의 수 중
-                                if (board[afterY][afterX] == 'k' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'q' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                break;
-                            }
-
-                            if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
-                                break;
-                            }
-
-                            possibleMoves.add(new Move(x, y, afterX, afterY));
-
-                            afterX += xCase[i];
-                            afterY += yCase[i];
-
-                        }
-
-
-                    }
-                }
-
-                break;
-            }
-
-            case 'R':
-            case 'r': {
-                int[] xCase = new int[]{0, -1, 1, 0};
-                int[] yCase = new int[]{-1, 0, 0, 1};
-
-                for (int i = 0; i < 4; i++) {
-                    int afterX = x + xCase[i];
-                    int afterY = y + yCase[i];
-
-                    if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                        while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
-
-                                // 공격적 경우의 수 중
-                                if (board[afterY][afterX] == 'k' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'q' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'r' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                break;
-                            }
-
-                            if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
-                                break;
-                            }
-
-                            possibleMoves.add(new Move(x, y, afterX, afterY));
-
-                            afterX += xCase[i];
-                            afterY += yCase[i];
-                        }
-
-
-                    }
-                }
-
-                break;
-            }
-
-            case 'B':
-            case 'b': {
-                int[] xCase = new int[]{-1, -1, 1, 1};
-                int[] yCase = new int[]{-1, 1, -1, 1};
-
-                for (int i = 0; i < 4; i++) {
-                    int afterX = x + xCase[i];
-                    int afterY = y + yCase[i];
-
-                    if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                        while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-
-                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
-
-                                // 공격적 경우의 수 중
-                                if (board[afterY][afterX] == 'k' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'q' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'r' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
-                                    possibleMoves.clear();
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    return possibleMoves;
-                                }
-
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                break;
-                            }
-
-                            if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
-                                break;
-                            }
-
-                            possibleMoves.add(new Move(x, y, afterX, afterY));
-
-                            afterX += xCase[i];
-                            afterY += yCase[i];
-                        }
-
-
-                    }
-                }
-
-                break;
-            }
-
-            case 'N':
-            case 'n': {
-                int[] xCase = new int[]{2, 2, -2, -2, 1, 1, -1, -1};
-                int[] yCase = new int[]{-1, 1, -1, 1, 2, -2, 2, -2};
-
-                for (int i = 0; i < 8; i++) {
-                    int afterX = x + xCase[i];
-                    int afterY = y + yCase[i];
-
-                    if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                        if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
-
-                            // 공격적 경우의 수 중
-                            if (board[afterY][afterX] == 'k' + chooser) {
-                                possibleMoves.clear();
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                return possibleMoves;
-                            }
-
-                            if (board[afterY][afterX] == 'q' + chooser) {
-                                possibleMoves.clear();
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                return possibleMoves;
-                            }
-
-                            if (board[afterY][afterX] == 'r' + chooser) {
-                                possibleMoves.clear();
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                return possibleMoves;
-                            }
-
-                            if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
-                                possibleMoves.clear();
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
-                                return possibleMoves;
-                            }
-
-                            possibleMoves.add(new Move(x, y, afterX, afterY));
-                        }
-                    }
-                }
-
-                break;
-            }
-
+        if (bestMove.size() != 0) {
+            return bestMoveContainer;
         }
 
         return possibleMoves;
@@ -580,7 +816,7 @@ public class Player extends PlayerBase {
         if (isMaximizingPlayer) {
             // int bestScore = -INFINITY;
             int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMoves(board, maximizingPlayerColor);
+            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, maximizingPlayerColor, -1, -1);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
                 int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, false, depth - 1, alpha, beta);
@@ -594,7 +830,7 @@ public class Player extends PlayerBase {
         } else {
             // int bestScore = INFINITY;
             int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMoves(board, getOpponentColor(maximizingPlayerColor));
+            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(maximizingPlayerColor), -1,- 1);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
                 int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, true, depth - 1, alpha, beta);
