@@ -66,7 +66,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -131,7 +131,8 @@ public class Player extends PlayerBase {
         ArrayList<Integer> bestMove = new ArrayList<>();
         ArrayList<Move> bestMoveContainer = new ArrayList<>();
 
-
+        bestMove.add(-1);
+        bestMoveContainer.add(null);
 
         Map<Character, Integer> mapColor;
         int left;
@@ -204,65 +205,40 @@ public class Player extends PlayerBase {
 
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXleft] == 'k' + chooser) {
-                                priority = 60;
-                                bestMove.add(mapW.get('k'));
-                                bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                priority = 200;
+                                bestMove.set(0, mapW.get('k'));
+                                bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                             }
 
                             if (board[afterY][afterXleft] == 'q' + chooser) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 59) {
-                                    priority = 59;
+                                if (bestMove.get(0) < mapW.get('q') && priority < 100) {
+                                    priority = 100;
                                     bestMove.set(0, mapW.get('q'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
-                                } else {
-                                    priority = 59;
-                                    bestMove.add(mapW.get('q'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
-
                             }
 
                             if (board[afterY][afterXleft] == 'r' + chooser) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 58) {
-                                    priority = 58;
+                                if (bestMove.get(0) < mapW.get('r') && priority < 50) {
+                                    priority = 50;
                                     bestMove.set(0, mapW.get('r'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
-                                } else {
-                                    priority = 58;
-                                    bestMove.add(mapW.get('r'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
-                            if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser  && priority < 57) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('b')) {
-                                    priority = 57;
+                            if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser) {
+                                if (bestMove.get(0) < mapW.get('b') && priority < 30) {
+                                    priority = 30;
                                     bestMove.set(0, mapW.get('b'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
-                                } else {
-                                    priority = 57;
-                                    bestMove.add(mapW.get('b'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
-                            if (board[afterY][afterXleft] == 'p' + chooser  && priority < 56) {
-                                if (bestMove.size() != 0) {
-                                    priority = 56;
+                            if (board[afterY][afterXleft] == 'p' + chooser) {
+                                if (priority < 10) {
+                                    priority = 10;
                                     bestMove.set(0, mapW.get('p'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
-                                } else {
-                                    priority = 56;
-                                    bestMove.add(mapW.get('p'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXleft, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
@@ -274,72 +250,42 @@ public class Player extends PlayerBase {
 
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXright] == 'k' + chooser) {
-                                if (bestMove.size() == 0) {
-                                    priority = 60;
-                                    bestMove.add(mapW.get('k'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                } else {
-                                    priority = 60;
+
+                                    priority = 200;
                                     bestMove.set(0, mapW.get('k'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                }
+                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+
                             }
 
                             if (board[afterY][afterXright] == 'q' + chooser) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q')  && priority < 59) {
-                                    priority = 59;
+                                if (bestMove.get(0) < mapW.get('q')  && priority < 100) {
+                                    priority = 100;
                                     bestMove.set(0, mapW.get('q'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                } else {
-                                    priority = 59;
-                                    bestMove.add(mapW.get('q'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'r' + chooser) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r')  && priority < 58) {
-                                    priority = 58;
+                                if (bestMove.get(0) < mapW.get('r')  && priority < 50) {
+                                    priority = 50;
                                     bestMove.set(0, mapW.get('r'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                } else {
-                                    priority = 58;
-                                    bestMove.add(mapW.get('r'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'b' + chooser || board[afterY][afterXright] == 'n' + chooser) {
-                                if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('b')  && priority < 57) {
-                                    priority = 57;
+                                if (bestMove.get(0) < mapW.get('b')  && priority < 30) {
+                                    priority = 30;
                                     bestMove.set(0, mapW.get('b'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                } else {
-                                    priority = 57;
-                                    bestMove.add(mapW.get('b'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'p' + chooser) {
-                                if (bestMove.size() != 0 && priority < 56) {
-                                    priority = 56;
+                                if (priority < 10) {
+                                    priority = 10;
                                     bestMove.set(0, mapW.get('p'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
-                                } else {
-                                    priority = 56;
-                                    bestMove.add(mapW.get('p'));
-                                    bestMoveContainer.clear();
-                                    bestMoveContainer.add(new Move(x, y, afterXright, afterY));
+                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                 }
                             }
 
@@ -365,16 +311,10 @@ public class Player extends PlayerBase {
                                 if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
                                     // 공격적 경우의 수 중
                                     if (board[afterY][afterX] == 'k' + chooser) {
-                                        if (bestMove.size() != 0 && priority < 1) {
-                                            priority = 1;
+                                        if (priority < 196) {
+                                            priority = 196;
                                             bestMove.set(0, mapW.get('k'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                        } else {
-                                            priority = 1;
-                                            bestMove.add(mapW.get('k'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0,new Move(x, y, afterX, afterY));
                                         }
 
                                     }
@@ -404,30 +344,18 @@ public class Player extends PlayerBase {
 
                                         // 공격적 경우의 수 중
                                         if (board[afterY][afterX] == 'k' + chooser) {
-                                            if (bestMove.size() != 0 && priority < 10) {
-                                                priority = 10;
-                                                bestMove.add(mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 10;
+                                            if (priority < 197) {
+                                                priority = 197;
                                                 bestMove.set(0, mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0,new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (bestMove.size() != 0 && priority < 9) {
-                                                priority = 9;
+                                            if (priority < 97) {
+                                                priority = 97;
                                                 bestMove.set(0, mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 9;
-                                                bestMove.add(mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
@@ -470,45 +398,27 @@ public class Player extends PlayerBase {
 
                                         // 공격적 경우의 수 중
                                         if (board[afterY][afterX] == 'k' + chooser) {
-                                            if (bestMove.size() != 0 && priority < 20) {
-                                                priority = 20;
-                                                bestMove.add(mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 20;
+                                            if (priority < 198) {
+                                                priority = 198;
                                                 bestMove.set(0, mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 19) {
-                                                priority = 19;
+                                            if (bestMove.get(0) < mapW.get('q') && priority < 98) {
+                                                priority = 98;
                                                 bestMove.set(0, mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 19;
-                                                bestMove.add(mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
 
                                         }
 
                                         if (board[afterY][afterX] == 'r' + chooser) {
-                                            if (bestMove.size() != 0  && priority < 18) {
-                                                priority = 18;
+                                            if (priority < 48) {
+                                                priority = 48;
                                                 bestMove.set(0, mapW.get('r'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 18;
-                                                bestMove.add(mapW.get('r'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
@@ -550,58 +460,34 @@ public class Player extends PlayerBase {
 
                                         // 공격적 경우의 수 중
                                         if (board[afterY][afterX] == 'k' + chooser) {
-                                            if (bestMove.size() != 0 && priority < 30) {
-                                                priority = 30;
-                                                bestMove.add(mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 30;
+                                            if (priority < 199) {
+                                                priority = 199;
                                                 bestMove.set(0, mapW.get('k'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 29) {
-                                                priority = 29;
+                                            if (bestMove.get(0) < mapW.get('q') && priority < 99) {
+                                                priority = 99;
                                                 bestMove.set(0, mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 29;
-                                                bestMove.add(mapW.get('q'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'r' + chooser) {
-                                            if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 28) {
-                                                priority = 28;
+                                            if (bestMove.get(0) < mapW.get('r') && priority < 49) {
+                                                priority = 49;
                                                 bestMove.set(0, mapW.get('r'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 28;
-                                                bestMove.add(mapW.get('r'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
-                                            if (bestMove.size() != 0 && priority < 27) {
-                                                priority = 27;
+                                            if (priority < 29) {
+                                                priority = 29;
                                                 bestMove.set(0, mapW.get('b'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                            } else {
-                                                priority = 27;
-                                                bestMove.add(mapW.get('b'));
-                                                bestMoveContainer.clear();
-                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
@@ -638,60 +524,36 @@ public class Player extends PlayerBase {
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
                                 if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
 
-// 공격적 경우의 수 중
+                                    // 공격적 경우의 수 중
                                     if (board[afterY][afterX] == 'k' + chooser) {
-                                        if (bestMove.size() != 0) {
-                                            priority = 30;
-                                            bestMove.add(mapW.get('k'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                        } else if (priority < 30){
-                                            priority = 30;
+                                        if (priority < 199) {
+                                            priority = 199;
                                             bestMove.set(0, mapW.get('k'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (board[afterY][afterX] == 'q' + chooser) {
-                                        if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('q') && priority < 29) {
-                                            priority = 29;
+                                        if (bestMove.get(0) < mapW.get('q') && priority < 99) {
+                                            priority = 99;
                                             bestMove.set(0, mapW.get('q'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                        } else {
-                                            priority = 29;
-                                            bestMove.add(mapW.get('q'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (board[afterY][afterX] == 'r' + chooser) {
-                                        if (bestMove.size() != 0 && bestMove.get(0) < mapW.get('r') && priority < 28) {
-                                            priority = 28;
+                                        if (bestMove.get(0) < mapW.get('r') && priority < 49) {
+                                            priority = 49;
                                             bestMove.set(0, mapW.get('r'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                        } else {
-                                            priority = 28;
-                                            bestMove.add(mapW.get('r'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
-                                        if (bestMove.size() != 0 && priority < 17) {
-                                            priority = 27;
+                                        if (priority < 29) {
+                                            priority = 29;
                                             bestMove.set(0, mapW.get('b'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                        } else {
-                                            priority = 27;
-                                            bestMove.add(mapW.get('b'));
-                                            bestMoveContainer.clear();
-                                            bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
@@ -709,7 +571,7 @@ public class Player extends PlayerBase {
 
 
 
-        if (bestMove.size() != 0) {
+        if (bestMove.get(0) != -1) {
             return bestMoveContainer;
         }
 
