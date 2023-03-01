@@ -251,14 +251,14 @@ public class Player extends PlayerBase {
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXright] == 'k' + chooser) {
 
-                                    priority = 200;
-                                    bestMove.set(0, mapW.get('k'));
-                                    bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+                                priority = 200;
+                                bestMove.set(0, mapW.get('k'));
+                                bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
 
                             }
 
                             if (board[afterY][afterXright] == 'q' + chooser) {
-                                if (bestMove.get(0) < mapW.get('q')  && priority < 100) {
+                                if (bestMove.get(0) < mapW.get('q') && priority < 100) {
                                     priority = 100;
                                     bestMove.set(0, mapW.get('q'));
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
@@ -266,7 +266,7 @@ public class Player extends PlayerBase {
                             }
 
                             if (board[afterY][afterXright] == 'r' + chooser) {
-                                if (bestMove.get(0) < mapW.get('r')  && priority < 50) {
+                                if (bestMove.get(0) < mapW.get('r') && priority < 50) {
                                     priority = 50;
                                     bestMove.set(0, mapW.get('r'));
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
@@ -274,7 +274,7 @@ public class Player extends PlayerBase {
                             }
 
                             if (board[afterY][afterXright] == 'b' + chooser || board[afterY][afterXright] == 'n' + chooser) {
-                                if (bestMove.get(0) < mapW.get('b')  && priority < 30) {
+                                if (bestMove.get(0) < mapW.get('b') && priority < 30) {
                                     priority = 30;
                                     bestMove.set(0, mapW.get('b'));
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
@@ -314,7 +314,7 @@ public class Player extends PlayerBase {
                                         if (priority < 196) {
                                             priority = 196;
                                             bestMove.set(0, mapW.get('k'));
-                                            bestMoveContainer.set(0,new Move(x, y, afterX, afterY));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
 
                                     }
@@ -347,7 +347,7 @@ public class Player extends PlayerBase {
                                             if (priority < 197) {
                                                 priority = 197;
                                                 bestMove.set(0, mapW.get('k'));
-                                                bestMoveContainer.set(0,new Move(x, y, afterX, afterY));
+                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
@@ -570,7 +570,6 @@ public class Player extends PlayerBase {
         }
 
 
-
         if (bestMove.get(0) != -1) {
             return bestMoveContainer;
         }
@@ -692,7 +691,7 @@ public class Player extends PlayerBase {
         } else {
             // int bestScore = INFINITY;
             int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(maximizingPlayerColor), -1,- 1);
+            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(maximizingPlayerColor), -1, -1);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
                 int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, true, depth - 1, alpha, beta);
