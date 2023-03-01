@@ -4,13 +4,32 @@ import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
+    private static final Map<Character, Integer> mapW = new HashMap<>();
+    private static final Map<Character, Integer> mapB = new HashMap<>();
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
+
+        mapW.put('p', 1);
+        mapW.put('b', 3);
+        mapW.put('n', 3);
+        mapW.put('r', 5);
+        mapW.put('q', 9);
+        mapW.put('k', 200);
+
+        mapB.put('P', 1);
+        mapB.put('B', 3);
+        mapB.put('N', 3);
+        mapB.put('R', 5);
+        mapB.put('Q', 9);
+        mapB.put('K', 200);
+
     }
 
     @Override
@@ -44,7 +63,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -105,14 +124,21 @@ public class Player extends PlayerBase {
     private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
+        Map<Character, Integer> mapColor;
         int left;
         int right;
+        int chooser; // 소문자를 기준으로 할거임
+
         if (color == 'W') {
             left = 97;
             right = 122;
+            mapColor = mapW;
+            chooser = -32;
         } else {
             left = 65;
             right = 90;
+            mapColor = mapB;
+            chooser = 0;
         }
 
         int lessMin = 0;
@@ -163,11 +189,48 @@ public class Player extends PlayerBase {
                 int afterXright = x + 1;
 
                 if (afterXleft >= lessMin && afterXleft < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
+
+                    // 공격적 경우의 수 중
+                    if (board[afterY][afterXleft] == 'k' + chooser) {
+                        possibleMoves.clear();
+                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                        return possibleMoves;
+                    }
+
+                    if (board[afterY][afterXleft] == 'q' + chooser) {
+                        possibleMoves.clear();
+                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                        return possibleMoves;
+                    }
+
+                    if (board[afterY][afterXleft] == 'r' + chooser) {
+                        possibleMoves.clear();
+                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                        return possibleMoves;
+                    }
+
+                    if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser) {
+                        possibleMoves.clear();
+                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                        return possibleMoves;
+                    }
+
+                    if (board[afterY][afterXleft] == 'p' + chooser) {
+                        possibleMoves.clear();
+                        possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                        return possibleMoves;
+                    }
+
                     possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                    return possibleMoves;
                 }
 
                 if (afterXright < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
+
+                    // 공격적
+                    possibleMoves.clear();
                     possibleMoves.add(new Move(x, y, afterXright, afterY));
+                    return possibleMoves;
                 }
 
 
@@ -186,6 +249,13 @@ public class Player extends PlayerBase {
 
                     if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
                         if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+                            // 공격적 경우의 수 중
+                            if (board[afterY][afterX] == 'k' + chooser) {
+                                possibleMoves.clear();
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                return possibleMoves;
+                            }
+
                             possibleMoves.add(new Move(x, y, afterX, afterY));
                         }
                     }
@@ -208,6 +278,20 @@ public class Player extends PlayerBase {
                         while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
                             if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                // 공격적 경우의 수 중
+                                if (board[afterY][afterX] == 'k' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'q' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
                                 possibleMoves.add(new Move(x, y, afterX, afterY));
                                 break;
                             }
@@ -244,6 +328,26 @@ public class Player extends PlayerBase {
                         while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
                             if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                // 공격적 경우의 수 중
+                                if (board[afterY][afterX] == 'k' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'q' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'r' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
                                 possibleMoves.add(new Move(x, y, afterX, afterY));
                                 break;
                             }
@@ -279,6 +383,32 @@ public class Player extends PlayerBase {
                         while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
                             if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                // 공격적 경우의 수 중
+                                if (board[afterY][afterX] == 'k' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'q' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'r' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
+                                if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                    possibleMoves.clear();
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    return possibleMoves;
+                                }
+
                                 possibleMoves.add(new Move(x, y, afterX, afterY));
                                 break;
                             }
@@ -311,6 +441,32 @@ public class Player extends PlayerBase {
 
                     if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
                         if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+
+                            // 공격적 경우의 수 중
+                            if (board[afterY][afterX] == 'k' + chooser) {
+                                possibleMoves.clear();
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                return possibleMoves;
+                            }
+
+                            if (board[afterY][afterX] == 'q' + chooser) {
+                                possibleMoves.clear();
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                return possibleMoves;
+                            }
+
+                            if (board[afterY][afterX] == 'r' + chooser) {
+                                possibleMoves.clear();
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                return possibleMoves;
+                            }
+
+                            if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                possibleMoves.clear();
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                return possibleMoves;
+                            }
+
                             possibleMoves.add(new Move(x, y, afterX, afterY));
                         }
                     }
