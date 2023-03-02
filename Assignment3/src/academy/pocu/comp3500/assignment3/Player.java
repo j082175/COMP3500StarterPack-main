@@ -15,6 +15,31 @@ public class Player extends PlayerBase {
     private static final Map<Character, Integer> mapW = new HashMap<>();
     private static final Map<Character, Integer> mapB = new HashMap<>();
 
+    // 왼쪽은 black, 오른쪽은 white 라고 약속 순서는 차례대로 오른쪽부터 k, q, r, b, n, p <= (p 이 시작점)
+    private enum chessPiece {
+        p(1),
+        n(2),
+        b(4),
+        r(8),
+        q(16),
+        k(32),
+        P(64),
+        N(128),
+        B(256),
+        R(512),
+        Q(1024),
+        K(2048);
+
+        private int num;
+        chessPiece(int num) {
+            this.num = num;
+        }
+
+        public int get() {
+            return num;
+        }
+    }
+
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
 
@@ -48,6 +73,11 @@ public class Player extends PlayerBase {
     public Move getNextMove(char[][] board, Move opponentMove) {
         // TODO Auto-generated method stub
 
+        // 왼쪽 char 는 Black, 오른쪽 char 는 White 라고 약속
+        // short[] shortBoard = charBoardToShortBoard(board);
+
+
+
         long startTime = System.currentTimeMillis();
 
         Move bestMove = null;
@@ -66,7 +96,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -743,6 +773,55 @@ public class Player extends PlayerBase {
         } else {
             return arr;
         }
+    }
+
+    private short[] charBoardToShortBoard(char[][] board) {
+        short[] shortBoard = new short[board.length];
+
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board.length; x++) {
+                switch (board[y][x]) {
+                    case 'p':
+                        shortBoard[y] ^= chessPiece.p.get();
+                        break;
+                    case 'n':
+                        shortBoard[y] ^= chessPiece.n.get();
+                        break;
+                    case 'b':
+                        shortBoard[y] ^= chessPiece.b.get();
+                        break;
+                    case 'r':
+                        shortBoard[y] ^= chessPiece.r.get();
+                        break;
+                    case 'q':
+                        shortBoard[y] ^= chessPiece.q.get();
+                        break;
+                    case 'k':
+                        shortBoard[y] ^= chessPiece.k.get();
+                        break;
+                    case 'P':
+                        shortBoard[y] ^= chessPiece.P.get();
+                        break;
+                    case 'N':
+                        shortBoard[y] ^= chessPiece.N.get();
+                        break;
+                    case 'B':
+                        shortBoard[y] ^= chessPiece.B.get();
+                        break;
+                    case 'R':
+                        shortBoard[y] ^= chessPiece.R.get();
+                        break;
+                    case 'Q':
+                        shortBoard[y] ^= chessPiece.Q.get();
+                        break;
+                    case 'K':
+                        shortBoard[y] ^= chessPiece.K.get();
+                        break;
+                }
+            }
+        }
+
+        return shortBoard;
     }
 
 }

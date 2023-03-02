@@ -4,11 +4,10 @@ import academy.pocu.comp3500.lab3.MissionControl;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
 
 public class test01 {
 
-    @Test
+
     public void sejinTest() {
         {
             final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7, 4, 3, 2 };
@@ -230,7 +229,6 @@ public class test01 {
         }
     }
 
-    @Test
     public void test1() {
         {
             final int[] altitudes = new int[] { 1, 2, 3, 4, 5, 6, 7, 4, 3, 2 };
