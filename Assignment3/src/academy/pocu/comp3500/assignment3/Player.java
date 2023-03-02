@@ -29,6 +29,7 @@ public class Player extends PlayerBase {
         K(2048);
 
         private int num;
+
         chessPiece(int num) {
             this.num = num;
         }
@@ -75,7 +76,6 @@ public class Player extends PlayerBase {
         // short[] shortBoard = charBoardToShortBoard(board);
 
 
-
         long startTime = System.currentTimeMillis();
 
         Move bestMove = null;
@@ -94,7 +94,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
