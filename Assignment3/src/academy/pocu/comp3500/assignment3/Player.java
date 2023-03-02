@@ -3,10 +3,8 @@ package academy.pocu.comp3500.assignment3;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -96,7 +94,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 1, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -611,7 +609,7 @@ public class Player extends PlayerBase {
     private int evaluateBoard(char[][] board, char color) {
         int score = 0;
 
-        char[] pieces = new char[]{'p', 'n', 'b', 'r', 'q', 'k'};
+        char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
 
         char ascii;
         int ascii2;
@@ -625,7 +623,7 @@ public class Player extends PlayerBase {
 
         char[] result = changeUpDown(pieces, color);
 
-        int[] scores = new int[]{1, 3, 3, 5, 9, 200};
+        int[] scores = {1, 3, 3, 5, 9, 200};
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
@@ -750,6 +748,7 @@ public class Player extends PlayerBase {
     // 특정 수를 적용한 새로운 보드를 반환합니다.
     private char[][] applyMove(char[][] board, Move move) {
         char[][] newBoard = new char[board.length][board[0].length];
+        //char[][] newBoard = board;
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 newBoard[col][row] = board[col][row];

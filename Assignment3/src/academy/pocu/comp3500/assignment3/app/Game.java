@@ -55,8 +55,8 @@ final class Game {
             this.black = player1;
         }
 
-        this.board = createNewBoard();
-        //this.board = createBoard2();
+        //this.board = createNewBoard();
+        this.board = createBoard2();
     }
 
     public void nextTurn() {
@@ -90,7 +90,7 @@ final class Game {
         this.lastMove.toX = nextMove.toX;
         this.lastMove.toY = nextMove.toY;
 //this.maxMoveTimeoutInMilliseconds
-        if (player.getMaxMoveTimeMilliseconds() != Integer.MAX_VALUE && duration > this.maxMoveTimeoutInMilliseconds) {
+        if (player.getMaxMoveTimeMilliseconds() != Integer.MAX_VALUE && duration > Integer.MAX_VALUE) {
             this.winner = this.currentTurn % 2 != 0 ? 'B' : 'W';
             this.isGameOver = true;
             this.timeOutInMilliseconds = duration;
@@ -512,12 +512,12 @@ final class Game {
 
     private static char[][] createBoard2() {
         char[][] board = new char[][]{
-                {' ',' ','N',' ',' ',' ',' ',' '},
+                {' ',' ','N',' ',' ',' ',' ','K'},
                 {' ',' ',' ',' ','R',' ',' ',' '},
                 {' ',' ',' ',' ',' ',' ',' ',' '},
                 {' ',' ',' ','n',' ',' ',' ',' '},
                 {' ',' ',' ','k',' ',' ',' ',' '},
-                {'P',' ','K',' ',' ',' ',' ',' '},
+                {'P',' ',' ',' ',' ',' ',' ',' '},
                 {' ','p',' ',' ',' ',' ',' ',' '},
                 {' ',' ','r',' ','b',' ',' ',' '},
         };
