@@ -107,18 +107,18 @@ public class Player extends PlayerBase {
             }
         }
 
-        long elapsedTime = System.currentTimeMillis() - startTime;
+/*        long elapsedTime = System.currentTimeMillis() - startTime;
         if (elapsedTime >= getMaxMoveTimeMilliseconds()) {
             throw new RuntimeException("Time is up!");
-        }
+        }*/
 
 
-        if (sameMoves.size() != 0) {
+/*        if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
                 Random random = new Random();
                 return sameMoves.get(random.nextInt(sameMoves.size()));
             }
-        }
+        }*/
 
         return bestMove;
     }
