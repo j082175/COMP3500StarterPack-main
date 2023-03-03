@@ -3,7 +3,7 @@ package academy.pocu.comp3500.assignment3.app;
 import academy.pocu.comp3500.assignment3.Player;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -90,7 +90,7 @@ public class Program {
 
 
     @Test
-    public static void test1() {
+    public void test1() {
         {
             // getNextMove returns a valid move when there is only one piece in board
             char[] symbols = {'k', 'n', 'b', 'r', 'q', 'p'};

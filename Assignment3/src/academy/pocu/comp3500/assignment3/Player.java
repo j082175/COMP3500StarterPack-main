@@ -1,4 +1,3 @@
-/*
 package academy.pocu.comp3500.assignment3;
 
 import academy.pocu.comp3500.assignment3.chess.Move;
@@ -95,7 +94,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, 2, 1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -108,11 +107,10 @@ public class Player extends PlayerBase {
             }
         }
 
-*/
-/*        long elapsedTime = System.currentTimeMillis() - startTime;
+        long elapsedTime = System.currentTimeMillis() - startTime;
         if (elapsedTime >= getMaxMoveTimeMilliseconds()) {
             throw new RuntimeException("Time is up!");
-        }*//*
+        }
 
 
         if (sameMoves.size() != 0) {
@@ -140,11 +138,10 @@ public class Player extends PlayerBase {
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
-*/
-/*                if (board[row][col] == color) {
+                if (board[row][col] == color) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
                     possibleMoves.addAll(movesFromCurrentPosition);
-                }*//*
+                }
 
                 if (board[col][row] >= left && board[col][row] <= right) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
@@ -335,7 +332,7 @@ public class Player extends PlayerBase {
                     case 'k': {
 
 
-                        // ArrayList<Move> checkmateCheck = new ArrayList<>();
+                        /*// ArrayList<Move> checkmateCheck = new ArrayList<>();
                         HashSet<MoveTo> checkmateCheck = new HashSet<>();
 
                         {
@@ -476,7 +473,7 @@ public class Player extends PlayerBase {
                                 }
 
                             }
-                        }
+                        }*/
 
 
                         ArrayList<MoveTo> allPossibilities = new ArrayList<>();
@@ -507,7 +504,7 @@ public class Player extends PlayerBase {
 
                         }
 
-                        for (int i = 0; i < allPossibilities.size(); i++) {
+                        /*for (int i = 0; i < allPossibilities.size(); i++) {
                             if (checkmateCheck.size() != 0) {
                                 if (!checkmateCheck.contains(allPossibilities.get(i))) {
                                     bestMoveContainer.set(0, new Move(x, y, allPossibilities.get(i).toX, allPossibilities.get(i).toY));
@@ -515,7 +512,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                        }
+                        }*/
 
 
                         break;
@@ -803,8 +800,7 @@ public class Player extends PlayerBase {
                         }
                     }
                 }
-                    */
-/*switch (board[row][col]) {
+switch (board[row][col]) {
                         case 'p':
                             score += 1;
                             break;
@@ -823,13 +819,12 @@ public class Player extends PlayerBase {
                         case 'k':
                             score += 200;
                             break;
-                    }*//*
+                    }
 
                 // score += 1;
 
 
-                    */
-/*switch (board[row][col]) {
+switch (board[row][col]) {
                         case 'P':
                             score -= 1;
                             break;
@@ -848,7 +843,7 @@ public class Player extends PlayerBase {
                         case 'K':
                             score -= 200;
                             break;
-                    }*//*
+                    }
 
                 // score -= 1;
 
@@ -859,42 +854,36 @@ public class Player extends PlayerBase {
     }
 
     // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
-    private int minMax(char[][] board, char currentPlayerColor, char maximizingPlayerColor, boolean isMaximizingPlayer, int depth, int alpha, int beta) {
-        int score = evaluateBoard(board, currentPlayerColor);
+    private int minMax(char[][] board, char color, int depth, int change) {
+        int score = evaluateBoard(board, color);
 
         if (depth == 0 || Math.abs(score) == INFINITY) {
             return score;
         }
 
-        if (isMaximizingPlayer) {
-            // int bestScore = -INFINITY;
-            int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, currentPlayerColor, -1, -1);
-            for (Move move : possibleMoves) {
-                char[][] newBoard = applyMove(board, move);
-                int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, false, depth - 1, alpha, beta);
-                bestScore = Math.max(bestScore, currentScore);
-                alpha = Math.max(alpha, bestScore);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return bestScore;
+        char opponent;
+        if (change == -1) {
+            opponent = color;
+            change = 1;
         } else {
-            // int bestScore = INFINITY;
-            int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(currentPlayerColor), -1, -1);
-            for (Move move : possibleMoves) {
-                char[][] newBoard = applyMove(board, move);
-                int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, true, depth - 1, alpha, beta);
-                bestScore = Math.min(bestScore, currentScore);
-                beta = Math.min(beta, bestScore);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return bestScore;
+            opponent = getOpponentColor(color);
+            change = -1;
         }
+
+        int bestScore = score;
+        ArrayList<Move> possibleMoves = getPossibleMoves(board, opponent);
+        for (Move move : possibleMoves) {
+            char[][] newBoard = applyMove(board, move);
+            int currentScore = minMax(newBoard, color, depth - 1, change);
+            if (change == 1) {
+                bestScore = Math.max(bestScore, currentScore);
+            } else {
+                bestScore = Math.min(bestScore, currentScore);
+            }
+
+        }
+        return bestScore;
+
     }
 
     private char getOpponentColorToAscii(char color) {
@@ -992,12 +981,11 @@ public class Player extends PlayerBase {
 
 
 
-*/
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-package academy.pocu.comp3500.assignment3;
+/*package academy.pocu.comp3500.assignment3;
 
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
@@ -1054,10 +1042,10 @@ public class Player extends PlayerBase {
             }
         }
 
-/*        long elapsedTime = System.currentTimeMillis() - startTime;
+*//*        long elapsedTime = System.currentTimeMillis() - startTime;
         if (elapsedTime >= getMaxMoveTimeMilliseconds()) {
             throw new RuntimeException("Time is up!");
-        }*/
+        }*//*
 
         if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
@@ -1084,10 +1072,10 @@ public class Player extends PlayerBase {
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
-/*                if (board[row][col] == color) {
+*//*                if (board[row][col] == color) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
                     possibleMoves.addAll(movesFromCurrentPosition);
-                }*/
+                }*//*
                 if (board[col][row] >= left && board[col][row] <= right) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
                     possibleMoves.addAll(movesFromCurrentPosition);
@@ -1122,8 +1110,8 @@ public class Player extends PlayerBase {
         int x = row;
         int y = col;
 
-        /*for (int x = lessMin; x < lessMax; x++) {
-            for (int y = lessMin; y < lessMax; y++) {*/
+        *//*for (int x = lessMin; x < lessMax; x++) {
+            for (int y = lessMin; y < lessMax; y++) {*//*
 
         char piece = board[y][x];
         if (piece >= opponentLeft && piece <= opponentRight) {
@@ -1359,51 +1347,6 @@ public class Player extends PlayerBase {
                         }
                     }
                 }
-                    /*switch (board[row][col]) {
-                        case 'p':
-                            score += 1;
-                            break;
-                        case 'n':
-                            score += 3;
-                            break;
-                        case 'b':
-                            score += 3;
-                            break;
-                        case 'r':
-                            score += 5;
-                            break;
-                        case 'q':
-                            score += 9;
-                            break;
-                        case 'k':
-                            score += 200;
-                            break;
-                    }*/
-                // score += 1;
-
-
-                    /*switch (board[row][col]) {
-                        case 'P':
-                            score -= 1;
-                            break;
-                        case 'N':
-                            score -= 3;
-                            break;
-                        case 'B':
-                            score -= 3;
-                            break;
-                        case 'R':
-                            score -= 5;
-                            break;
-                        case 'Q':
-                            score -= 9;
-                            break;
-                        case 'K':
-                            score -= 200;
-                            break;
-                    }*/
-                // score -= 1;
-
             }
         }
 
@@ -1483,7 +1426,4 @@ public class Player extends PlayerBase {
         }
     }
 
-}
-
-
-
+}*/
