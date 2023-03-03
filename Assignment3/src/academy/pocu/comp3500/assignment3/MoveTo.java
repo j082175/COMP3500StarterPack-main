@@ -1,7 +1,5 @@
 package academy.pocu.comp3500.assignment3;
 
-
-import java.util.HashSet;
 import java.util.Objects;
 
 public class MoveTo {
