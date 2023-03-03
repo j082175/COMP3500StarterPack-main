@@ -995,8 +995,6 @@ public class Player extends PlayerBase {
 */
 
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package academy.pocu.comp3500.assignment3;
@@ -1043,7 +1041,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 3, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, 2, 1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -1413,42 +1411,36 @@ public class Player extends PlayerBase {
     }
 
     // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
-    private int minMax(char[][] board, char currentPlayerColor, char maximizingPlayerColor, boolean isMaximizingPlayer, int depth, int alpha, int beta) {
-        int score = evaluateBoard(board, currentPlayerColor);
+    private int minMax(char[][] board, char color, int depth, int change) {
+        int score = evaluateBoard(board, color);
 
         if (depth == 0 || Math.abs(score) == INFINITY) {
             return score;
         }
 
-        if (isMaximizingPlayer) {
-            // int bestScore = -INFINITY;
-            int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMoves(board, maximizingPlayerColor);
-            for (Move move : possibleMoves) {
-                char[][] newBoard = applyMove(board, move);
-                int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, false, depth - 1, alpha, beta);
-                bestScore = Math.max(bestScore, currentScore);
-                alpha = Math.max(alpha, bestScore);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return bestScore;
+        char opponent;
+        if (change == -1) {
+            opponent = color;
+            change = 1;
         } else {
-            // int bestScore = INFINITY;
-            int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMoves(board, getOpponentColor(maximizingPlayerColor));
-            for (Move move : possibleMoves) {
-                char[][] newBoard = applyMove(board, move);
-                int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, true, depth - 1, alpha, beta);
-                bestScore = Math.min(bestScore, currentScore);
-                beta = Math.min(beta, bestScore);
-                if (beta <= alpha) {
-                    break;
-                }
-            }
-            return bestScore;
+            opponent = getOpponentColor(color);
+            change = -1;
         }
+
+        int bestScore = score;
+        ArrayList<Move> possibleMoves = getPossibleMoves(board, opponent);
+        for (Move move : possibleMoves) {
+            char[][] newBoard = applyMove(board, move);
+            int currentScore = minMax(newBoard, color, depth - 1, change);
+            if (change == 1) {
+                bestScore = Math.max(bestScore, currentScore);
+            } else {
+                bestScore = Math.min(bestScore, currentScore);
+            }
+
+        }
+        return bestScore;
+
     }
 
     private char getOpponentColorToAscii(char color) {
