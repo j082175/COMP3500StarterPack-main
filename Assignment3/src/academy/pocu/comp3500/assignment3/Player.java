@@ -5,6 +5,7 @@ import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -75,7 +76,6 @@ public class Player extends PlayerBase {
         // 왼쪽 char 는 Black, 오른쪽 char 는 White 라고 약속
         // short[] shortBoard = charBoardToShortBoard(board);
 
-
         long startTime = System.currentTimeMillis();
 
         Move bestMove = null;
@@ -94,7 +94,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, getOpponentColor(color), false, 2, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            int score = minMax(newBoard, color, getOpponentColor(color), false, 4, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -152,7 +152,7 @@ public class Player extends PlayerBase {
     }
 
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
-    private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
+    /*private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
         int priority = -1;
@@ -186,11 +186,11 @@ public class Player extends PlayerBase {
         int opponentRight = opponentLeft + 25;
 
 
-/*        int x = row;
-        int y = col;*/
+*//*        int x = row;
+        int y = col;*//*
 
-        /*for (int x = lessMin; x < lessMax; x++) {
-            for (int y = lessMin; y < lessMax; y++) {*/
+     *//*for (int x = lessMin; x < lessMax; x++) {
+            for (int y = lessMin; y < lessMax; y++) {*//*
 
         for (int y = lessMin; y < lessMax; y++) {
             for (int x = lessMin; x < lessMax; x++) {
@@ -217,7 +217,9 @@ public class Player extends PlayerBase {
                             pawnStart = 1;
                         }
 
-                        if ((afterY >= lessMin && afterY < lessMax) && board[afterY][x] == 0) {
+                        boolean initialMoveCheck = afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveCheck && board[afterY][x] == 0) {
                             possibleMoves.add(new Move(x, y, x, afterY));
 
                             if (y == pawnStart && (afterY + 1 < lessMax) && board[afterY + 1][x] == 0) {
@@ -229,7 +231,9 @@ public class Player extends PlayerBase {
                         int afterXleft = x - 1;
                         int afterXright = x + 1;
 
-                        if (afterXleft >= lessMin && afterXleft < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
+                        boolean initialMoveLeftCheck = afterXleft >= lessMin && afterXleft < lessMax && afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveLeftCheck && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
 
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXleft] == 'k' + chooser) {
@@ -274,7 +278,9 @@ public class Player extends PlayerBase {
                             // return possibleMoves;
                         }
 
-                        if (afterXright < lessMax && (afterY >= lessMin && afterY < lessMax) && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
+                        boolean initialMoveRightCheck = afterXright < lessMax && afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveRightCheck && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
 
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXright] == 'k' + chooser) {
@@ -328,6 +334,153 @@ public class Player extends PlayerBase {
 
                     case 'K':
                     case 'k': {
+
+
+                        // ArrayList<Move> checkmateCheck = new ArrayList<>();
+                        HashSet<MoveTo> checkmateCheck = new HashSet<>();
+
+                        {
+                            int[] xCase2 = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+                            int[] yCase2 = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                            for (int j = 0; j < xCase2.length; j++) {
+                                int afterY2 = y + yCase2[j];
+                                int afterX2 = x + xCase2[j];
+                                boolean isCheckmateFound = false;
+
+                                if (j == 1 && checkmateCheck.size() == 0) {
+                                    break;
+                                }
+
+
+                                // Rook case
+                                {
+                                    int[] xCase = new int[]{-1, 0, 1, 0};
+                                    int[] yCase = new int[]{0, 1, 0, -1};
+
+
+                                    for (int i = 0; i < 4; i++) {
+                                        int afterY = afterY2 + yCase[i];
+                                        int afterX = afterX2 + xCase[i];
+
+                                        if (isCheckmateFound) {
+                                            break;
+                                        }
+
+                                        while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                                // 체크메이트부터 확인
+
+                                                if (board[afterY][afterX] == 'r' + chooser) {
+                                                    // checkmateCheck.add(new Move(x, y, afterX2, afterY2));
+
+                                                    checkmateCheck.add(new MoveTo(afterX2, afterY2));
+                                                    isCheckmateFound = true;
+                                                    break;
+                                                }
+
+                                                if (board[afterY][afterX] == 'q' + chooser) {
+                                                    //checkmateCheck.add(new Move(x, y, afterX2, afterY2));
+
+                                                    checkmateCheck.add(new MoveTo(afterX2, afterY2));
+                                                    isCheckmateFound = true;
+                                                    break;
+                                                }
+
+                                            }
+
+                                            if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                                break;
+                                            }
+
+                                            afterX += xCase[i];
+                                            afterY += yCase[i];
+                                        }
+
+
+                                    }
+                                }
+
+                                // Bishop case
+                                {
+                                    int[] xCase = new int[]{-1, 1, 1, -1};
+                                    int[] yCase = new int[]{-1, 1, -1, 1};
+
+                                    for (int i = 0; i < 4; i++) {
+                                        int afterY = afterY2 + yCase[i];
+                                        int afterX = afterX2 + xCase[i];
+
+                                        if (isCheckmateFound) {
+                                            break;
+                                        }
+
+                                        while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                                // 체크메이트부터 확인
+
+                                                if (board[afterY][afterX] == 'b' + chooser) {
+                                                    //checkmateCheck.add(new Move(x, y, afterX2, afterY2));
+
+                                                    checkmateCheck.add(new MoveTo(afterX2, afterY2));
+                                                    isCheckmateFound = true;
+                                                    break;
+                                                }
+
+                                                if (board[afterY][afterX] == 'q' + chooser) {
+                                                    //checkmateCheck.add(new Move(x, y, afterX2, afterY2));
+
+                                                    checkmateCheck.add(new MoveTo(afterX2, afterY2));
+                                                    isCheckmateFound = true;
+                                                    break;
+                                                }
+
+                                            }
+
+                                            if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                                break;
+                                            }
+
+                                            afterX += xCase[i];
+                                            afterY += yCase[i];
+                                        }
+
+                                    }
+                                }
+
+                                // Kinght case
+                                {
+                                    if (isCheckmateFound) {
+                                        continue;
+                                    }
+
+                                    int[] xCase = new int[]{2, 2, -2, -2, 1, 1, -1, -1};
+                                    int[] yCase = new int[]{-1, 1, -1, 1, 2, -2, 2, -2};
+
+                                    for (int i = 0; i < 8; i++) {
+                                        int afterY = afterY2 + yCase[i];
+                                        int afterX = afterX2 + xCase[i];
+
+                                        if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                            if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                                if (board[afterY][afterX] == 'n' + chooser) {
+                                                    //checkmateCheck.add(new Move(x, y, afterX2, afterY2));
+                                                    checkmateCheck.add(new MoveTo(afterX2, afterY2));
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+
+
+                        ArrayList<MoveTo> allPossibilities = new ArrayList<>();
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 
@@ -335,8 +488,9 @@ public class Player extends PlayerBase {
                             int afterY = y + yCase[i];
                             int afterX = x + xCase[i];
 
+
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight || (board[afterY][afterX] == 0)) {
                                     // 공격적 경우의 수 중
                                     if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 196) {
@@ -347,10 +501,23 @@ public class Player extends PlayerBase {
 
                                     }
 
+                                    allPossibilities.add(new MoveTo(afterX, afterY));
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
                             }
+
                         }
+
+                        for (int i = 0; i < allPossibilities.size(); i++) {
+                            if (checkmateCheck.size() != 0) {
+                                if (!checkmateCheck.contains(allPossibilities.get(i))) {
+                                    bestMoveContainer.set(0, new Move(x, y, allPossibilities.get(i).toX, allPossibilities.get(i).toY));
+                                    return bestMoveContainer;
+                                }
+                            }
+
+                        }
+
 
                         break;
                     }
@@ -364,48 +531,41 @@ public class Player extends PlayerBase {
                             int afterX = x + xCase[i];
                             int afterY = y + yCase[i];
 
-                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
-                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                            while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
 
-                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
-
-                                        // 공격적 경우의 수 중
-                                        if (board[afterY][afterX] == 'k' + chooser) {
-                                            if (priority < 197) {
-                                                priority = 197;
-                                                bestMove.set(0, mapW.get('k'));
-                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
-                                            }
+                                    // 공격적 경우의 수 중
+                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (priority < 197) {
+                                            priority = 197;
+                                            bestMove.set(0, mapW.get('k'));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
-
-                                        if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (priority < 97) {
-                                                priority = 97;
-                                                bestMove.set(0, mapW.get('q'));
-                                                bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
-                                            }
-                                        }
-
-                                        possibleMoves.add(new Move(x, y, afterX, afterY));
-                                        break;
                                     }
 
-                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
-                                        break;
+                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                        if (priority < 97) {
+                                            priority = 97;
+                                            bestMove.set(0, mapW.get('q'));
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                        }
                                     }
 
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
-
-                                    afterX += xCase[i];
-                                    afterY += yCase[i];
-
+                                    break;
                                 }
 
+                                if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                    break;
+                                }
 
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                afterX += xCase[i];
+                                afterY += yCase[i];
                             }
                         }
-
                         break;
                     }
 
@@ -603,6 +763,239 @@ public class Player extends PlayerBase {
         }
 
         return possibleMoves;
+    }*/
+
+    private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+
+        int left;
+        int right;
+        int chooser; // 소문자를 기준으로 할거임
+
+        if (color == 'W') {
+            left = 97;
+            right = 122;
+            chooser = -32;
+        } else {
+            left = 65;
+            right = 90;
+            chooser = 0;
+        }
+
+        int lessMin = 0;
+        int lessMax = 8;
+
+        int opponentLeft = getOpponentColorToAscii(color);
+        int opponentRight = opponentLeft + 25;
+
+
+        for (int y = lessMin; y < lessMax; y++) {
+            for (int x = lessMin; x < lessMax; x++) {
+                char piece = board[y][x];
+                if (piece >= opponentLeft && piece <= opponentRight) {
+                    // return possibleMoves;
+                    continue;
+                }
+
+                switch (piece) {
+                    case 'P':
+                    case 'p': {
+                        int afterY;
+                        if (color == 'B') {
+                            afterY = y + 1;
+                        } else {
+                            afterY = y - 1;
+                        }
+
+                        int pawnStart;
+                        if (color == 'W') {
+                            pawnStart = 6;
+                        } else {
+                            pawnStart = 1;
+                        }
+
+                        boolean initialMoveCheck = afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveCheck && board[afterY][x] == 0) {
+                            possibleMoves.add(new Move(x, y, x, afterY));
+
+                            if (y == pawnStart && (afterY + 1 < lessMax) && board[afterY + 1][x] == 0) {
+                                possibleMoves.add(new Move(x, y, x, afterY + 1));
+                            }
+                        }
+
+
+                        int afterXleft = x - 1;
+                        int afterXright = x + 1;
+
+                        boolean initialMoveLeftCheck = afterXleft >= lessMin && afterXleft < lessMax && afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveLeftCheck && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
+
+                            possibleMoves.add(new Move(x, y, afterXleft, afterY));
+                            // return possibleMoves;
+                        }
+
+                        boolean initialMoveRightCheck = afterXright < lessMax && afterY >= lessMin && afterY < lessMax;
+
+                        if (initialMoveRightCheck && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
+
+                            possibleMoves.add(new Move(x, y, afterXright, afterY));
+                            // return possibleMoves;
+                        }
+
+
+                        break;
+                    }
+
+
+                    case 'K':
+                    case 'k': {
+                        int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+                        int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterY = y + yCase[i];
+                            int afterX = x + xCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight || (board[afterY][afterX] == 0)) {
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                }
+                            }
+
+                        }
+
+                        break;
+                    }
+
+                    case 'Q':
+                    case 'q': {
+                        int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
+                        int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+
+                            while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    break;
+                                }
+
+                                if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                    break;
+                                }
+
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                afterX += xCase[i];
+                                afterY += yCase[i];
+                            }
+                        }
+                        break;
+                    }
+
+                    case 'R':
+                    case 'r': {
+                        int[] xCase = new int[]{0, -1, 1, 0};
+                        int[] yCase = new int[]{-1, 0, 0, 1};
+
+                        for (int i = 0; i < 4; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                        break;
+                                    }
+
+                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                        break;
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    afterX += xCase[i];
+                                    afterY += yCase[i];
+                                }
+
+
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'B':
+                    case 'b': {
+                        int[] xCase = new int[]{-1, -1, 1, 1};
+                        int[] yCase = new int[]{-1, 1, -1, 1};
+
+                        for (int i = 0; i < 4; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+
+                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                        break;
+                                    }
+
+                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                        break;
+                                    }
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    afterX += xCase[i];
+                                    afterY += yCase[i];
+                                }
+
+
+                            }
+                        }
+
+                        break;
+                    }
+
+                    case 'N':
+                    case 'n': {
+                        int[] xCase = new int[]{2, 2, -2, -2, 1, 1, -1, -1};
+                        int[] yCase = new int[]{-1, 1, -1, 1, 2, -2, 2, -2};
+
+                        for (int i = 0; i < 8; i++) {
+                            int afterX = x + xCase[i];
+                            int afterY = y + yCase[i];
+
+                            if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
+                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                }
+                            }
+                        }
+
+                        break;
+                    }
+
+                }
+            }
+        }
+
+        return possibleMoves;
     }
 
     // 현재 상태의 점수를 반환하는 함수
@@ -705,7 +1098,7 @@ public class Player extends PlayerBase {
         if (isMaximizingPlayer) {
             // int bestScore = -INFINITY;
             int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, maximizingPlayerColor, -1, -1);
+            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, currentPlayerColor, -1, -1);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
                 int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, false, depth - 1, alpha, beta);
@@ -719,7 +1112,7 @@ public class Player extends PlayerBase {
         } else {
             // int bestScore = INFINITY;
             int bestScore = score;
-            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(maximizingPlayerColor), -1, -1);
+            ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, getOpponentColor(currentPlayerColor), -1, -1);
             for (Move move : possibleMoves) {
                 char[][] newBoard = applyMove(board, move);
                 int currentScore = minMax(newBoard, currentPlayerColor, maximizingPlayerColor, true, depth - 1, alpha, beta);
