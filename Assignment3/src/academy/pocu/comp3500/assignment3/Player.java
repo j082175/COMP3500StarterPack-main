@@ -30,8 +30,8 @@ public class Player extends PlayerBase {
 
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
-        Move bestMove = opponentMove;
-        int bestScore = Integer.MIN_VALUE;
+        Move bestMove = null;
+        int bestScore = -INFINITY;
 
         // 현재 플레이어의 색상
         char color = isWhite() ? 'W' : 'B';
@@ -49,7 +49,7 @@ public class Player extends PlayerBase {
             int score = minMax(newBoard, getOpponentColor(color), 3, -1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
-            if (score > bestScore) {
+            if (score != INFINITY && score > bestScore) {
                 bestScore = score;
                 bestMove = move;
             }
@@ -60,13 +60,17 @@ public class Player extends PlayerBase {
         }
 
 
-        if (sameMoves.size() != 0) {
+/*        if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
                 Random random = new Random();
                 return sameMoves.get(random.nextInt(sameMoves.size()));
             }
-        }
+        }*/
 
+        if (bestMove == null) {
+            Random random = new Random();
+            return possibleMoves.get(random.nextInt(possibleMoves.size()));
+        }
 
         return bestMove;
     }
@@ -811,15 +815,9 @@ public class Player extends PlayerBase {
         int bestScore;
 
         if (check == 1) {
-            bestScore = Integer.MIN_VALUE;
-            if (possibleMoves.size() == 0) {
-                bestScore = Integer.MAX_VALUE;
-            }
+            bestScore = -INFINITY;
         } else {
-            bestScore = Integer.MAX_VALUE;
-            if (possibleMoves.size() == 0) {
-                bestScore = Integer.MIN_VALUE;
-            }
+            bestScore = INFINITY;
         }
 
 
