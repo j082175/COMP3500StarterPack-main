@@ -45,16 +45,17 @@ public class Player extends PlayerBase {
         // 가능한 모든 수에 대해 상대방이 다음 수로 이동할 수 있는 모든 가능성에 대한 점수를 구합니다.
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
-
-            int score = minMax(newBoard, getOpponentColor(color), 3, -1);
+            int[] minValue = {INFINITY};
+            int score = minMax(newBoard, getOpponentColor(color), 3, -1, minValue);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
-            if (score != INFINITY && score > bestScore) {
+            if (score != INFINITY && score > bestScore && score == minValue[0]) {
                 bestScore = score;
                 bestMove = move;
+                sameMoves.clear();
             }
 
-            if (score == bestScore) {
+            if (score == bestScore && minValue[0] == bestScore) {
                 sameMoves.add(move);
             }
         }
@@ -113,6 +114,7 @@ public class Player extends PlayerBase {
         int bestMove = -1;
         bestMoveContainer.add(null);
 
+
         int left;
         int right;
         int chooser; // 소문자를 기준으로 할거임
@@ -146,10 +148,13 @@ public class Player extends PlayerBase {
                     case 'P':
                     case 'p': {
                         int afterY;
+                        int afterY2;
                         if (color == 'B') {
                             afterY = y + 1;
+                            afterY2 = y + 2;
                         } else {
                             afterY = y - 1;
+                            afterY2 = y - 2;
                         }
 
                         int pawnStart;
@@ -164,8 +169,8 @@ public class Player extends PlayerBase {
                         if (initialMoveCheck && board[afterY][x] == 0) {
                             possibleMoves.add(new Move(x, y, x, afterY));
 
-                            if (y == pawnStart && (afterY + 1 < lessMax) && board[afterY + 1][x] == 0) {
-                                possibleMoves.add(new Move(x, y, x, afterY + 1));
+                            if (y == pawnStart && (afterY2 < lessMax) && board[afterY2][x] == 0) {
+                                possibleMoves.add(new Move(x, y, x, afterY2));
                             }
                         }
 
@@ -219,7 +224,6 @@ public class Player extends PlayerBase {
                             }
 
                             possibleMoves.add(new Move(x, y, afterXleft, afterY));
-                            // return possibleMoves;
                         }
 
                         boolean initialMoveRightCheck = afterXright < lessMax && afterY >= lessMin && afterY < lessMax;
@@ -272,7 +276,6 @@ public class Player extends PlayerBase {
                             }
 
                             possibleMoves.add(new Move(x, y, afterXright, afterY));
-                            // return possibleMoves;
                         }
 
 
@@ -440,9 +443,9 @@ public class Player extends PlayerBase {
 
 
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight || (board[afterY][afterX] == 0)) {
+                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
                                     // 공격적 경우의 수 중
-                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                    /*if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 196) {
                                             priority = 196;
                                             bestMove = mapW.get('k');
@@ -450,7 +453,7 @@ public class Player extends PlayerBase {
                                             return bestMoveContainer;
                                         }
 
-                                    }
+                                    }*/
 
                                     /*if (board[afterY][afterX] == 'q' + chooser) {
                                         if (priority < 195) {
@@ -486,7 +489,12 @@ public class Player extends PlayerBase {
                                     }*/
 
                                     // allPossibilities.add(new MoveTo(afterX, afterY));
+                                    //bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    //return bestMoveContainer;
+
+
+
                                     // possibleMovesForKing.add(new Move(x, y, afterX, afterY));
 
                                     ////////////////////////////////////////////////
@@ -540,6 +548,10 @@ public class Player extends PlayerBase {
 
 
                                     // bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                }
+
+                                if (board[afterY][afterX] == 0) {
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
 
                             }
@@ -600,10 +612,10 @@ public class Player extends PlayerBase {
                                     break;
                                 }
 
-                                // possibleMoves.add(new Move(x, y, afterX, afterY));
+                                possibleMoves.add(new Move(x, y, afterX, afterY));
                                 ////////////////////////////////////////////////
 
-                                {
+                                /*{
                                     for (int j = 0; j < 8; j++) {
                                         int afterX2 = afterX + xCase[j];
                                         int afterY2 = afterY + yCase[j];
@@ -630,7 +642,7 @@ public class Player extends PlayerBase {
                                             afterY2 += yCase[j];
                                         }
                                     }
-                                }
+                                }*/
 
                                 ///////////////////////////////////////////////////////
                                 afterX += xCase[i];
@@ -691,11 +703,11 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    // possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
 
                                     ////////////////////////////////////////////////
 
-                                    {
+                                    /*{
                                         for (int j = 0; j < xCase.length; j++) {
                                             int afterX2 = afterX + xCase[j];
                                             int afterY2 = afterY + yCase[j];
@@ -722,7 +734,7 @@ public class Player extends PlayerBase {
                                                 afterY2 += yCase[j];
                                             }
                                         }
-                                    }
+                                    }*/
 
                                     ///////////////////////////////////////////////////////
 
@@ -795,7 +807,7 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    // possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
 
                                     ////////////////////////////////////////////////
 
@@ -851,7 +863,7 @@ public class Player extends PlayerBase {
                             int afterY = y + yCase[i];
 
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) || (board[afterY][afterX] == 0)) {
+                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight)) {
 
                                     // 공격적 경우의 수 중
                                     if (board[afterY][afterX] == 'k' + chooser) {
@@ -888,6 +900,10 @@ public class Player extends PlayerBase {
 
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
+
+                                if ((board[afterY][afterX] == 0)) {
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                }
                             }
                         }
 
@@ -898,6 +914,9 @@ public class Player extends PlayerBase {
             }
         }
 
+/*        if (bestMoveContainer.size() != 0) {
+            return bestMoveContainer;
+        }*/
 
         if (bestMove != -1) {
             return bestMoveContainer;
@@ -1026,7 +1045,7 @@ public class Player extends PlayerBase {
     }*/
 
 
-    private int minMax(char[][] board, char color, int depth, int check) {
+    private int minMax(char[][] board, char color, int depth, int check, int[] minValue) {
         if (depth == 0) { // 종료 조건
             return evaluateBoard(board, getOpponentColor(color));
         }
@@ -1040,10 +1059,11 @@ public class Player extends PlayerBase {
             bestScore = INFINITY;
         }
 
-
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
-            int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1); // 새로운 보드에 대해 미니맥스 재귀호출
+            int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1, minValue); // 새로운 보드에 대해 미니맥스 재귀호출
+
+            minValue[0] = score;
             if (check == 1) {
                 bestScore = Math.max(bestScore, score); // 최적의 점수 갱신
             } else {
@@ -1096,6 +1116,8 @@ public class Player extends PlayerBase {
             return arr;
         }
     }
+
+
 }
 
 
