@@ -302,6 +302,28 @@ public class Program {
             assert move.toY == 5;*/
         }
 
+        {
+            char[][] board = {
+                    {'r', 0 , 0 , 0 ,'K', 0 ,'B', 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 ,'P', 0 , 0 , 0 , 0 ,'R'},
+                    {'N', 0 , 0 ,'k', 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 ,'Q', 0 , 0 , 0 , 0 , 0 , 0 },
+            };
+            Player player = new Player(true, 10000);
+
+            Move move = player.getNextMove(board);
+
+            assert Game.isMoveValid(board, player, move);
+/*            assert move.fromX == 3;
+            assert move.fromY == 4;
+            assert move.toX == 4;
+            assert move.toY == 5;*/
+        }
+
     }
 
 

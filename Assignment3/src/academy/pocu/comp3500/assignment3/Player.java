@@ -5,40 +5,12 @@ import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
     private static final Map<Character, Integer> mapW = new HashMap<>();
-    private static final Map<Character, Integer> mapB = new HashMap<>();
-
-    // 왼쪽은 black, 오른쪽은 white 라고 약속 순서는 차례대로 오른쪽부터 k, q, r, b, n, p <= (p 이 시작점)
-    private enum chessPiece {
-        p(1),
-        n(2),
-        b(4),
-        r(8),
-        q(16),
-        k(32),
-        P(64),
-        N(128),
-        B(256),
-        R(512),
-        Q(1024),
-        K(2048);
-
-        private int num;
-
-        chessPiece(int num) {
-            this.num = num;
-        }
-
-        public int get() {
-            return num;
-        }
-    }
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
@@ -49,37 +21,17 @@ public class Player extends PlayerBase {
         mapW.put('r', 5);
         mapW.put('q', 9);
         mapW.put('k', 200);
-
-        mapB.put('P', 1);
-        mapB.put('B', 3);
-        mapB.put('N', 3);
-        mapB.put('R', 5);
-        mapB.put('Q', 9);
-        mapB.put('K', 200);
-
     }
 
     @Override
     public Move getNextMove(char[][] board) {
-        // TODO Auto-generated method stub
-        //return getNextMove(board, new Move(3, 6, 3, 4));
-
-        // return new Move(3, 6, 3, 4);
-
         return getNextMove(board, null);
     }
 
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
-        // TODO Auto-generated method stub
-
-        // 왼쪽 char 는 Black, 오른쪽 char 는 White 라고 약속
-        // short[] shortBoard = charBoardToShortBoard(board);
-
-        long startTime = System.currentTimeMillis();
-
-        Move bestMove = null;
-        int bestScore = -INFINITY;
+        Move bestMove = opponentMove;
+        int bestScore = Integer.MIN_VALUE;
 
         // 현재 플레이어의 색상
         char color = isWhite() ? 'W' : 'B';
@@ -94,7 +46,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, 2, 1);
+            int score = minMax(newBoard, getOpponentColor(color), 3, -1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -107,18 +59,14 @@ public class Player extends PlayerBase {
             }
         }
 
-/*        long elapsedTime = System.currentTimeMillis() - startTime;
-        if (elapsedTime >= getMaxMoveTimeMilliseconds()) {
-            throw new RuntimeException("Time is up!");
-        }*/
 
-
-/*        if (sameMoves.size() != 0) {
+        if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
                 Random random = new Random();
                 return sameMoves.get(random.nextInt(sameMoves.size()));
             }
-        }*/
+        }
+
 
         return bestMove;
     }
@@ -153,18 +101,18 @@ public class Player extends PlayerBase {
         return possibleMoves;
     }
 
+
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
     private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
         int priority = -1;
-        ArrayList<Integer> bestMove = new ArrayList<>();
+
         ArrayList<Move> bestMoveContainer = new ArrayList<>();
 
-        bestMove.add(-1);
+        int bestMove = -1;
         bestMoveContainer.add(null);
 
-        Map<Character, Integer> mapColor;
         int left;
         int right;
         int chooser; // 소문자를 기준으로 할거임
@@ -172,12 +120,10 @@ public class Player extends PlayerBase {
         if (color == 'W') {
             left = 97;
             right = 122;
-            mapColor = mapW;
             chooser = -32;
         } else {
             left = 65;
             right = 90;
-            mapColor = mapB;
             chooser = 0;
         }
 
@@ -234,30 +180,32 @@ public class Player extends PlayerBase {
                             // 공격적 경우의 수 중
                             if (board[afterY][afterXleft] == 'k' + chooser) {
                                 priority = 200;
-                                bestMove.set(0, mapW.get('k'));
+                                //bestMove.set(0, mapW.get('k'));
+                                bestMove = mapW.get('k');
                                 bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                             }
 
                             if (board[afterY][afterXleft] == 'q' + chooser) {
-                                if (bestMove.get(0) < mapW.get('q') && priority < 100) {
+                                if (bestMove < mapW.get('q') && priority < 100) {
                                     priority = 100;
-                                    bestMove.set(0, mapW.get('q'));
+                                    //bestMove.set(0, mapW.get('q'));
+                                    bestMove = mapW.get('q');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
                             if (board[afterY][afterXleft] == 'r' + chooser) {
-                                if (bestMove.get(0) < mapW.get('r') && priority < 50) {
+                                if (bestMove < mapW.get('r') && priority < 50) {
                                     priority = 50;
-                                    bestMove.set(0, mapW.get('r'));
+                                    bestMove = mapW.get('r');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
                             if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser) {
-                                if (bestMove.get(0) < mapW.get('b') && priority < 30) {
+                                if (bestMove < mapW.get('b') && priority < 30) {
                                     priority = 30;
-                                    bestMove.set(0, mapW.get('b'));
+                                    bestMove = mapW.get('b');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
@@ -265,7 +213,7 @@ public class Player extends PlayerBase {
                             if (board[afterY][afterXleft] == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
-                                    bestMove.set(0, mapW.get('p'));
+                                    bestMove = mapW.get('p');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
@@ -282,40 +230,44 @@ public class Player extends PlayerBase {
                             if (board[afterY][afterXright] == 'k' + chooser) {
 
                                 priority = 200;
-                                bestMove.set(0, mapW.get('k'));
+                                bestMove = mapW.get('k');
                                 bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
-
+                                break;
                             }
 
                             if (board[afterY][afterXright] == 'q' + chooser) {
-                                if (bestMove.get(0) < mapW.get('q') && priority < 100) {
+                                if (bestMove < mapW.get('q') && priority < 100) {
                                     priority = 100;
-                                    bestMove.set(0, mapW.get('q'));
+                                    bestMove = mapW.get('q');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+                                    break;
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'r' + chooser) {
-                                if (bestMove.get(0) < mapW.get('r') && priority < 50) {
+                                if (bestMove < mapW.get('r') && priority < 50) {
                                     priority = 50;
-                                    bestMove.set(0, mapW.get('r'));
+                                    bestMove = mapW.get('r');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+                                    break;
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'b' + chooser || board[afterY][afterXright] == 'n' + chooser) {
-                                if (bestMove.get(0) < mapW.get('b') && priority < 30) {
+                                if (bestMove < mapW.get('b') && priority < 30) {
                                     priority = 30;
-                                    bestMove.set(0, mapW.get('b'));
+                                    bestMove = mapW.get('b');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+                                    break;
                                 }
                             }
 
                             if (board[afterY][afterXright] == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
-                                    bestMove.set(0, mapW.get('p'));
+                                    bestMove = mapW.get('p');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
+                                    break;
                                 }
                             }
 
@@ -332,7 +284,7 @@ public class Player extends PlayerBase {
                     case 'k': {
 
 
-                        /*// ArrayList<Move> checkmateCheck = new ArrayList<>();
+                        /*ArrayList<Move> checkmateCheck = new ArrayList<>();
                         HashSet<MoveTo> checkmateCheck = new HashSet<>();
 
                         {
@@ -476,7 +428,8 @@ public class Player extends PlayerBase {
                         }*/
 
 
-                        ArrayList<MoveTo> allPossibilities = new ArrayList<>();
+
+                        // ArrayList<MoveTo> allPossibilities = new ArrayList<>();
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 
@@ -491,20 +444,27 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 196) {
                                             priority = 196;
-                                            bestMove.set(0, mapW.get('k'));
+                                            bestMove = mapW.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
 
                                     }
 
-                                    allPossibilities.add(new MoveTo(afterX, afterY));
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    // allPossibilities.add(new MoveTo(afterX, afterY));
+
+                                    if (bestMove != -1 && bestMove != mapW.get('k')) {
+                                        // bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                        bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                    } else {
+                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    }
+
                                 }
                             }
 
                         }
 
-                        /*for (int i = 0; i < allPossibilities.size(); i++) {
+/*for (int i = 0; i < allPossibilities.size(); i++) {
                             if (checkmateCheck.size() != 0) {
                                 if (!checkmateCheck.contains(allPossibilities.get(i))) {
                                     bestMoveContainer.set(0, new Move(x, y, allPossibilities.get(i).toX, allPossibilities.get(i).toY));
@@ -513,6 +473,7 @@ public class Player extends PlayerBase {
                             }
 
                         }*/
+
 
 
                         break;
@@ -535,7 +496,7 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 197) {
                                             priority = 197;
-                                            bestMove.set(0, mapW.get('k'));
+                                            bestMove = mapW.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -543,7 +504,7 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] == 'q' + chooser) {
                                         if (priority < 97) {
                                             priority = 97;
-                                            bestMove.set(0, mapW.get('q'));
+                                            bestMove = mapW.get('q');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -584,15 +545,15 @@ public class Player extends PlayerBase {
                                         if (board[afterY][afterX] == 'k' + chooser) {
                                             if (priority < 198) {
                                                 priority = 198;
-                                                bestMove.set(0, mapW.get('k'));
+                                                bestMove = mapW.get('k');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (bestMove.get(0) < mapW.get('q') && priority < 98) {
+                                            if (bestMove < mapW.get('q') && priority < 98) {
                                                 priority = 98;
-                                                bestMove.set(0, mapW.get('q'));
+                                                bestMove = mapW.get('q');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
 
@@ -601,7 +562,7 @@ public class Player extends PlayerBase {
                                         if (board[afterY][afterX] == 'r' + chooser) {
                                             if (priority < 48) {
                                                 priority = 48;
-                                                bestMove.set(0, mapW.get('r'));
+                                                bestMove = mapW.get('r');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -646,23 +607,23 @@ public class Player extends PlayerBase {
                                         if (board[afterY][afterX] == 'k' + chooser) {
                                             if (priority < 199) {
                                                 priority = 199;
-                                                bestMove.set(0, mapW.get('k'));
+                                                bestMove = mapW.get('k');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'q' + chooser) {
-                                            if (bestMove.get(0) < mapW.get('q') && priority < 99) {
+                                            if (bestMove < mapW.get('q') && priority < 99) {
                                                 priority = 99;
-                                                bestMove.set(0, mapW.get('q'));
+                                                bestMove = mapW.get('q');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (board[afterY][afterX] == 'r' + chooser) {
-                                            if (bestMove.get(0) < mapW.get('r') && priority < 49) {
+                                            if (bestMove < mapW.get('r') && priority < 49) {
                                                 priority = 49;
-                                                bestMove.set(0, mapW.get('r'));
+                                                bestMove = mapW.get('r');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -670,7 +631,7 @@ public class Player extends PlayerBase {
                                         if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
                                             if (priority < 29) {
                                                 priority = 29;
-                                                bestMove.set(0, mapW.get('b'));
+                                                bestMove = mapW.get('b');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -712,23 +673,23 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 199) {
                                             priority = 199;
-                                            bestMove.set(0, mapW.get('k'));
+                                            bestMove = mapW.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (board[afterY][afterX] == 'q' + chooser) {
-                                        if (bestMove.get(0) < mapW.get('q') && priority < 99) {
+                                        if (bestMove < mapW.get('q') && priority < 99) {
                                             priority = 99;
-                                            bestMove.set(0, mapW.get('q'));
+                                            bestMove = mapW.get('q');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (board[afterY][afterX] == 'r' + chooser) {
-                                        if (bestMove.get(0) < mapW.get('r') && priority < 49) {
+                                        if (bestMove < mapW.get('r') && priority < 49) {
                                             priority = 49;
-                                            bestMove.set(0, mapW.get('r'));
+                                            bestMove = mapW.get('r');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -736,7 +697,7 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
                                         if (priority < 29) {
                                             priority = 29;
-                                            bestMove.set(0, mapW.get('b'));
+                                            bestMove = mapW.get('b');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -754,7 +715,7 @@ public class Player extends PlayerBase {
         }
 
 
-        if (bestMove.get(0) != -1) {
+        if (bestMove != -1) {
             return bestMoveContainer;
         }
 
@@ -800,52 +761,6 @@ public class Player extends PlayerBase {
                         }
                     }
                 }
-switch (board[row][col]) {
-                        case 'p':
-                            score += 1;
-                            break;
-                        case 'n':
-                            score += 3;
-                            break;
-                        case 'b':
-                            score += 3;
-                            break;
-                        case 'r':
-                            score += 5;
-                            break;
-                        case 'q':
-                            score += 9;
-                            break;
-                        case 'k':
-                            score += 200;
-                            break;
-                    }
-
-                // score += 1;
-
-
-switch (board[row][col]) {
-                        case 'P':
-                            score -= 1;
-                            break;
-                        case 'N':
-                            score -= 3;
-                            break;
-                        case 'B':
-                            score -= 3;
-                            break;
-                        case 'R':
-                            score -= 5;
-                            break;
-                        case 'Q':
-                            score -= 9;
-                            break;
-                        case 'K':
-                            score -= 200;
-                            break;
-                    }
-
-                // score -= 1;
 
             }
         }
@@ -854,7 +769,7 @@ switch (board[row][col]) {
     }
 
     // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
-    private int minMax(char[][] board, char color, int depth, int change) {
+/*    private int minMax(char[][] board, char color, int depth, int change) {
         int score = evaluateBoard(board, color);
 
         if (depth == 0 || Math.abs(score) == INFINITY) {
@@ -871,7 +786,7 @@ switch (board[row][col]) {
         }
 
         int bestScore = score;
-        ArrayList<Move> possibleMoves = getPossibleMoves(board, opponent);
+        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, opponent, -1, -1);
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
             int currentScore = minMax(newBoard, color, depth - 1, change);
@@ -884,7 +799,45 @@ switch (board[row][col]) {
         }
         return bestScore;
 
+    }*/
+
+
+    private int minMax(char[][] board, char color, int depth , int check) {
+        if (depth == 0) { // 종료 조건
+            return evaluateBoard(board, getOpponentColor(color));
+        }
+
+        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, color, -1, -1); // 현재 플레이어의 가능한 수 모두 생성
+        int bestScore;
+
+        if (check == 1) {
+            bestScore = Integer.MIN_VALUE;
+            if (possibleMoves.size() == 0) {
+                bestScore = Integer.MAX_VALUE;
+            }
+        } else {
+            bestScore = Integer.MAX_VALUE;
+            if (possibleMoves.size() == 0) {
+                bestScore = Integer.MIN_VALUE;
+            }
+        }
+
+
+        for (Move move : possibleMoves) {
+            char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
+            int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1); // 새로운 보드에 대해 미니맥스 재귀호출
+            if (check == 1) {
+                bestScore = Math.max(bestScore, score); // 최적의 점수 갱신
+            } else {
+                bestScore = Math.min(bestScore, score);
+            }
+
+        }
+
+        return bestScore;
     }
+
+
 
     private char getOpponentColorToAscii(char color) {
         if (color == 'W') {
@@ -926,66 +879,14 @@ switch (board[row][col]) {
             return arr;
         }
     }
-
-    private short[] charBoardToShortBoard(char[][] board) {
-        short[] shortBoard = new short[board.length];
-
-        for (int y = 0; y < board.length; y++) {
-            for (int x = 0; x < board.length; x++) {
-                switch (board[y][x]) {
-                    case 'p':
-                        shortBoard[y] ^= chessPiece.p.get();
-                        break;
-                    case 'n':
-                        shortBoard[y] ^= chessPiece.n.get();
-                        break;
-                    case 'b':
-                        shortBoard[y] ^= chessPiece.b.get();
-                        break;
-                    case 'r':
-                        shortBoard[y] ^= chessPiece.r.get();
-                        break;
-                    case 'q':
-                        shortBoard[y] ^= chessPiece.q.get();
-                        break;
-                    case 'k':
-                        shortBoard[y] ^= chessPiece.k.get();
-                        break;
-                    case 'P':
-                        shortBoard[y] ^= chessPiece.P.get();
-                        break;
-                    case 'N':
-                        shortBoard[y] ^= chessPiece.N.get();
-                        break;
-                    case 'B':
-                        shortBoard[y] ^= chessPiece.B.get();
-                        break;
-                    case 'R':
-                        shortBoard[y] ^= chessPiece.R.get();
-                        break;
-                    case 'Q':
-                        shortBoard[y] ^= chessPiece.Q.get();
-                        break;
-                    case 'K':
-                        shortBoard[y] ^= chessPiece.K.get();
-                        break;
-                }
-            }
-        }
-
-        return shortBoard;
-    }
-
 }
-
-
-
 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/*package academy.pocu.comp3500.assignment3;
+/*
+package academy.pocu.comp3500.assignment3;
 
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
@@ -1012,8 +913,6 @@ public class Player extends PlayerBase {
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
 
-        long startTime = System.currentTimeMillis();
-
         Move bestMove = null;
         int bestScore = -INFINITY;
 
@@ -1029,7 +928,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, color, 2, 1);
+            int score = minMax(newBoard, color, 1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score > bestScore) {
@@ -1041,11 +940,6 @@ public class Player extends PlayerBase {
                 sameMoves.add(move);
             }
         }
-
-*//*        long elapsedTime = System.currentTimeMillis() - startTime;
-        if (elapsedTime >= getMaxMoveTimeMilliseconds()) {
-            throw new RuntimeException("Time is up!");
-        }*//*
 
         if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
@@ -1072,10 +966,10 @@ public class Player extends PlayerBase {
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
-*//*                if (board[row][col] == color) {
+                if (board[row][col] == color) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
                     possibleMoves.addAll(movesFromCurrentPosition);
-                }*//*
+                }
                 if (board[col][row] >= left && board[col][row] <= right) {
                     ArrayList<Move> movesFromCurrentPosition = getPossibleMovesFromPosition(board, color, row, col);
                     possibleMoves.addAll(movesFromCurrentPosition);
@@ -1110,8 +1004,6 @@ public class Player extends PlayerBase {
         int x = row;
         int y = col;
 
-        *//*for (int x = lessMin; x < lessMax; x++) {
-            for (int y = lessMin; y < lessMax; y++) {*//*
 
         char piece = board[y][x];
         if (piece >= opponentLeft && piece <= opponentRight) {
@@ -1354,37 +1246,23 @@ public class Player extends PlayerBase {
     }
 
     // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
-    private int minMax(char[][] board, char color, int depth, int change) {
-        int score = evaluateBoard(board, color);
-
-        if (depth == 0 || Math.abs(score) == INFINITY) {
-            return score;
+    private int minMax(char[][] board, char color, int depth) {
+        if (depth == 0) { // 종료 조건
+            return evaluateBoard(board, color);
         }
 
-        char opponent;
-        if (change == -1) {
-            opponent = color;
-            change = 1;
-        } else {
-            opponent = getOpponentColor(color);
-            change = -1;
-        }
+        ArrayList<Move> possibleMoves = getPossibleMoves(board, color); // 현재 플레이어의 가능한 수 모두 생성
+        int bestScore = Integer.MIN_VALUE;
 
-        int bestScore = score;
-        ArrayList<Move> possibleMoves = getPossibleMoves(board, opponent);
         for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move);
-            int currentScore = minMax(newBoard, color, depth - 1, change);
-            if (change == 1) {
-                bestScore = Math.max(bestScore, currentScore);
-            } else {
-                bestScore = Math.min(bestScore, currentScore);
-            }
-
+            char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
+            int score = -minMax(newBoard, getOpponentColor(color), depth - 1); // 새로운 보드에 대해 미니맥스 재귀호출
+            bestScore = Math.max(bestScore, score); // 최적의 점수 갱신
         }
-        return bestScore;
 
+        return bestScore;
     }
+
 
     private char getOpponentColorToAscii(char color) {
         if (color == 'W') {
