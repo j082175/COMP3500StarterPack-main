@@ -46,7 +46,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, getOpponentColor(color), 0, -1);
+            int score = minMax(newBoard, getOpponentColor(color), 3, -1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score != INFINITY && score > bestScore) {
@@ -60,12 +60,12 @@ public class Player extends PlayerBase {
         }
 
 
-/*        if (sameMoves.size() != 0) {
+        if (sameMoves.size() != 0) {
             if (sameMoves.get(0) == bestMove) {
                 Random random = new Random();
                 return sameMoves.get(random.nextInt(sameMoves.size()));
             }
-        }*/
+        }
 
         if (bestMove == null) {
             Random random = new Random();
@@ -109,11 +109,9 @@ public class Player extends PlayerBase {
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
     private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
-
+        ArrayList<Move> possibleMovesForKing = new ArrayList<>();
         int priority = -1;
-
         ArrayList<Move> bestMoveContainer = new ArrayList<>();
-
         int bestMove = -1;
         bestMoveContainer.add(null);
 
@@ -132,7 +130,7 @@ public class Player extends PlayerBase {
         }
 
         int lessMin = 0;
-        int lessMax = 8;
+        int lessMax = board.length;
 
         int opponentLeft = getOpponentColorToAscii(color);
         int opponentRight = opponentLeft + 25;
@@ -432,10 +430,11 @@ public class Player extends PlayerBase {
                         }*/
 
 
-
                         // ArrayList<MoveTo> allPossibilities = new ArrayList<>();
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
+
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
 
                         for (int i = 0; i < 8; i++) {
                             int afterY = y + yCase[i];
@@ -450,23 +449,105 @@ public class Player extends PlayerBase {
                                             priority = 196;
                                             bestMove = mapW.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                            return bestMoveContainer;
+                                        }
+
+                                    }
+
+                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                        if (priority < 195) {
+                                            priority = 195;
+                                            bestMove = mapW.get('q');
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                            return bestMoveContainer;
+
+                                        }
+
+                                    }
+
+                                    if (board[afterY][afterX] == 'r' + chooser) {
+                                        if (priority < 194) {
+                                            priority = 194;
+                                            bestMove = mapW.get('r');
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                            return bestMoveContainer;
+
+                                        }
+
+                                    }
+
+                                    if (board[afterY][afterX] == 'b' + chooser) {
+                                        if (priority < 193) {
+                                            priority = 193;
+                                            bestMove = mapW.get('b');
+                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                            return bestMoveContainer;
+
                                         }
 
                                     }
 
                                     // allPossibilities.add(new MoveTo(afterX, afterY));
+                                    //possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    possibleMovesForKing.add(new Move(x, y, afterX, afterY));
 
-                                    if (bestMove != -1 && bestMove != mapW.get('k')) {
-                                        // bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
-                                        bestMoveContainer.add(new Move(x, y, afterX, afterY));
-                                    } else {
-                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    ////////////////////////////////////////////////
+
+                                    {
+                                        for (int j = 0; j < 8; j++) {
+                                            int afterX2 = afterX + xCase[j];
+                                            int afterY2 = afterY + yCase[j];
+
+                                            while (afterX2 >= lessMin && afterX2 < lessMax && afterY2 >= lessMin && afterY2 < lessMax) {
+                                                if (board[afterY2][afterX2] >= opponentLeft && board[afterY2][afterX2] <= opponentRight) {
+
+                                                    if (!(board[afterY2][afterX2] == 'q' + chooser || board[afterY2][afterX2] == 'r' + chooser || board[afterY2][afterX2] == 'b' + chooser)) {
+                                                        MoveTo m = new MoveTo(afterX, afterY);
+                                                        if (!checkHashMap.containsKey(new MoveTo(afterX, afterY))) {
+                                                            checkHashMap.put(m, 0);
+                                                            // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                                            if (bestMove != -1 && bestMove != mapW.get('k')) {
+                                                                bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                                            } else {
+                                                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                                            }
+                                                        }
+                                                    }
+
+                                                    int offset = evaluateBoard2(board, color);
+                                                    if (offset == 0) {
+                                                        if (bestMove == -1) {
+                                                            bestMove = mapW.get('k');
+                                                            bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
+                                                        }
+                                                    }
+
+                                                    break;
+                                                }
+
+                                                if (board[afterY2][afterX2] >= left && board[afterY2][afterX2] <= right) {
+                                                    break;
+                                                }
+
+                                                // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                                afterX2 += xCase[j];
+                                                afterY2 += yCase[j];
+                                            }
+                                        }
                                     }
 
-                                }
-                            }
+                                    ///////////////////////////////////////////////////////
 
+
+                                    // bestMoveContainer.add(new Move(x, y, afterX, afterY));
+                                }
+
+                            }
                         }
+
+
 
 /*for (int i = 0; i < allPossibilities.size(); i++) {
                             if (checkmateCheck.size() != 0) {
@@ -478,16 +559,16 @@ public class Player extends PlayerBase {
 
                         }*/
 
-
-
                         break;
                     }
+
 
                     case 'Q':
                     case 'q': {
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
                         for (int i = 0; i < 8; i++) {
                             int afterX = x + xCase[i];
                             int afterY = y + yCase[i];
@@ -521,8 +602,39 @@ public class Player extends PlayerBase {
                                     break;
                                 }
 
-                                possibleMoves.add(new Move(x, y, afterX, afterY));
+                                // possibleMoves.add(new Move(x, y, afterX, afterY));
+                                ////////////////////////////////////////////////
 
+                                {
+                                    for (int j = 0; j < 8; j++) {
+                                        int afterX2 = afterX + xCase[j];
+                                        int afterY2 = afterY + yCase[j];
+
+                                        while (afterX2 >= lessMin && afterX2 < lessMax && afterY2 >= lessMin && afterY2 < lessMax) {
+                                            if (board[afterY2][afterX2] >= opponentLeft && board[afterY2][afterX2] <= opponentRight) {
+
+                                                MoveTo m = new MoveTo(afterX, afterY);
+                                                if (!checkHashMap.containsKey(new MoveTo(afterX, afterY))) {
+                                                    checkHashMap.put(m, 0);
+                                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                                }
+
+                                                break;
+                                            }
+
+                                            if (board[afterY2][afterX2] >= left && board[afterY2][afterX2] <= right) {
+                                                break;
+                                            }
+
+                                            // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                            afterX2 += xCase[j];
+                                            afterY2 += yCase[j];
+                                        }
+                                    }
+                                }
+
+                                ///////////////////////////////////////////////////////
                                 afterX += xCase[i];
                                 afterY += yCase[i];
                             }
@@ -535,7 +647,9 @@ public class Player extends PlayerBase {
                         int[] xCase = new int[]{0, -1, 1, 0};
                         int[] yCase = new int[]{-1, 0, 0, 1};
 
-                        for (int i = 0; i < 4; i++) {
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
+
+                        for (int i = 0; i < xCase.length; i++) {
                             int afterX = x + xCase[i];
                             int afterY = y + yCase[i];
 
@@ -579,7 +693,40 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    ////////////////////////////////////////////////
+
+                                    {
+                                        for (int j = 0; j < xCase.length; j++) {
+                                            int afterX2 = afterX + xCase[j];
+                                            int afterY2 = afterY + yCase[j];
+
+                                            while (afterX2 >= lessMin && afterX2 < lessMax && afterY2 >= lessMin && afterY2 < lessMax) {
+                                                if (board[afterY2][afterX2] >= opponentLeft && board[afterY2][afterX2] <= opponentRight) {
+
+                                                    MoveTo m = new MoveTo(afterX, afterY);
+                                                    if (!checkHashMap.containsKey(new MoveTo(afterX, afterY))) {
+                                                        checkHashMap.put(m, 0);
+                                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                                    }
+
+                                                    break;
+                                                }
+
+                                                if (board[afterY2][afterX2] >= left && board[afterY2][afterX2] <= right) {
+                                                    break;
+                                                }
+
+                                                // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                                afterX2 += xCase[j];
+                                                afterY2 += yCase[j];
+                                            }
+                                        }
+                                    }
+
+                                    ///////////////////////////////////////////////////////
 
                                     afterX += xCase[i];
                                     afterY += yCase[i];
@@ -596,6 +743,8 @@ public class Player extends PlayerBase {
                     case 'b': {
                         int[] xCase = new int[]{-1, -1, 1, 1};
                         int[] yCase = new int[]{-1, 1, -1, 1};
+
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
 
                         for (int i = 0; i < 4; i++) {
                             int afterX = x + xCase[i];
@@ -648,7 +797,40 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                    ////////////////////////////////////////////////
+
+                                    {
+                                        for (int j = 0; j < xCase.length; j++) {
+                                            int afterX2 = afterX + xCase[j];
+                                            int afterY2 = afterY + yCase[j];
+
+                                            while (afterX2 >= lessMin && afterX2 < lessMax && afterY2 >= lessMin && afterY2 < lessMax) {
+                                                if (board[afterY2][afterX2] >= opponentLeft && board[afterY2][afterX2] <= opponentRight) {
+
+                                                    MoveTo m = new MoveTo(afterX, afterY);
+                                                    if (!checkHashMap.containsKey(new MoveTo(afterX, afterY))) {
+                                                        checkHashMap.put(m, 0);
+                                                        possibleMoves.add(new Move(x, y, afterX, afterY));
+                                                    }
+
+                                                    break;
+                                                }
+
+                                                if (board[afterY2][afterX2] >= left && board[afterY2][afterX2] <= right) {
+                                                    break;
+                                                }
+
+                                                // possibleMoves.add(new Move(x, y, afterX, afterY));
+
+                                                afterX2 += xCase[j];
+                                                afterY2 += yCase[j];
+                                            }
+                                        }
+                                    }
+
+                                    ///////////////////////////////////////////////////////
 
                                     afterX += xCase[i];
                                     afterY += yCase[i];
@@ -723,6 +905,9 @@ public class Player extends PlayerBase {
             return bestMoveContainer;
         }
 
+        if (possibleMoves.size() == 0) {
+            return possibleMovesForKing;
+        }
         return possibleMoves;
     }
 
@@ -772,6 +957,43 @@ public class Player extends PlayerBase {
         return score;
     }
 
+    private int evaluateBoard2(char[][] board, char color) {
+        int score = 0;
+
+        char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
+
+        char ascii;
+        int ascii2;
+        if (color == 'W') {
+            ascii = 97;
+            ascii2 = -32;
+        } else {
+            ascii = 65;
+            ascii2 = 32;
+        }
+
+        char[] result = changeUpDown(pieces, color);
+
+        int[] scores = {1, 3, 3, 5, 9, 200};
+
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (board[row][col] >= ascii && board[row][col] <= ascii + 25) {
+
+                    for (int i = 0; i < 6; i++) {
+                        if (board[row][col] == result[i]) {
+                            score += scores[i];
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return score;
+    }
+
     // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
 /*    private int minMax(char[][] board, char color, int depth, int change) {
         int score = evaluateBoard(board, color);
@@ -806,7 +1028,7 @@ public class Player extends PlayerBase {
     }*/
 
 
-    private int minMax(char[][] board, char color, int depth , int check) {
+    private int minMax(char[][] board, char color, int depth, int check) {
         if (depth == 0) { // 종료 조건
             return evaluateBoard(board, getOpponentColor(color));
         }
@@ -834,7 +1056,6 @@ public class Player extends PlayerBase {
 
         return bestScore;
     }
-
 
 
     private char getOpponentColorToAscii(char color) {
@@ -878,7 +1099,6 @@ public class Player extends PlayerBase {
         }
     }
 }
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
