@@ -488,12 +488,12 @@ public class Player extends PlayerBase {
                                     }
 
                                     // allPossibilities.add(new MoveTo(afterX, afterY));
-                                    //possibleMoves.add(new Move(x, y, afterX, afterY));
-                                    possibleMovesForKing.add(new Move(x, y, afterX, afterY));
+                                    possibleMoves.add(new Move(x, y, afterX, afterY));
+                                    //possibleMovesForKing.add(new Move(x, y, afterX, afterY));
 
                                     ////////////////////////////////////////////////
 
-                                    {
+/*                                    {
                                         for (int j = 0; j < 8; j++) {
                                             int afterX2 = afterX + xCase[j];
                                             int afterY2 = afterY + yCase[j];
@@ -515,13 +515,13 @@ public class Player extends PlayerBase {
                                                         }
                                                     }
 
-/*                                                    int offset = evaluateBoard2(board, color);
+*//*                                                    int offset = evaluateBoard2(board, color);
                                                     if (offset == 0) {
                                                         if (bestMove == -1) {
                                                             bestMove = mapW.get('k');
                                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                                         }
-                                                    }*/
+                                                    }*//*
 
                                                     break;
                                                 }
@@ -536,7 +536,7 @@ public class Player extends PlayerBase {
                                                 afterY2 += yCase[j];
                                             }
                                         }
-                                    }
+                                    }*/
 
                                     ///////////////////////////////////////////////////////
 
@@ -605,7 +605,7 @@ public class Player extends PlayerBase {
                                 // possibleMoves.add(new Move(x, y, afterX, afterY));
                                 ////////////////////////////////////////////////
 
-                                {
+                                /*{
                                     for (int j = 0; j < 8; j++) {
                                         int afterX2 = afterX + xCase[j];
                                         int afterY2 = afterY + yCase[j];
@@ -632,7 +632,7 @@ public class Player extends PlayerBase {
                                             afterY2 += yCase[j];
                                         }
                                     }
-                                }
+                                }*/
 
                                 ///////////////////////////////////////////////////////
                                 afterX += xCase[i];
@@ -697,7 +697,7 @@ public class Player extends PlayerBase {
 
                                     ////////////////////////////////////////////////
 
-                                    {
+                                    /*{
                                         for (int j = 0; j < xCase.length; j++) {
                                             int afterX2 = afterX + xCase[j];
                                             int afterY2 = afterY + yCase[j];
@@ -724,7 +724,7 @@ public class Player extends PlayerBase {
                                                 afterY2 += yCase[j];
                                             }
                                         }
-                                    }
+                                    }*/
 
                                     ///////////////////////////////////////////////////////
 
@@ -801,7 +801,7 @@ public class Player extends PlayerBase {
 
                                     ////////////////////////////////////////////////
 
-                                    {
+                                    /*{
                                         for (int j = 0; j < xCase.length; j++) {
                                             int afterX2 = afterX + xCase[j];
                                             int afterY2 = afterY + yCase[j];
@@ -828,7 +828,7 @@ public class Player extends PlayerBase {
                                                 afterY2 += yCase[j];
                                             }
                                         }
-                                    }
+                                    }*/
 
                                     ///////////////////////////////////////////////////////
 
