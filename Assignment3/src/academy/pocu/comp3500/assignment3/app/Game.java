@@ -55,8 +55,8 @@ final class Game {
             this.black = player1;
         }
 
-        this.board = createNewBoard();
-        //this.board = createBoard2();
+        //this.board = createNewBoard();
+        this.board = createBoard2();
     }
 
     public void nextTurn() {
@@ -534,14 +534,14 @@ final class Game {
         };*/
 
         char[][] board = new char[][]{
-                { 'q' , 0 , 0 , 0 ,'k', 0 , 0 , 0 },
+                { 'q' , 0 , 0 , 0 ,'k', 0 , 0 , 'K' },
                 { 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
-                { 0 , 0 ,'Q', 0 , 0 , 0 , 'K' , 0 },
+                { 0 , 0 ,'Q', 0 , 0 , 0 , 0 , 0 },
         };
 
 
