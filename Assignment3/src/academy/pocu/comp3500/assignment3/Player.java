@@ -46,7 +46,7 @@ public class Player extends PlayerBase {
         for (Move move : possibleMoves) {
             char[][] newBoard = applyMove(board, move);
 
-            int score = minMax(newBoard, getOpponentColor(color), 3, -1);
+            int score = minMax(newBoard, getOpponentColor(color), 2, -1);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score != INFINITY && score > bestScore) {
@@ -434,7 +434,7 @@ public class Player extends PlayerBase {
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 
-                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap<>();
 
                         for (int i = 0; i < 8; i++) {
                             int afterY = y + yCase[i];
@@ -515,13 +515,13 @@ public class Player extends PlayerBase {
                                                         }
                                                     }
 
-                                                    int offset = evaluateBoard2(board, color);
+/*                                                    int offset = evaluateBoard2(board, color);
                                                     if (offset == 0) {
                                                         if (bestMove == -1) {
                                                             bestMove = mapW.get('k');
                                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                                         }
-                                                    }
+                                                    }*/
 
                                                     break;
                                                 }
@@ -568,7 +568,7 @@ public class Player extends PlayerBase {
                         int[] xCase = new int[]{-1, -1, -1, 0, 0, 1, 1, 1};
                         int[] yCase = new int[]{-1, 0, 1, -1, 1, -1, 0, 1};
 
-                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap<>();
                         for (int i = 0; i < 8; i++) {
                             int afterX = x + xCase[i];
                             int afterY = y + yCase[i];
@@ -647,7 +647,7 @@ public class Player extends PlayerBase {
                         int[] xCase = new int[]{0, -1, 1, 0};
                         int[] yCase = new int[]{-1, 0, 0, 1};
 
-                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap<>();
 
                         for (int i = 0; i < xCase.length; i++) {
                             int afterX = x + xCase[i];
@@ -744,7 +744,7 @@ public class Player extends PlayerBase {
                         int[] xCase = new int[]{-1, -1, 1, 1};
                         int[] yCase = new int[]{-1, 1, -1, 1};
 
-                        HashMap<MoveTo, Integer> checkHashMap = new HashMap();
+                        HashMap<MoveTo, Integer> checkHashMap = new HashMap<>();
 
                         for (int i = 0; i < 4; i++) {
                             int afterX = x + xCase[i];
