@@ -1,5 +1,6 @@
 package academy.pocu.comp3500.assignment3.app;
 
+import academy.pocu.comp3500.assignment3.ChessBoard;
 import academy.pocu.comp3500.assignment3.Player;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
@@ -12,6 +13,31 @@ import java.io.InputStreamReader;
 public class Program {
 
     public static void main(String[] args) {
+        char[][] board = {
+                {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
+                {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {'p','p','p','p','p','p','p','p'},
+                {'r','n','b','k','q','b','n','r'},
+        };
+        ChessBoard chessBoard = new ChessBoard();
+        chessBoard.boardInitializer(board);
+
+
+
+
+
+
+
+
+
+
+
+
+
         final boolean IS_AUTO_PLAY = true; // true 라면 주기적으로 자동으로 다음 턴이 진행됨; false 라면 Enter/Return 키를 누를 때 진행됨
         final boolean IS_WHITE_KEYBOARD_PLAYER = false; // true 라면 하얀색 플레이어의 수를 콘솔에 입력해야 함
         final boolean IS_BLACK_KEYBOARD_PLAYER = false; // true 라면 검은색 플레이어의 수를 콘솔에 입력해야 함
