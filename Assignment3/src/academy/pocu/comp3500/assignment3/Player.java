@@ -3,10 +3,12 @@ package academy.pocu.comp3500.assignment3;
 import academy.pocu.comp3500.assignment3.chess.Move;
 import academy.pocu.comp3500.assignment3.chess.PlayerBase;
 
+import java.security.cert.PolicyNode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.zip.CheckedOutputStream;
 
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
@@ -45,11 +47,19 @@ public class Player extends PlayerBase {
 
         ArrayList<Move> sameMoves = new ArrayList<>();
 
+        ChessBoard chessBoardBackup = new ChessBoard();
+
         // 가능한 모든 수에 대해 상대방이 다음 수로 이동할 수 있는 모든 가능성에 대한 점수를 구합니다.
         for (Move move : possibleMoves) {
-            ChessBoard newBoard = applyMove(chessBoard, move);
+            chessBoardBackup.setPieces(chessBoard.getPieces());
+            chessBoardBackup.setBoardStatus(chessBoard.getBoardStatus());
+
+            applyMove(chessBoardBackup, move);
+
+            long[] pieces = chessBoardBackup.getPieces();
+
             int[] minValue = {INFINITY};
-            int score = minMax(newBoard, getOpponentColor(color), 3, -1, minValue);
+            int score = minMax(chessBoardBackup, getOpponentColor(color), 3, -1, minValue, pieces[0], pieces[1], pieces[2], pieces[3], pieces[4], pieces[5], pieces[6], pieces[7], pieces[8], pieces[9], pieces[10], pieces[11], chessBoardBackup.getBoardStatus());
 
             // 가장 높은 점수를 가진 수를 선택합니다.
             if (score != INFINITY && score > bestScore && score == minValue[0]) {
@@ -158,6 +168,9 @@ public class Player extends PlayerBase {
 
         int opponentLeft = getOpponentColorToAscii(color);
         int opponentRight = opponentLeft + 25;
+
+
+
 
         for (int y = lessMin; y < lessMax; y++) {
             for (int x = lessMin; x < lessMax; x++) {
@@ -674,43 +687,29 @@ public class Player extends PlayerBase {
 
     // 현재 상태의 점수를 반환하는 함수
     private int evaluateBoard(ChessBoard chessBoard, char color) {
-        int score = 0;
 
-        int[] scores = {1, 3, 3, 5, 9, 200};
-        char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
-
-        char ascii;
-        int ascii2;
-        if (color == 'W') {
-            ascii = 97;
-            ascii2 = -32;
-        } else {
-            ascii = 65;
-            ascii2 = 32;
+        int check = 1;
+        if (color == 'B') {
+            check *= -1;
         }
 
-        char[] result = changeUpDown(pieces, color);
+        long[] pieces = chessBoard.getPieces();
+        long boardStatus = chessBoard.getBoardStatus();
+        int count = 0;
+        int score = 0;
 
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                if (checkPiece(chessBoard, row, col) >= ascii && checkPiece(chessBoard, row, col) <= ascii + 25) {
-
-                    for (int i = 0; i < 6; i++) {
-                        if (checkPiece(chessBoard, row, col) == result[i]) {
-                            score += scores[i];
-                            break;
-                        }
-                    }
-                } else if (checkPiece(chessBoard, row, col) >= ascii + ascii2 && checkPiece(chessBoard, row, col) <= ascii + 25 + ascii2) {
-                    for (int i = 0; i < 6; i++) {
-                        if (checkPiece(chessBoard, row, col) == result[i] + ascii2) {
-                            score -= scores[i];
-                            break;
-                        }
-                    }
+        for (ChessBoard.ChessPiece c : ChessBoard.ChessPiece.values()) {
+            if (pieces[count] != 0 && (pieces[count] & boardStatus) == pieces[count]) {
+                int i;
+                long p = pieces[count];
+                for (i = 0; p != 0; i++) {
+                    p &= (p - 1);
                 }
 
+                score += c.getScore() * check * i;
             }
+
+            ++count;
         }
 
         return score;
@@ -750,7 +749,9 @@ public class Player extends PlayerBase {
     }*/
 
 
-    private int minMax(ChessBoard chessBoard, char color, int depth, int check, int[] minValue) {
+    private int minMax(ChessBoard chessBoard, char color, int depth, int check, int[] minValue, long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK, long boardStatus) {
+        chessBoard.setPieces(WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, boardStatus);
+
         if (depth == 0) { // 종료 조건
             return evaluateBoard(chessBoard, getOpponentColor(color));
         }
@@ -765,8 +766,9 @@ public class Player extends PlayerBase {
         }
 
         for (Move move : possibleMoves) {
-            ChessBoard newBoard = applyMove(chessBoard, move); // 현재 수를 적용한 새로운 보드 생성
-            int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1, minValue); // 새로운 보드에 대해 미니맥스 재귀호출
+            applyMove(chessBoard, move); // 현재 수를 적용한 새로운 보드 생성
+
+            int score = -minMax(chessBoard, getOpponentColor(color), depth - 1, check * -1, minValue, WP, WN, WB, WR, WQ, WK, BP, BN, BB, BR, BQ, BK, boardStatus); // 새로운 보드에 대해 미니맥스 재귀호출
 
             minValue[0] = score;
             if (check == 1) {
@@ -794,22 +796,22 @@ public class Player extends PlayerBase {
     }
 
     // 특정 수를 적용한 새로운 보드를 반환합니다.
-    public static ChessBoard applyMove(ChessBoard chessBoard, Move move) {
+    public static void applyMove(ChessBoard chessBoard, Move move) {
         int lessMin = 0;
         int lessMax = 8;
         int boardSize = lessMax * lessMax;
 
-        long fromCount = boardSize - (move.fromY * lessMax + move.fromX);
-        long toCount = boardSize - (move.toY * lessMax + move.toX);
+        int fromCount = boardSize - (move.fromY * lessMax + move.fromX);
+        int toCount = boardSize - (move.toY * lessMax + move.toX);
 
-        ChessBoard newBoard = new ChessBoard();
-        char piece = checkPiece(chessBoard, move.fromY, move.fromX);
+        char pieceFrom = checkPiece(chessBoard, move.fromY, move.fromX);
+        char pieceTo = checkPiece(chessBoard, move.toY, move.toX);
 
         long[] p = chessBoard.getPieces();
-        long[] newLong = new long[12];
+
         int count = 0;
         for (ChessBoard.ChessPiece c : ChessBoard.ChessPiece.values()) {
-            if (c.getChar() == piece) {
+            if (c.getChar() == pieceFrom) {
                 //System.out.println(Long.toBinaryString(p[count]));
                 p[count] ^= (long) 1 << fromCount - 1;
                 //System.out.println(Long.toBinaryString(p[count]));
@@ -817,13 +819,14 @@ public class Player extends PlayerBase {
                 //System.out.println(Long.toBinaryString(p[count]));
             }
 
-            newLong[count] = p[count];
+            if (c.getChar() == pieceTo) {
+                p[count] ^= (long) 1 << toCount - 1;
+            }
+
+            chessBoard.setPieces(p);
             ++count;
         }
 
-        newBoard.setPieces(newLong);
-
-        return newBoard;
     }
 
     private char[] changeUpDown(char[] arr, char color) {
@@ -860,6 +863,4 @@ public class Player extends PlayerBase {
 
         return 0;
     }
-
-
 }

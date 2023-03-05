@@ -2,30 +2,36 @@ package academy.pocu.comp3500.assignment3;
 
 public class ChessBoard {
     private long boardStatus;
-    private long[] pieces;
+    private long[] pieces = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public enum ChessPiece {
-        whitePawns('p'),
-        whiteKnights('n'),
-        whiteBishops('b'),
-        whiteRooks('r'),
-        whiteQueens('q'),
-        whiteKing('k'),
-        blackPawns('P'),
-        blackKnights('N'),
-        blackBishops('B'),
-        blackRooks('R'),
-        blackQueens('Q'),
-        blackKing('K');
+        whitePawns('p', 1),
+        whiteKnights('n', 3),
+        whiteBishops('b', 3),
+        whiteRooks('r', 5),
+        whiteQueens('q', 9),
+        whiteKing('k', 200),
+        blackPawns('P', -1),
+        blackKnights('N', -3),
+        blackBishops('B', -3),
+        blackRooks('R', -5),
+        blackQueens('Q', -9),
+        blackKing('K', -200);
 
         private char character;
+        private int score;
 
-        ChessPiece(char character) {
+        ChessPiece(char character, int score) {
             this.character = character;
+            this.score = score;
         }
 
         public char getChar() {
             return this.character;
+        }
+
+        public int getScore() {
+            return this.score;
         }
     }
 
@@ -47,7 +53,7 @@ public class ChessBoard {
     private long whitePawnMoves; // 흰색 폰의 이동 가능한 위치를 저장하는 배열
 
     public ChessBoard() {
-        pieces = new long[12];
+
 /*        boardStatus = 0xffff00000000ffffL;
 
         whitePawns =   0b0000000000000000000000000000000000000000000000001111111100000000L; // a2, b2, ..., h2
@@ -62,7 +68,6 @@ public class ChessBoard {
 
     public void boardInitializer(char[][] board) {
         long offset = 0b0000000000000000000000000000000000000000000000000000000000000001L;
-        boardStatus = 0L;
         boolean isChecked = false;
 
         for (int y = board.length - 1; y >= 0; y--) {
@@ -145,6 +150,32 @@ public class ChessBoard {
     }
 
     public void setPieces(long[] pieces) {
-        this.pieces = pieces;
+        for (int i = 0; i < pieces.length; i++) {
+            this.pieces[i] = pieces[i];
+        }
+    }
+
+    public void setPieces(long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK, long boardStatus) {
+        this.pieces[ChessPiece.whitePawns.ordinal()] = WP;
+        this.pieces[ChessPiece.whiteKnights.ordinal()] = WN;
+        this.pieces[ChessPiece.whiteBishops.ordinal()] = WB;
+        this.pieces[ChessPiece.whiteRooks.ordinal()] = WR;
+        this.pieces[ChessPiece.whiteQueens.ordinal()] = WQ;
+        this.pieces[ChessPiece.whiteKing.ordinal()] = WK;
+        this.pieces[ChessPiece.blackPawns.ordinal()] = BP;
+        this.pieces[ChessPiece.blackKnights.ordinal()] = BN;
+        this.pieces[ChessPiece.blackBishops.ordinal()] = BB;
+        this.pieces[ChessPiece.blackRooks.ordinal()] = BR;
+        this.pieces[ChessPiece.blackQueens.ordinal()] = BQ;
+        this.pieces[ChessPiece.blackKing.ordinal()] = BK;
+        this.boardStatus = boardStatus;
+    }
+
+    public long getBoardStatus() {
+        return this.boardStatus;
+    }
+
+    public void setBoardStatus(long boardStatus) {
+        this.boardStatus = boardStatus;
     }
 }

@@ -16,21 +16,23 @@ public class Program {
         char[][] board = {
                 {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
                 {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+                {'p', 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {'p','p','p','p','p','p','p','p'},
+                {0,'p','p','p','p','p','p','p'},
                 {'r','n','b','k','q','b','n','r'},
         };
         ChessBoard chessBoard = new ChessBoard();
         chessBoard.boardInitializer(board);
 
+        char ch3 = Player.checkPiece(chessBoard, 1, 0);
+        char ch4 = Player.checkPiece(chessBoard, 2, 0);
+
+        Player.applyMove(chessBoard, new Move(0, 1, 0, 2));
+
         char ch = Player.checkPiece(chessBoard, 1, 0);
-
-        ChessBoard newBoard = Player.applyMove(chessBoard, new Move(1, 0, 2, 2));
-
-
+        char ch2 = Player.checkPiece(chessBoard, 2, 0);
 
 
 
