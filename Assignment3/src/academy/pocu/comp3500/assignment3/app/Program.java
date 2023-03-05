@@ -26,6 +26,10 @@ public class Program {
         ChessBoard chessBoard = new ChessBoard();
         chessBoard.boardInitializer(board);
 
+        char ch = Player.checkPiece(chessBoard, 1, 0);
+
+        ChessBoard newBoard = Player.applyMove(chessBoard, new Move(1, 0, 2, 2));
+
 
 
 

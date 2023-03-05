@@ -36,15 +36,18 @@ public class Player extends PlayerBase {
         // 현재 플레이어의 색상
         char color = isWhite() ? 'W' : 'B';
 
+        ChessBoard chessBoard = new ChessBoard();
+        chessBoard.boardInitializer(board);
+
         // 현재 상태에서 가능한 모든 수를 구합니다.
         // ArrayList<Move> possibleMoves = getPossibleMoves(board, color);
-        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, color, -1, -1);
+        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(chessBoard, color, -1, -1);
 
         ArrayList<Move> sameMoves = new ArrayList<>();
 
         // 가능한 모든 수에 대해 상대방이 다음 수로 이동할 수 있는 모든 가능성에 대한 점수를 구합니다.
         for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move);
+            ChessBoard newBoard = applyMove(chessBoard, move);
             int[] minValue = {INFINITY};
             int score = minMax(newBoard, getOpponentColor(color), 3, -1, minValue);
 
@@ -74,7 +77,7 @@ public class Player extends PlayerBase {
         return bestMove;
     }
 
-    private ArrayList<Move> getPossibleMoves(char[][] board, char color) {
+/*    private ArrayList<Move> getPossibleMoves(char[][] board, char color) {
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
         int left;
@@ -102,11 +105,13 @@ public class Player extends PlayerBase {
         }
 
         return possibleMoves;
-    }
+    }*/
 
 
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
-    private ArrayList<Move> getPossibleMovesFromPosition(char[][] board, char color, int row, int col) {
+    private ArrayList<Move> getPossibleMovesFromPosition(ChessBoard chessBoard, char color, int row, int col) {
+
+
         ArrayList<Move> possibleMoves = new ArrayList<>();
         int priority = -1;
         ArrayList<Move> bestMoveContainer = new ArrayList<>();
@@ -117,26 +122,47 @@ public class Player extends PlayerBase {
         int right;
         int chooser; // 소문자를 기준으로 할거임
 
+        long pawns; // 흰색 폰의 위치를 저장하는 배열
+        long knights;
+        long bishops;
+        long rooks;
+        long queens;
+        long king;
+
+        long[] pieces = chessBoard.getPieces();
+
         if (color == 'W') {
             left = 97;
             right = 122;
             chooser = -32;
+            pawns = pieces[ChessBoard.ChessPiece.whitePawns.ordinal()];
+            knights = pieces[ChessBoard.ChessPiece.whiteKnights.ordinal()];
+            bishops = pieces[ChessBoard.ChessPiece.whiteBishops.ordinal()];
+            rooks = pieces[ChessBoard.ChessPiece.whiteRooks.ordinal()];
+            queens = pieces[ChessBoard.ChessPiece.whiteQueens.ordinal()];
+            king = pieces[ChessBoard.ChessPiece.whiteKing.ordinal()];
         } else {
             left = 65;
             right = 90;
             chooser = 0;
+            pawns = pieces[ChessBoard.ChessPiece.blackPawns.ordinal()];
+            knights = pieces[ChessBoard.ChessPiece.blackKnights.ordinal()];
+            bishops = pieces[ChessBoard.ChessPiece.blackBishops.ordinal()];
+            rooks = pieces[ChessBoard.ChessPiece.blackRooks.ordinal()];
+            queens = pieces[ChessBoard.ChessPiece.blackQueens.ordinal()];
+            king = pieces[ChessBoard.ChessPiece.blackKing.ordinal()];
         }
 
         int lessMin = 0;
-        int lessMax = board.length;
+        int lessMax = 8;
 
         int opponentLeft = getOpponentColorToAscii(color);
         int opponentRight = opponentLeft + 25;
 
-
         for (int y = lessMin; y < lessMax; y++) {
             for (int x = lessMin; x < lessMax; x++) {
-                char piece = board[y][x];
+                long[] pieceBinary = new long[1];
+                char piece = checkPiece(chessBoard, y, x);
                 if (piece >= opponentLeft && piece <= opponentRight) {
                     continue;
                 }
@@ -163,10 +189,10 @@ public class Player extends PlayerBase {
 
                         boolean initialMoveCheck = afterY >= lessMin && afterY < lessMax;
 
-                        if (initialMoveCheck && board[afterY][x] == 0) {
+                        if (initialMoveCheck && checkPiece(chessBoard, afterY, x) == 0) {
                             possibleMoves.add(new Move(x, y, x, afterY));
 
-                            if (y == pawnStart && (afterY2 < lessMax) && board[afterY2][x] == 0) {
+                            if (y == pawnStart && (afterY2 < lessMax) && checkPiece(chessBoard, afterY2, x) == 0) {
                                 possibleMoves.add(new Move(x, y, x, afterY2));
                             }
                         }
@@ -177,17 +203,17 @@ public class Player extends PlayerBase {
 
                         boolean initialMoveLeftCheck = afterXleft >= lessMin && afterXleft < lessMax && afterY >= lessMin && afterY < lessMax;
 
-                        if (initialMoveLeftCheck && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
+                        if (initialMoveLeftCheck && checkPiece(chessBoard, afterY, afterXleft) >= opponentLeft && checkPiece(chessBoard, afterY, afterXleft) <= opponentRight) {
 
                             // 공격적 경우의 수 중
-                            if (board[afterY][afterXleft] == 'k' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXleft) == 'k' + chooser) {
                                 priority = 200;
                                 //bestMove.set(0, mapW.get('k'));
                                 bestMove = mapW.get('k');
                                 bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                             }
 
-                            if (board[afterY][afterXleft] == 'q' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXleft) == 'q' + chooser) {
                                 if (bestMove < mapW.get('q') && priority < 100) {
                                     priority = 100;
                                     //bestMove.set(0, mapW.get('q'));
@@ -196,7 +222,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXleft] == 'r' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXleft) == 'r' + chooser) {
                                 if (bestMove < mapW.get('r') && priority < 50) {
                                     priority = 50;
                                     bestMove = mapW.get('r');
@@ -204,7 +230,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXleft] == 'b' + chooser || board[afterY][afterXleft] == 'n' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXleft) == 'b' + chooser || checkPiece(chessBoard, afterY, afterXleft) == 'n' + chooser) {
                                 if (bestMove < mapW.get('b') && priority < 30) {
                                     priority = 30;
                                     bestMove = mapW.get('b');
@@ -212,7 +238,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXleft] == 'p' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXleft) == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
                                     bestMove = mapW.get('p');
@@ -225,10 +251,10 @@ public class Player extends PlayerBase {
 
                         boolean initialMoveRightCheck = afterXright < lessMax && afterY >= lessMin && afterY < lessMax;
 
-                        if (initialMoveRightCheck && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
+                        if (initialMoveRightCheck && checkPiece(chessBoard, afterY, afterXright) >= opponentLeft && checkPiece(chessBoard, afterY, afterXright) <= opponentRight) {
 
                             // 공격적 경우의 수 중
-                            if (board[afterY][afterXright] == 'k' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXright) == 'k' + chooser) {
 
                                 priority = 200;
                                 bestMove = mapW.get('k');
@@ -236,7 +262,7 @@ public class Player extends PlayerBase {
                                 break;
                             }
 
-                            if (board[afterY][afterXright] == 'q' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXright) == 'q' + chooser) {
                                 if (bestMove < mapW.get('q') && priority < 100) {
                                     priority = 100;
                                     bestMove = mapW.get('q');
@@ -245,7 +271,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXright] == 'r' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXright) == 'r' + chooser) {
                                 if (bestMove < mapW.get('r') && priority < 50) {
                                     priority = 50;
                                     bestMove = mapW.get('r');
@@ -254,7 +280,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXright] == 'b' + chooser || board[afterY][afterXright] == 'n' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXright) == 'b' + chooser || checkPiece(chessBoard, afterY, afterXright) == 'n' + chooser) {
                                 if (bestMove < mapW.get('b') && priority < 30) {
                                     priority = 30;
                                     bestMove = mapW.get('b');
@@ -263,7 +289,7 @@ public class Player extends PlayerBase {
                                 }
                             }
 
-                            if (board[afterY][afterXright] == 'p' + chooser) {
+                            if (checkPiece(chessBoard, afterY, afterXright) == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
                                     bestMove = mapW.get('p');
@@ -290,9 +316,9 @@ public class Player extends PlayerBase {
                             int afterX = x + xCase[i];
 
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+                                if (checkPiece(chessBoard, afterY, afterX) >= opponentLeft && checkPiece(chessBoard, afterY, afterX) <= opponentRight) {
                                     // 공격적 경우의 수 중
-                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'k' + chooser) {
                                         if (priority < 196) {
                                             priority = 196;
                                             bestMove = mapW.get('k');
@@ -300,7 +326,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'q' + chooser) {
                                         if (priority < 96) {
                                             priority = 96;
                                             bestMove = mapW.get('q');
@@ -308,7 +334,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'r' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'r' + chooser) {
                                         if (priority < 46) {
                                             priority = 46;
                                             bestMove = mapW.get('r');
@@ -316,7 +342,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'b' + chooser || checkPiece(chessBoard, afterY, afterX) == 'n' + chooser) {
                                         if (priority < 26) {
                                             priority = 26;
                                             bestMove = mapW.get('b');
@@ -324,7 +350,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'p' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'p' + chooser) {
                                         if (priority < 6) {
                                             priority = 6;
                                             bestMove = mapW.get('p');
@@ -335,7 +361,7 @@ public class Player extends PlayerBase {
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
 
-                                if (board[afterY][afterX] == 0) {
+                                if (checkPiece(chessBoard, afterY, afterX) == 0) {
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
 
@@ -356,10 +382,10 @@ public class Player extends PlayerBase {
 
 
                             while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+                                if (checkPiece(chessBoard, afterY, afterX) >= opponentLeft && checkPiece(chessBoard, afterY, afterX) <= opponentRight) {
 
                                     // 공격적 경우의 수 중
-                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'k' + chooser) {
                                         if (priority < 197) {
                                             priority = 197;
                                             bestMove = mapW.get('k');
@@ -367,7 +393,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'q' + chooser) {
                                         if (priority < 97) {
                                             priority = 97;
                                             bestMove = mapW.get('q');
@@ -375,7 +401,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'r' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'r' + chooser) {
                                         if (priority < 47) {
                                             priority = 47;
                                             bestMove = mapW.get('r');
@@ -383,7 +409,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'b' + chooser || checkPiece(chessBoard, afterY, afterX) == 'n' + chooser) {
                                         if (priority < 27) {
                                             priority = 27;
                                             bestMove = mapW.get('b');
@@ -391,7 +417,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'p' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'p' + chooser) {
                                         if (priority < 7) {
                                             priority = 7;
                                             bestMove = mapW.get('p');
@@ -403,7 +429,7 @@ public class Player extends PlayerBase {
                                     break;
                                 }
 
-                                if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                if (checkPiece(chessBoard, afterY, afterX) >= left && checkPiece(chessBoard, afterY, afterX) <= right) {
                                     break;
                                 }
 
@@ -429,10 +455,10 @@ public class Player extends PlayerBase {
 
                                 while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
-                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+                                    if (checkPiece(chessBoard, afterY, afterX) >= opponentLeft && checkPiece(chessBoard, afterY, afterX) <= opponentRight) {
 
                                         // 공격적 경우의 수 중
-                                        if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'k' + chooser) {
                                             if (priority < 198) {
                                                 priority = 198;
                                                 bestMove = mapW.get('k');
@@ -440,7 +466,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'q' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'q' + chooser) {
                                             if (bestMove < mapW.get('q') && priority < 98) {
                                                 priority = 98;
                                                 bestMove = mapW.get('q');
@@ -449,7 +475,7 @@ public class Player extends PlayerBase {
 
                                         }
 
-                                        if (board[afterY][afterX] == 'r' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'r' + chooser) {
                                             if (priority < 48) {
                                                 priority = 48;
                                                 bestMove = mapW.get('r');
@@ -457,7 +483,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'b' + chooser || checkPiece(chessBoard, afterY, afterX) == 'n' + chooser) {
                                             if (priority < 28) {
                                                 priority = 28;
                                                 bestMove = mapW.get('b');
@@ -465,7 +491,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'p' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'p' + chooser) {
                                             if (priority < 8) {
                                                 priority = 8;
                                                 bestMove = mapW.get('p');
@@ -477,7 +503,7 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                    if (checkPiece(chessBoard, afterY, afterX) >= left && checkPiece(chessBoard, afterY, afterX) <= right) {
                                         break;
                                     }
 
@@ -507,10 +533,10 @@ public class Player extends PlayerBase {
 
                                 while (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
 
-                                    if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
+                                    if (checkPiece(chessBoard, afterY, afterX) >= opponentLeft && checkPiece(chessBoard, afterY, afterX) <= opponentRight) {
 
                                         // 공격적 경우의 수 중
-                                        if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'k' + chooser) {
                                             if (priority < 199) {
                                                 priority = 199;
                                                 bestMove = mapW.get('k');
@@ -518,7 +544,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'q' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'q' + chooser) {
                                             if (bestMove < mapW.get('q') && priority < 99) {
                                                 priority = 99;
                                                 bestMove = mapW.get('q');
@@ -526,7 +552,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'r' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'r' + chooser) {
                                             if (bestMove < mapW.get('r') && priority < 49) {
                                                 priority = 49;
                                                 bestMove = mapW.get('r');
@@ -534,7 +560,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'b' + chooser || checkPiece(chessBoard, afterY, afterX) == 'n' + chooser) {
                                             if (priority < 29) {
                                                 priority = 29;
                                                 bestMove = mapW.get('b');
@@ -542,7 +568,7 @@ public class Player extends PlayerBase {
                                             }
                                         }
 
-                                        if (board[afterY][afterX] == 'p' + chooser) {
+                                        if (checkPiece(chessBoard, afterY, afterX) == 'p' + chooser) {
                                             if (bestMove < mapW.get('p') && priority < 9) {
                                                 priority = 9;
                                                 bestMove = mapW.get('p');
@@ -554,7 +580,7 @@ public class Player extends PlayerBase {
                                         break;
                                     }
 
-                                    if (board[afterY][afterX] >= left && board[afterY][afterX] <= right) {
+                                    if (checkPiece(chessBoard, afterY, afterX) >= left && checkPiece(chessBoard, afterY, afterX) <= right) {
                                         break;
                                     }
 
@@ -579,10 +605,10 @@ public class Player extends PlayerBase {
                             int afterY = y + yCase[i];
 
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
-                                if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight)) {
+                                if ((checkPiece(chessBoard, afterY, afterX) >= opponentLeft && checkPiece(chessBoard, afterY, afterX) <= opponentRight)) {
 
                                     // 공격적 경우의 수 중
-                                    if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'k' + chooser) {
                                         if (priority < 199) {
                                             priority = 199;
                                             bestMove = mapW.get('k');
@@ -590,7 +616,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'q' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'q' + chooser) {
                                         if (bestMove < mapW.get('q') && priority < 99) {
                                             priority = 99;
                                             bestMove = mapW.get('q');
@@ -598,7 +624,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'r' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'r' + chooser) {
                                         if (bestMove < mapW.get('r') && priority < 49) {
                                             priority = 49;
                                             bestMove = mapW.get('r');
@@ -606,7 +632,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'b' + chooser || board[afterY][afterX] == 'n' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'b' + chooser || checkPiece(chessBoard, afterY, afterX) == 'n' + chooser) {
                                         if (priority < 29) {
                                             priority = 29;
                                             bestMove = mapW.get('b');
@@ -614,7 +640,7 @@ public class Player extends PlayerBase {
                                         }
                                     }
 
-                                    if (board[afterY][afterX] == 'p' + chooser) {
+                                    if (checkPiece(chessBoard, afterY, afterX) == 'p' + chooser) {
                                         if (bestMove < mapW.get('p') && priority < 9) {
                                             priority = 9;
                                             bestMove = mapW.get('p');
@@ -625,7 +651,7 @@ public class Player extends PlayerBase {
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
 
-                                if ((board[afterY][afterX] == 0)) {
+                                if ((checkPiece(chessBoard, afterY, afterX) == 0)) {
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
                             }
@@ -635,6 +661,8 @@ public class Player extends PlayerBase {
                     }
 
                 }
+
+
             }
         }
 
@@ -645,9 +673,10 @@ public class Player extends PlayerBase {
     }
 
     // 현재 상태의 점수를 반환하는 함수
-    private int evaluateBoard(char[][] board, char color) {
+    private int evaluateBoard(ChessBoard chessBoard, char color) {
         int score = 0;
 
+        int[] scores = {1, 3, 3, 5, 9, 200};
         char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
 
         char ascii;
@@ -662,59 +691,20 @@ public class Player extends PlayerBase {
 
         char[] result = changeUpDown(pieces, color);
 
-        int[] scores = {1, 3, 3, 5, 9, 200};
-
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                if (board[row][col] >= ascii && board[row][col] <= ascii + 25) {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (checkPiece(chessBoard, row, col) >= ascii && checkPiece(chessBoard, row, col) <= ascii + 25) {
 
                     for (int i = 0; i < 6; i++) {
-                        if (board[row][col] == result[i]) {
+                        if (checkPiece(chessBoard, row, col) == result[i]) {
                             score += scores[i];
                             break;
                         }
                     }
-                } else if (board[row][col] >= ascii + ascii2 && board[row][col] <= ascii + 25 + ascii2) {
+                } else if (checkPiece(chessBoard, row, col) >= ascii + ascii2 && checkPiece(chessBoard, row, col) <= ascii + 25 + ascii2) {
                     for (int i = 0; i < 6; i++) {
-                        if (board[row][col] == result[i] + ascii2) {
+                        if (checkPiece(chessBoard, row, col) == result[i] + ascii2) {
                             score -= scores[i];
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        return score;
-    }
-
-    private int evaluateBoard2(char[][] board, char color) {
-        int score = 0;
-
-        char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
-
-        char ascii;
-        int ascii2;
-        if (color == 'W') {
-            ascii = 97;
-            ascii2 = -32;
-        } else {
-            ascii = 65;
-            ascii2 = 32;
-        }
-
-        char[] result = changeUpDown(pieces, color);
-
-        int[] scores = {1, 3, 3, 5, 9, 200};
-
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                if (board[row][col] >= ascii && board[row][col] <= ascii + 25) {
-
-                    for (int i = 0; i < 6; i++) {
-                        if (board[row][col] == result[i]) {
-                            score += scores[i];
                             break;
                         }
                     }
@@ -760,12 +750,12 @@ public class Player extends PlayerBase {
     }*/
 
 
-    private int minMax(char[][] board, char color, int depth, int check, int[] minValue) {
+    private int minMax(ChessBoard chessBoard, char color, int depth, int check, int[] minValue) {
         if (depth == 0) { // 종료 조건
-            return evaluateBoard(board, getOpponentColor(color));
+            return evaluateBoard(chessBoard, getOpponentColor(color));
         }
 
-        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, color, -1, -1); // 현재 플레이어의 가능한 수 모두 생성
+        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(chessBoard, color, -1, -1); // 현재 플레이어의 가능한 수 모두 생성
         int bestScore;
 
         if (check == 1) {
@@ -775,7 +765,7 @@ public class Player extends PlayerBase {
         }
 
         for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
+            ChessBoard newBoard = applyMove(chessBoard, move); // 현재 수를 적용한 새로운 보드 생성
             int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1, minValue); // 새로운 보드에 대해 미니맥스 재귀호출
 
             minValue[0] = score;
@@ -804,17 +794,34 @@ public class Player extends PlayerBase {
     }
 
     // 특정 수를 적용한 새로운 보드를 반환합니다.
-    private char[][] applyMove(char[][] board, Move move) {
-        char[][] newBoard = new char[board.length][board[0].length];
-        //char[][] newBoard = board;
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                newBoard[col][row] = board[col][row];
+    public static ChessBoard applyMove(ChessBoard chessBoard, Move move) {
+        int lessMin = 0;
+        int lessMax = 8;
+        int boardSize = lessMax * lessMax;
+
+        long fromCount = boardSize - (move.fromY * lessMax + move.fromX);
+        long toCount = boardSize - (move.toY * lessMax + move.toX);
+
+        ChessBoard newBoard = new ChessBoard();
+        char piece = checkPiece(chessBoard, move.fromY, move.fromX);
+
+        long[] p = chessBoard.getPieces();
+        long[] newLong = new long[12];
+        int count = 0;
+        for (ChessBoard.ChessPiece c : ChessBoard.ChessPiece.values()) {
+            if (c.getChar() == piece) {
+                //System.out.println(Long.toBinaryString(p[count]));
+                p[count] ^= (long) 1 << fromCount - 1;
+                //System.out.println(Long.toBinaryString(p[count]));
+                p[count] ^= (long) 1 << toCount - 1;
+                //System.out.println(Long.toBinaryString(p[count]));
             }
+
+            newLong[count] = p[count];
+            ++count;
         }
 
-        newBoard[move.toY][move.toX] = newBoard[move.fromY][move.fromX];
-        newBoard[move.fromY][move.fromX] = 0;
+        newBoard.setPieces(newLong);
 
         return newBoard;
     }
@@ -831,5 +838,28 @@ public class Player extends PlayerBase {
             return arr;
         }
     }
+
+    public static char checkPiece(ChessBoard chessBoard, int y, int x) {
+        int lessMin = 0;
+        int lessMax = 8;
+        int boardSize = lessMax * lessMax;
+
+        int totalCount = boardSize - (y * lessMax + x);
+
+        // System.out.println(Long.toBinaryString(offset));
+
+        long[] pieces = chessBoard.getPieces();
+        int count = 0;
+        for (ChessBoard.ChessPiece c : ChessBoard.ChessPiece.values()) {
+            if ((pieces[count] | (long) 1 << totalCount - 1) == pieces[count]) {
+                //outPieces[0] = pieces[count];
+                return c.getChar();
+            }
+            ++count;
+        }
+
+        return 0;
+    }
+
 
 }

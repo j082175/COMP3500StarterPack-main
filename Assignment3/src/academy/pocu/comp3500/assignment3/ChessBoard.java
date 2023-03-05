@@ -2,8 +2,35 @@ package academy.pocu.comp3500.assignment3;
 
 public class ChessBoard {
     private long boardStatus;
+    private long[] pieces;
 
-    private long whitePawns; // 흰색 폰의 위치를 저장하는 배열
+    public enum ChessPiece {
+        whitePawns('p'),
+        whiteKnights('n'),
+        whiteBishops('b'),
+        whiteRooks('r'),
+        whiteQueens('q'),
+        whiteKing('k'),
+        blackPawns('P'),
+        blackKnights('N'),
+        blackBishops('B'),
+        blackRooks('R'),
+        blackQueens('Q'),
+        blackKing('K');
+
+        private char character;
+
+        ChessPiece(char character) {
+            this.character = character;
+        }
+
+        public char getChar() {
+            return this.character;
+        }
+    }
+
+
+/*    private long whitePawns; // 흰색 폰의 위치를 저장하는 배열
     private long whiteKnights;
     private long whiteBishops;
     private long whiteRooks;
@@ -15,11 +42,12 @@ public class ChessBoard {
     private long blackBishops;
     private long blackRooks;
     private long blackQueens;
-    private long blackKing;
+    private long blackKing;*/
 
     private long whitePawnMoves; // 흰색 폰의 이동 가능한 위치를 저장하는 배열
 
     public ChessBoard() {
+        pieces = new long[12];
 /*        boardStatus = 0xffff00000000ffffL;
 
         whitePawns =   0b0000000000000000000000000000000000000000000000001111111100000000L; // a2, b2, ..., h2
@@ -43,56 +71,57 @@ public class ChessBoard {
                 switch (board[y][x]) {
                     case 'p':
                         isChecked = true;
-                        whitePawns |= offset;
+                        pieces[ChessPiece.whitePawns.ordinal()] |= offset;
                         break;
                     case 'n':
                         isChecked = true;
-                        whiteKnights |= offset;
+                        pieces[ChessPiece.whiteKnights.ordinal()] |= offset;
                         break;
                     case 'b':
                         isChecked = true;
-                        whiteBishops |= offset;
+                        pieces[ChessPiece.whiteBishops.ordinal()] |= offset;
                         break;
                     case 'r':
                         isChecked = true;
-                        whiteRooks |= offset;
+                        pieces[ChessPiece.whiteRooks.ordinal()] |= offset;
                         break;
                     case 'q':
                         isChecked = true;
-                        whiteQueens |= offset;
+                        pieces[ChessPiece.whiteQueens.ordinal()] |= offset;
                         break;
                     case 'k':
                         isChecked = true;
-                        whiteKing |= offset;
+                        pieces[ChessPiece.whiteKing.ordinal()] |= offset;
                         break;
                     case 'P':
                         isChecked = true;
-                        blackPawns |= offset;
+                        pieces[ChessPiece.blackPawns.ordinal()] |= offset;
                         break;
                     case 'N':
                         isChecked = true;
-                        blackKnights |= offset;
+                        pieces[ChessPiece.blackKnights.ordinal()] |= offset;
                         break;
                     case 'B':
                         isChecked = true;
-                        blackBishops |= offset;
+                        pieces[ChessPiece.blackBishops.ordinal()] |= offset;
                         break;
                     case 'R':
                         isChecked = true;
-                        blackRooks |= offset;
+                        pieces[ChessPiece.blackRooks.ordinal()] |= offset;
                         break;
                     case 'Q':
                         isChecked = true;
-                        blackQueens |= offset;
+                        pieces[ChessPiece.blackQueens.ordinal()] |= offset;
                         break;
                     case 'K':
                         isChecked = true;
-                        blackKing |= offset;
+                        pieces[ChessPiece.blackKing.ordinal()] |= offset;
                         break;
                 }
 
                 if (isChecked) {
                     boardStatus |= offset;
+                    // System.out.println(Long.toBinaryString(boardStatus));
                     isChecked = false;
                 }
 
@@ -103,15 +132,19 @@ public class ChessBoard {
 
     public void initialize() {
         // 초기 상태 설정  0, 1, 2, 3, 4, 5, 6, 7행
-        whitePawns = 0b0000000000000000000000000000000000000000000000001111111100000000L; // a2, b2, ..., h2
-        whitePawnMoves = (whitePawns << 8) & ~0xffffffffffffff00L; // a3, b3, ..., h3
+        //whitePawns = 0b0000000000000000000000000000000000000000000000001111111100000000L; // a2, b2, ..., h2
+        //whitePawnMoves = (whitePawns << 8) & ~0xffffffffffffff00L; // a3, b3, ..., h3
     }
 
     public boolean isCollision(long pieceMoves, long allPieces) {
         return (pieceMoves & allPieces) != 0;
     }
 
-    private void allInitialize() {
+    public long[] getPieces() {
+        return this.pieces;
+    }
 
+    public void setPieces(long[] pieces) {
+        this.pieces = pieces;
     }
 }
