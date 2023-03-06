@@ -194,7 +194,7 @@ public class Player extends PlayerBase {
                         if (initialMoveLeftCheck && board[afterY][afterXleft] >= opponentLeft && board[afterY][afterXleft] <= opponentRight) {
 
                             // 공격적 경우의 수 중
-                            /*if (board[afterY][afterXleft] == 'k' + chooser) {
+                            if (board[afterY][afterXleft] == 'k' + chooser) {
                                 priority = 200;
                                 //bestMove.set(0, mapW.get('k'));
                                 bestMove = mapW.get('k');
@@ -232,7 +232,7 @@ public class Player extends PlayerBase {
                                     bestMove = mapW.get('p');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
-                            }*/
+                            }
 
                             possibleMoves.add(new Move(x, y, afterXleft, afterY));
                         }
@@ -242,7 +242,7 @@ public class Player extends PlayerBase {
                         if (initialMoveRightCheck && board[afterY][afterXright] >= opponentLeft && board[afterY][afterXright] <= opponentRight) {
 
                             // 공격적 경우의 수 중
-                            /*if (board[afterY][afterXright] == 'k' + chooser) {
+                            if (board[afterY][afterXright] == 'k' + chooser) {
 
                                 priority = 200;
                                 bestMove = mapW.get('k');
@@ -284,7 +284,7 @@ public class Player extends PlayerBase {
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                     break;
                                 }
-                            }*/
+                            }
 
                             possibleMoves.add(new Move(x, y, afterXright, afterY));
                         }
@@ -306,7 +306,7 @@ public class Player extends PlayerBase {
                             if (afterX >= lessMin && afterX < lessMax && afterY >= lessMin && afterY < lessMax) {
                                 if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
                                     // 공격적 경우의 수 중
-                                    /*if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 196) {
                                             priority = 196;
                                             bestMove = mapW.get('k');
@@ -344,7 +344,7 @@ public class Player extends PlayerBase {
                                             bestMove = mapW.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
-                                    }*/
+                                    }
 
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
@@ -373,7 +373,7 @@ public class Player extends PlayerBase {
                                 if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
 
                                     // 공격적 경우의 수 중
-                                    /*if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 197) {
                                             priority = 197;
                                             bestMove = mapW.get('k');
@@ -411,7 +411,7 @@ public class Player extends PlayerBase {
                                             bestMove = mapW.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
-                                    }*/
+                                    }
 
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                     break;
@@ -446,7 +446,7 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
 
                                         // 공격적 경우의 수 중
-                                        /*if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (board[afterY][afterX] == 'k' + chooser) {
                                             if (priority < 198) {
                                                 priority = 198;
                                                 bestMove = mapW.get('k');
@@ -485,7 +485,7 @@ public class Player extends PlayerBase {
                                                 bestMove = mapW.get('p');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
-                                        }*/
+                                        }
 
                                         possibleMoves.add(new Move(x, y, afterX, afterY));
                                         break;
@@ -524,7 +524,7 @@ public class Player extends PlayerBase {
                                     if (board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight) {
 
                                         // 공격적 경우의 수 중
-                                        /*if (board[afterY][afterX] == 'k' + chooser) {
+                                        if (board[afterY][afterX] == 'k' + chooser) {
                                             if (priority < 199) {
                                                 priority = 199;
                                                 bestMove = mapW.get('k');
@@ -562,7 +562,7 @@ public class Player extends PlayerBase {
                                                 bestMove = mapW.get('p');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
-                                        }*/
+                                        }
 
                                         possibleMoves.add(new Move(x, y, afterX, afterY));
                                         break;
@@ -596,7 +596,7 @@ public class Player extends PlayerBase {
                                 if ((board[afterY][afterX] >= opponentLeft && board[afterY][afterX] <= opponentRight)) {
 
                                     // 공격적 경우의 수 중
-                                    /*if (board[afterY][afterX] == 'k' + chooser) {
+                                    if (board[afterY][afterX] == 'k' + chooser) {
                                         if (priority < 199) {
                                             priority = 199;
                                             bestMove = mapW.get('k');
@@ -634,7 +634,7 @@ public class Player extends PlayerBase {
                                             bestMove = mapW.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
-                                    }*/
+                                    }
 
                                     possibleMoves.add(new Move(x, y, afterX, afterY));
                                 }
