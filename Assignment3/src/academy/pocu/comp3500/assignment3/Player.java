@@ -656,7 +656,7 @@ public class Player extends PlayerBase {
             return bestMoveContainer;
         }
 
-/*        if (possibleMoves.size() > 10) {
+        if (possibleMoves.size() > 10) {
             ArrayList<Move> newArr = new ArrayList<>(10);
             Random r = new Random();
             for (int i = 0; i < 10; i++) {
@@ -666,7 +666,7 @@ public class Player extends PlayerBase {
             }
 
             return newArr;
-        }*/
+        }
 
         return possibleMoves;
     }
