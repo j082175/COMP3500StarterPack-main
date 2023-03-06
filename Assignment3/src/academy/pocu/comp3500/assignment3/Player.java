@@ -50,7 +50,7 @@ public class Player extends PlayerBase {
 
             int s = minMax(newBoard, getOpponentColor(color), 1, -1, minValue);
 
-            int score = minMax(newBoard, getOpponentColor(color), 3, -1, minValue);
+            int score = minMax(newBoard, getOpponentColor(color), 4, -1, minValue);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
 
