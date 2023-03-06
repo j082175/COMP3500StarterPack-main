@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Program {
 
@@ -34,12 +35,15 @@ public class Program {
         char ch = Player.checkPiece(chessBoard, 1, 0);
         char ch2 = Player.checkPiece(chessBoard, 2, 0);
 
+        long[] p = chessBoard.getPieces();
+        // long e = ChessBoard.kingMoves(63, chessBoard.getBoardStatus());
 
+        System.out.println(Long.toBinaryString(chessBoard.getBoardStatus()));
+        long res = Player.getBishopMoves(35, chessBoard.getBoardStatus());
 
+        System.out.println(Long.toBinaryString(res));
 
-
-
-
+        //ArrayList<Move> arr = Player.calculateDecimalFromPowersOfTwo(res, 7, 7);
 
 
 

@@ -1,6 +1,12 @@
 package academy.pocu.comp3500.assignment3;
 
 public class ChessBoard {
+
+    private static final long H_FILE = 0x8080808080808080L;
+    private static final long A_FILE = 0x0101010101010101L;
+    private static final long B_FILE = 0x0202020202020202L;
+
+
     private long boardStatus;
     private long[] pieces = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -149,6 +155,10 @@ public class ChessBoard {
         return this.pieces;
     }
 
+    public long getPieces(int index) {
+        return this.pieces[index];
+    }
+
     public void setPieces(long[] pieces) {
         for (int i = 0; i < pieces.length; i++) {
             this.pieces[i] = pieces[i];
@@ -178,4 +188,46 @@ public class ChessBoard {
     public void setBoardStatus(long boardStatus) {
         this.boardStatus = boardStatus;
     }
+
+    public static long rookMoves(int square, long occupied) {
+        long bitboard = 1L << square;
+        long file = (0x0101010101010101L * bitboard) & ~occupied;
+        long rank = (0x00000000000000FFL * bitboard) & ~occupied;
+        long moves = (file - 2 * bitboard) ^ Long.reverse(Long.reverse(file) - 2 * Long.reverse(bitboard));
+        moves = moves ^ ((rank - 2 * bitboard) ^ Long.reverse(Long.reverse(rank) - 2 * Long.reverse(bitboard)));
+        return moves;
+    }
+
+    public static long kingMoves(int square, long occupied) {
+        long bitboard = 1L << square;
+        long east = (bitboard << 1) & 0x7F7F7F7F7F7F7F7FL;
+        long west = (bitboard >>> 1) & 0xFEFEFEFEFEFEFEFEL;
+        long moves = bitboard << 8 | bitboard >>> 8 | east << 8 | east | west >>> 8 | west;
+        return moves & ~occupied;
+    }
+
+    public static long queenMoves(int square, long occupied) {
+        return rookMoves(square, occupied) | bishopMoves(square, occupied);
+    }
+
+    public static long bishopMoves(int square, long occupied) {
+        long bitboard = 1L << square;
+        long diag45 = (0x8040201008040201L * bitboard) & ~H_FILE & ~A_FILE;
+        long diag135 = (0x0102040810204080L * bitboard) & ~H_FILE & ~A_FILE;
+        long moves = (diag45 - 2 * bitboard) ^ Long.reverse(Long.reverse(diag45) - 2 * Long.reverse(bitboard));
+        moves = moves ^ ((diag135 - 2 * bitboard) ^ Long.reverse(Long.reverse(diag135) - 2 * Long.reverse(bitboard)));
+        return moves;
+    }
+
+    public static long knightMoves(int square, long occupied) {
+        long bitboard = 1L << square;
+        long east = (bitboard << 1) & 0x7F7F7F7F7F7F7F7FL;
+        long west = (bitboard >>> 1) & 0xFEFEFEFEFEFEFEFEL;
+        long moves = (east << 16 | east >>> 16 | west << 16 | west >>> 16) & 0x00FFFFFFFFFFFF00L;
+        moves = moves | (east << 6 | east >>> 10 | west << 10 | west >>> 6) & ~A_FILE & ~B_FILE;
+        return moves & ~occupied;
+    }
+
+
+
 }
