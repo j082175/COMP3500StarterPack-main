@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Program {
 
     public static void main(String[] args) {
-        char[][] board = {
+/*        char[][] board = {
                 {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
                 {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
                 {'p', 0, 0, 0, 0, 0, 0, 0},
@@ -41,7 +41,7 @@ public class Program {
         System.out.println(Long.toBinaryString(chessBoard.getBoardStatus()));
         long res = Player.getBishopMoves(35, chessBoard.getBoardStatus());
 
-        System.out.println(Long.toBinaryString(res));
+        System.out.println(Long.toBinaryString(res));*/
 
         //ArrayList<Move> arr = Player.calculateDecimalFromPowersOfTwo(res, 7, 7);
 
