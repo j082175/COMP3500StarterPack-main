@@ -8,7 +8,7 @@ public class ChessBoard {
 
 
     private long boardStatus;
-    private long[] pieces = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    private long[] pieces = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public enum ChessPiece {
         whitePawns('p', 1),
