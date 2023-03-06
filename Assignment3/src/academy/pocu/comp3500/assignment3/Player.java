@@ -11,7 +11,6 @@ import java.util.Random;
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
     private static final Map<Character, Integer> mapW = new HashMap<>();
-    private static int turn;
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
@@ -51,7 +50,7 @@ public class Player extends PlayerBase {
 
             int s = minMax(newBoard, getOpponentColor(color), 1, -1, minValue);
 
-            int score = minMax(newBoard, getOpponentColor(color), 5, -1, minValue);
+            int score = minMax(newBoard, getOpponentColor(color), 3, -1, minValue);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
 
@@ -657,7 +656,7 @@ public class Player extends PlayerBase {
             return bestMoveContainer;
         }
 
-        if (possibleMoves.size() > 10) {
+/*        if (possibleMoves.size() > 10) {
             ArrayList<Move> newArr = new ArrayList<>(10);
             Random r = new Random();
             for (int i = 0; i < 10; i++) {
@@ -667,7 +666,7 @@ public class Player extends PlayerBase {
             }
 
             return newArr;
-        }
+        }*/
 
         return possibleMoves;
     }
