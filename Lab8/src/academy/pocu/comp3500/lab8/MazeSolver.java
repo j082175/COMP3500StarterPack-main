@@ -2,197 +2,136 @@ package academy.pocu.comp3500.lab8;
 
 import academy.pocu.comp3500.lab8.maze.Point;
 
-import java.util.ArrayDeque;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
 public final class MazeSolver {
-    public static List<Point> findPath(final char[][] maze, final Point start) {
-        List<Point> list = new ArrayList<>();
-        Stack<List<Point>> ableToGo = new Stack<>();
-        Queue<Integer> q;
-        boolean isEnd = false;
-        list.add(start);
-        Point before = null;
+    private static Node root;
+    private final static int length = 4;
+    private final static int[] xCase = {0, -1, 0, 1};
+    private final static int[] yCase = {-1, 0, 1, 0};
+    private final static char wall = 'x';
+    private final static char past = '!';
+    private final static char way = ' ';
+    private final static char exit = 'E';
 
-        while (!isEnd) {
-            isEnd = getNextMove(maze, start, ableToGo);
+    public static List<Point> findPath(final char[][] maze, final Point start) {
+        LinkedList<Point> totalList = new LinkedList<>();
+        root = null;
+
+        if (maze[start.getY()][start.getX()] == exit) {
+            totalList.add(new Point(start.getX(), start.getY()));
+            return totalList;
+        }
+
+        if (root == null) {
+            ArrayList<Point> a = new ArrayList<>();
+            a.add(start);
+            root = new Node(a);
         }
 
 
-        return list;
+        findRecursive(root, maze, totalList);
+
+
+
+
+
+
+
+        return totalList;
     }
 
-    private static boolean getNextMove(char[][] maze, Point start, Stack<List<Point>> ableToGo) {
-        char wall = 'x';
-        char exit = 'E';
+    private static boolean findRecursive(Node node, char[][] maze, LinkedList<Point> totalList) {
+        int x = node.point.get(node.point.size() - 1).getX();
+        int y = node.point.get(node.point.size() - 1).getY();
 
-        int x = start.getX();
-        int y = start.getY();
-        boolean check;
-        boolean isNull = false;
+        int count = 0;
+        Queue<Point> pointStorage = new LinkedList<>();
 
-        int wayCount = 0;
+        maze[y][x] = past;
 
-
-
-
-/*        if (!isNull) {
-            //check = afterY != before.getY() && afterX != before.getX();
-        } else {
-            check = true;
-        }*/
-
-        List<List<Point>> list = new ArrayList<>();
-
-        ableToGo.push(new ArrayList<>());
-
-        int historyCount = 0;
-
-        int newX = x;
-        int newY = y;
-
-        while (true) { // 순서대로 왼쪽 오른쪽 위 아래
-            x = newX;
-            y = newY;
-
-            int afterX = x - 1;
+        for (int i = 0; i < length; i++) {
+            int afterX = x;
             int afterY = y;
 
-            boolean isWay = false;
-            wayCount = 0;
-            maze[y][x] = '!';
+            afterX += xCase[i];
+            afterY += yCase[i];
 
+            if (afterY < 0 || afterY >= maze.length && afterX < 0 || afterX >= maze[0].length) {
+                return false;
+            }
 
-            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != '!') {
-                isWay = true;
-
-                if (isWay) {
-                    ableToGo.push(new ArrayList<>());
-                    ableToGo.peek().add(new Point(afterX, afterY));
-                } else {
-                    ableToGo.peek().add(new Point(afterX, afterY));
-
-                    newY = afterY;
-                    newX = afterX;
-                }
-
+            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != past) {
                 if (maze[afterY][afterX] == exit) {
+                    totalList.addFirst(new Point(afterX, afterY));
                     return true;
                 }
 
+                pointStorage.add(new Point(afterX, afterY));
             } else {
-                ++wayCount;
+                ++count;
             }
+        }
 
-            afterX = x + 1;
-            afterY = y;
+        if (count == 4) {
+            node.point.clear();
+            return false;
+        }
 
-
-/*        if (!isNull) {
-            check = afterY != before.getY() && afterX != before.getX();
-        }*/
-
-            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != '!') {
-                if (isWay) {
-                    ableToGo.push(new ArrayList<>());
-                    ableToGo.peek().add(new Point(afterX, afterY));
-                } else {
-                    ableToGo.peek().add(new Point(afterX, afterY));
-
-                    newY = afterY;
-                    newX = afterX;
-                    isWay = true;
-                }
-
-                if (maze[afterY][afterX] == exit) {
+        if (count == 3) {
+            node.point.add(pointStorage.peek());
+            boolean result = findRecursive(node, maze, totalList);
+            if (result) {
+                if (node.point.get(0).getX() == totalList.getFirst().getX() && node.point.get(0).getY() == totalList.getFirst().getY()) {
                     return true;
                 }
 
-            } else {
-                ++wayCount;
+                for (int i = 0; i < node.point.size(); i++) {
+                    totalList.addFirst(new Point(node.point.get(node.point.size() - 1 - i).getX(), node.point.get(node.point.size() - 1 - i).getY()));
+                }
+
+                return true;
             }
-
-            afterX = x;
-            afterY = y - 1;
-
-
-/*        if (!isNull) {
-            check = afterY != before.getY() && afterX != before.getX();
-        }*/
-
-            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != '!') {
-                if (isWay) {
-                    ableToGo.push(new ArrayList<>());
-                    ableToGo.peek().add(new Point(afterX, afterY));
-                } else {
-                    ableToGo.peek().add(new Point(afterX, afterY));
-
-                    newY = afterY;
-                    newX = afterX;
-                    isWay = true;
-                }
-
-                if (maze[afterY][afterX] == exit) {
-                    return true;
-                }
-
-            } else {
-                ++wayCount;
-            }
-
-            afterX = x;
-            afterY = y + 1;
-
-
-/*        if (!isNull) {
-            check = afterY != before.getY() && afterX != before.getX();
-        }*/
-
-            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != '!') {
-                if (isWay) {
-                    ableToGo.push(new ArrayList<>());
-                    ableToGo.peek().add(new Point(afterX, afterY));
-                } else {
-                    ableToGo.peek().add(new Point(afterX, afterY));
-
-                    newY = afterY;
-                    newX = afterX;
-                    isWay = true;
-                }
-
-                if (maze[afterY][afterX] == exit) {
-                    return true;
-                }
-            } else {
-                ++wayCount;
-            }
-
-            if (wayCount == 4) {
-                ableToGo.pop();
-                int size = ableToGo.peek().size();
-                newX = ableToGo.peek().get(size - 1).getX();
-                newY = ableToGo.peek().get(size - 1).getY();
-            } /*else {
-                list.add(ableToGo.getFirst());
-                newX = ableToGo.getFirst().get(0).getX();
-                newY = ableToGo.getFirst().get(0).getY();
-                ableToGo.removeFirst();
-            }*/
-
-
-/*            else {
-                newX = ableToGo.peek().get(0).getX();
-                newY = ableToGo.peek().get(0).getY();
-            }*/
-
 
         }
 
+        {
+            int size = pointStorage.size();
+            for (int i = 0; i < size; i++) {
+                node.addChildren(pointStorage.remove());
+            }
+        }
 
+
+        {
+            int size = node.children.size();
+            for (int j = 0; j < size; j++) {
+                boolean result = findRecursive(node.getChildrenNode(), maze, totalList);
+
+                if (result) {
+                    for (int i = 0; i < node.point.size(); i++) {
+                        totalList.addFirst(new Point(node.point.get(node.point.size() - 1 - i).getX(), node.point.get(node.point.size() - 1 - i).getY()));
+                    }
+
+                    return true;
+                }
+
+                if (node.getChildrenNode().point.size() == 0) {
+                    node.children.remove();
+                }
+            }
+        }
+
+
+
+
+        return false;
     }
+
+
 }
