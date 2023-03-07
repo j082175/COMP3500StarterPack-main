@@ -2,40 +2,38 @@ package academy.pocu.comp3500.lab8;
 
 import academy.pocu.comp3500.lab8.maze.Point;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Stack;
 
 public final class MazeSolver {
-    private static Node root;
-    private final static int length = 4;
-    private final static int[] xCase = {0, -1, 0, 1};
-    private final static int[] yCase = {-1, 0, 1, 0};
-    private final static char wall = 'x';
-    private final static char past = '!';
-    private final static char way = ' ';
-    private final static char exit = 'E';
+    private static Node ROOT;
+    private final static int LENGTH = 4;
+    private final static int[] X_CASE = {0, -1, 0, 1};
+    private final static int[] Y_CASE = {-1, 0, 1, 0};
+    private final static char WALL = 'x';
+    private final static char PAST = '!';
+    private final static char WAY = ' ';
+    private final static char EXIT = 'E';
 
     public static List<Point> findPath(final char[][] maze, final Point start) {
         LinkedList<Point> totalList = new LinkedList<>();
-        root = null;
+        ROOT = null;
 
-        if (maze[start.getY()][start.getX()] == exit) {
+        if (maze[start.getY()][start.getX()] == EXIT) {
             totalList.add(new Point(start.getX(), start.getY()));
             return totalList;
         }
 
-        if (root == null) {
+        if (ROOT == null) {
             ArrayList<Point> a = new ArrayList<>();
             a.add(start);
-            root = new Node(a);
+            ROOT = new Node(a);
         }
 
 
-        findRecursive(root, maze, totalList);
+        findRecursive(ROOT, maze, totalList);
 
 
 
@@ -53,22 +51,23 @@ public final class MazeSolver {
         int count = 0;
         Queue<Point> pointStorage = new LinkedList<>();
 
-        maze[y][x] = past;
+        maze[y][x] = PAST;
 
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < LENGTH; i++) {
             int afterX = x;
             int afterY = y;
 
-            afterX += xCase[i];
-            afterY += yCase[i];
+            afterX += X_CASE[i];
+            afterY += Y_CASE[i];
 
             if (afterY < 0 || afterY >= maze.length && afterX < 0 || afterX >= maze[0].length) {
                 return false;
             }
 
-            if (maze[afterY][afterX] != wall && maze[afterY][afterX] != past) {
-                if (maze[afterY][afterX] == exit) {
+            if (maze[afterY][afterX] != WALL && maze[afterY][afterX] != PAST) {
+                if (maze[afterY][afterX] == EXIT) {
                     totalList.addFirst(new Point(afterX, afterY));
+                    totalList.addFirst(new Point(x, y));
                     return true;
                 }
 
@@ -92,10 +91,15 @@ public final class MazeSolver {
                 }
 
                 for (int i = 0; i < node.point.size(); i++) {
+                    if (node.point.get(node.point.size() - 1 - i).getX() == totalList.getFirst().getX() && node.point.get(node.point.size() - 1 - i).getY() == totalList.getFirst().getY()) {
+                        continue;
+                    }
                     totalList.addFirst(new Point(node.point.get(node.point.size() - 1 - i).getX(), node.point.get(node.point.size() - 1 - i).getY()));
                 }
 
                 return true;
+            } else {
+                return false;
             }
 
         }

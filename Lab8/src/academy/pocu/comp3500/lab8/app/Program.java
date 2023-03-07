@@ -20,14 +20,15 @@ public class Program {
 
         char[][] maze8x6 = new char[][]{
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-                {'x', 'E', ' ', 'x', ' ', ' ', ' ', 'x'},
-                {'x', 'x', ' ', 'x', ' ', 'x', 'x', 'x'},
-                {'x', ' ', ' ', ' ', ' ', 'x', ' ', 'x'},
-                {'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'},
+                {'x', ' ', ' ', ' ', ' ', ' ', ' ', 'x'},
+                {'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x'},
+                {'x', ' ', 'x', 'E', ' ', 'x', ' ', 'x'},
+                {'x', ' ', 'x', 'x', ' ', ' ', ' ', 'x'},
+                {'x', ' ', ' ', ' ', ' ', 'x', 'x', 'x'},
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'}
         };
 
-        List<Point> result = MazeSolver.findPath(maze8x6, new Point(5, 1));
+        List<Point> result = MazeSolver.findPath(maze8x6, new Point(6, 1));
 
         assert (result.size() == 7);
         assert (result.get(0).getX() == 2 && result.get(0).getY() == 2);
