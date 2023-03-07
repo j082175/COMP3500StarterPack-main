@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Queue;
 
 public final class MazeSolver {
-    private static Node ROOT;
     private final static int LENGTH = 4;
     private final static int[] X_CASE = {0, -1, 0, 1};
     private final static int[] Y_CASE = {-1, 0, 1, 0};
@@ -19,21 +18,21 @@ public final class MazeSolver {
 
     public static List<Point> findPath(final char[][] maze, final Point start) {
         LinkedList<Point> totalList = new LinkedList<>();
-        ROOT = null;
+        Node root = null;
 
         if (maze[start.getY()][start.getX()] == EXIT) {
             totalList.add(new Point(start.getX(), start.getY()));
             return totalList;
         }
 
-        if (ROOT == null) {
+        if (root == null) {
             ArrayList<Point> a = new ArrayList<>();
             a.add(start);
-            ROOT = new Node(a);
+            root = new Node(a);
         }
 
 
-        findRecursive(ROOT, maze, totalList);
+        findRecursive(root, maze, totalList);
 
 
 
@@ -125,7 +124,7 @@ public final class MazeSolver {
                     return true;
                 }
 
-                if (node.getChildrenNode().point.size() == 0) {
+                if (node.children.size() != 0) {
                     node.children.remove();
                 }
             }

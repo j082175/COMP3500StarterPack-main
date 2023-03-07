@@ -9,16 +9,22 @@ import java.util.List;
 public class Program {
 
     public static void main(String[] args) {
-/*        char[][] maze8x6 = new char[][]{
+        char[][] maze8x6 = new char[][]{
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
-                {'x', 'x', ' ', 'x', ' ', 'E', ' ', 'x'},
+                {'x', ' ', ' ', 'x', ' ', ' ', ' ', 'x'},
+                {'x', ' ', 'x', 'x', ' ', 'x', 'x', 'x'},
+                {'x', ' ', ' ', ' ', ' ', 'x', ' ', 'x'},
+                {'x', ' ', 'x', 'x', ' ', ' ', ' ', 'x'},
+                {'x', ' ', ' ', ' ', 'x', 'x', 'x', 'x'},
+                {'x', 'x', ' ', 'x', 'x', ' ', 'x', 'x'},
+                {'x', ' ', ' ', 'x', ' ', ' ', 'E', 'x'},
                 {'x', 'x', ' ', 'x', ' ', 'x', 'x', 'x'},
                 {'x', ' ', ' ', ' ', ' ', 'x', ' ', 'x'},
                 {'x', 'x', ' ', 'x', ' ', ' ', ' ', 'x'},
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'}
-        };*/
+        };
 
-        char[][] maze8x6 = new char[][]{
+/*        char[][] maze8x6 = new char[][]{
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
                 {'x', ' ', ' ', ' ', ' ', ' ', ' ', 'x'},
                 {'x', ' ', 'x', 'x', 'x', 'x', 'x', 'x'},
@@ -26,7 +32,7 @@ public class Program {
                 {'x', ' ', 'x', 'x', ' ', ' ', ' ', 'x'},
                 {'x', ' ', ' ', ' ', ' ', 'x', 'x', 'x'},
                 {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'}
-        };
+        };*/
 
         List<Point> result = MazeSolver.findPath(maze8x6, new Point(6, 1));
 
