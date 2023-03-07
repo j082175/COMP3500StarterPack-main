@@ -72,6 +72,11 @@ public class ChessBoard {
         blackPawns = 0b0000000000000000000000000000000000000000000000000000000000000000L;*/
     }
 
+    public ChessBoard(ChessBoard other) {
+        setPieces(other.getPieces());
+        setBoardStatus(other.getBoardStatus());
+    }
+
     public void boardInitializer(char[][] board) {
         long offset = 0b0000000000000000000000000000000000000000000000000000000000000001L;
         boolean isChecked = false;
