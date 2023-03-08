@@ -143,7 +143,7 @@ public class Program {
                             {0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0},
                     };
-                    board[p.y][p.x] = s;
+                    board[p.y][p.x] = 'b';
                     Player player = new Player(true, 10000);
 
                     Move move = player.getNextMove(board);
@@ -378,6 +378,28 @@ public class Program {
             assert Game.isMoveValid(board, player, move);
             assert move.fromX == 4;
             assert move.fromY == 4;
+            assert move.toX == 3;
+            assert move.toY == 3;
+        }
+
+        {
+            char[][] board = new char[][]{
+                    { 0 , 0 , 0 , 0 ,0, 0 , 0 , 0 },
+                    { 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 'r' , 0 , 0 ,'K' , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0, 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                    { 0 , 0 , 0 , 'k' , 0 , 0 , 0 , 0 },
+            };
+            Player player = new Player(true, 10000);
+
+            Move move = player.getNextMove(board);
+
+            assert Game.isMoveValid(board, player, move);
+            assert move.fromX == 0;
+            assert move.fromY == 3;
             assert move.toX == 3;
             assert move.toY == 3;
         }
