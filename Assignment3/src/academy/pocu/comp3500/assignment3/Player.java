@@ -57,7 +57,7 @@ public class Player extends PlayerBase {
 
             int s = minMax(chess2, getOpponentColor(color), 1, -1, minValue);
 
-            int score = minMax(chess2, getOpponentColor(color), 6, -1, minValue);
+            int score = minMax(chess2, getOpponentColor(color), 5, -1, minValue);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
 
