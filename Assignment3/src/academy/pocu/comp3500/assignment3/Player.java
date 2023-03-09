@@ -36,8 +36,6 @@ public class Player extends PlayerBase {
         // return findBestMove(board, 5, true, color);
 
 
-        long start = System.currentTimeMillis();
-
         Move bestMove = null;
         int bestScore = -INFINITY;
         int bestScore2 = -INFINITY;
@@ -57,11 +55,11 @@ public class Player extends PlayerBase {
 
             char[] hCh = {0};
             applyMove1(board, move, hCh);
-            int s = minMax(board, getOpponentColor(color), 1, -1, start);
+            int s = minMax(board, getOpponentColor(color), 1, -1);
             undoMove(board, move, hCh);
 
             applyMove1(board, move, hCh);
-            int score = minMax(board, getOpponentColor(color), 4, -1, start);
+            int score = minMax(board, getOpponentColor(color), 4, -1);
             undoMove(board, move, hCh);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
@@ -768,11 +766,8 @@ public class Player extends PlayerBase {
     }*/
 
 
-    private int minMax(char[][] board, char color, int depth, int check, long start) {
-        long afterTime = System.currentTimeMillis();
-        long diff = afterTime - start;
-
-        if (depth == 0 || diff > getMaxMoveTimeMilliseconds()) { // 종료 조건
+    private int minMax(char[][] board, char color, int depth, int check) {
+        if (depth == 0) { // 종료 조건
             return evaluateBoard(board, getOpponentColor(color));
         }
 
@@ -790,7 +785,7 @@ public class Player extends PlayerBase {
 
             char[] hCh = {0};
             applyMove1(board, move, hCh);
-            int score = -minMax(board, getOpponentColor(color), depth - 1, check * -1, start); // 새로운 보드에 대해 미니맥스 재귀호출
+            int score = -minMax(board, getOpponentColor(color), depth - 1, check * -1); // 새로운 보드에 대해 미니맥스 재귀호출
             undoMove(board, move, hCh);
 
             if (check == 1) {
