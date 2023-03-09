@@ -66,7 +66,7 @@ public class Program {
         System.out.println("Let the game begin!");
         System.out.println(game.toString());
 
-        for (int i = 0; i < 500; ++i) {
+        for (int i = 0; i < 50; ++i) {
             if (game.isNextTurnWhite() && IS_BLACK_KEYBOARD_PLAYER
                     || !game.isNextTurnWhite() && IS_WHITE_KEYBOARD_PLAYER) {
                 if (IS_AUTO_PLAY) {

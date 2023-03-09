@@ -55,8 +55,8 @@ final class Game {
             this.black = player1;
         }
 
-        this.board = createNewBoard();
-        //this.board = createBoard2();
+        //this.board = createNewBoard();
+        this.board = createBoard2();
     }
 
     public void nextTurn() {
@@ -511,7 +511,7 @@ final class Game {
     }
 
     private static char[][] createBoard2() {
-        char[][] board = new char[][]{
+/*        char[][] board = new char[][]{
                 { 'P' , 0 , 0 , 0 ,'k', 0 , 0 , 'K' },
                 { 0, 0 , 0 , 0 , 'P' , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
@@ -520,16 +520,20 @@ final class Game {
                 { 0 , 0 , 'p' , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
-        };
-
-/*        char[][] board = new char[][]{
-                {'K', 0 ,'k', 0 },
-                { 0 , 0 , 0 , 0 },
-                { 0 , 0 , 0 ,'r'},
-                {'R', 0 , 0 , 0 },
         };*/
 
 /*        char[][] board = new char[][]{
+                { 'R' , 'r' , 0 , 0 ,0, 0 , 0 , 0 },
+                { 0, 0 , 0 , 0 , 0 , 0 , 0 , 'K' },
+                { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                { 0 , 'k' , 0 , 'R' , 0 , 0 , 0 , 0 },
+                { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                { 0 , 0 , 0 , 0 , 0 , 0 , 'r' , 0 },
+                { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
+                { 0 , 0 , 0, 0 , 0 , 0 , 0 , 0 },
+        };*/
+
+        char[][] board = new char[][]{
                 { 'q' , 0 , 0 , 0 ,'k', 0 , 0 , 'K' },
                 { 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
@@ -538,7 +542,7 @@ final class Game {
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 ,'Q', 0 , 0 , 0 , 0 , 0 },
-        };*/
+        };
 
 
         return board;
