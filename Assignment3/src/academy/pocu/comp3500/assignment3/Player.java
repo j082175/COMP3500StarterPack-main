@@ -68,7 +68,7 @@ public class Player extends PlayerBase {
 
             char[] hCh = {0};
             applyMove1(board, move, hCh);
-            int score = minMax(board, getOpponentColor(color), 4, -1);
+            int score = minMax(board, getOpponentColor(color), 3, -1);
             undoMove(board, move, hCh);
 
             // 가장 높은 점수를 가진 수를 선택합니다.

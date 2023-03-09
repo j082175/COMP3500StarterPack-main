@@ -543,10 +543,10 @@ public class ChessBoard {
     }
 
     public void calculateDecimalFromPowersOfTwo(long decimal, int fromY, int fromX, ArrayList<Move> arrayList) {
-        final long offset = 0xFF;
+        final long OFFSET = 0xFF;
 
         for (int i = 0; i < 8; i++) {
-            long result = offset & decimal;
+            long result = OFFSET & decimal;
 
             if (result != 0) {
                 String binaryString = Long.toBinaryString(result);
