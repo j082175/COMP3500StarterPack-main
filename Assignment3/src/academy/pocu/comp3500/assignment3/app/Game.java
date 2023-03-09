@@ -89,7 +89,7 @@ final class Game {
         this.lastMove.fromY = nextMove.fromY;
         this.lastMove.toX = nextMove.toX;
         this.lastMove.toY = nextMove.toY;
-//
+//this.maxMoveTimeoutInMilliseconds
         if (player.getMaxMoveTimeMilliseconds() != Integer.MAX_VALUE && duration > Integer.MAX_VALUE) {
             this.winner = this.currentTurn % 2 != 0 ? 'B' : 'W';
             this.isGameOver = true;
