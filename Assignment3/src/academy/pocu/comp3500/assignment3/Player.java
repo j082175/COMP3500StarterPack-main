@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
     private static final Map<Character, Integer> mapW = new HashMap<>();
+    private static Move hMove = new Move();
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
@@ -31,7 +32,12 @@ public class Player extends PlayerBase {
 
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
-        long start = System.currentTimeMillis();
+        char color = isWhite() ? 'W' : 'B';
+        return findBestMove(board, 5, true, color);
+
+
+
+        /*long start = System.currentTimeMillis();
 
         Move bestMove = null;
         int bestScore = -INFINITY;
@@ -53,7 +59,7 @@ public class Player extends PlayerBase {
 
             int s = minMax(newBoard, getOpponentColor(color), 1, -1, start);
 
-            int score = minMax(newBoard, getOpponentColor(color), 10, -1, start);
+            int score = minMax(newBoard, getOpponentColor(color), 4, -1, start);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
 
@@ -93,7 +99,7 @@ public class Player extends PlayerBase {
 
         }
 
-        return bestMove;
+        return bestMove;*/
     }
 
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
@@ -841,5 +847,97 @@ public class Player extends PlayerBase {
     }
 
 
+    public int minimax(char[][] board, int depth, boolean maximizingPlayer, char color) {
+
+        if (depth == 0) {
+            return evaluateBoard(board, color);
+        }
+
+        ArrayList<Move> moves = getPossibleMovesFromPosition(board, color);
+        // Move bestMove = moves.get(0);
+
+        if (maximizingPlayer) {
+            int maxEval = -INFINITY;
+
+            for (Move move : moves) {
+                char[] hCh = {0};
+                applyMove1(board, move, hCh);
+                int eval = minimax(board, depth - 1, false, getOpponentColor(color));
+                undoMove(board, move, hCh);
+
+                if (eval > maxEval) {
+                    maxEval = eval;
+                    //bestMove = move;
+                }
+            }
+            return maxEval;
+        } else {
+            int minEval = INFINITY;
+
+            for (Move move : moves) {
+                char[] hCh = {0};
+                applyMove1(board, move, hCh);
+                int eval = minimax(board, depth - 1, true, getOpponentColor(color));
+                undoMove(board, move, hCh);
+
+                if (eval < minEval) {
+                    minEval = eval;
+                    //bestMove = move;
+                }
+            }
+            return minEval;
+        }
+    }
+
+    public Move findBestMove(char[][] board, int depth, boolean maximizingPlayer, char color) {
+        ArrayList<Move> moves = getPossibleMovesFromPosition(board, color);
+        Move bestMove = null;
+        int bestEval = maximizingPlayer ? -INFINITY : INFINITY;
+
+        for (Move move : moves) {
+            char[] hCh = {0};
+            applyMove1(board, move, hCh);
+            int eval = minimax(board, depth - 1, !maximizingPlayer, getOpponentColor(color));
+            undoMove(board, move, hCh);
+
+            if (maximizingPlayer && eval > bestEval) {
+                bestEval = eval;
+                bestMove = move;
+            } else if (!maximizingPlayer && eval < bestEval) {
+                bestEval = eval;
+                bestMove = move;
+            }
+        }
+
+        if (bestMove == null) {
+            for (Move move : moves) {
+                char[] hCh = {0};
+                applyMove1(board, move, hCh);
+                int eval = minimax(board, 1, !maximizingPlayer, getOpponentColor(color));
+                undoMove(board, move, hCh);
+
+                if (maximizingPlayer && eval > bestEval) {
+                    bestEval = eval;
+                    bestMove = move;
+                } else if (!maximizingPlayer && eval < bestEval) {
+                    bestEval = eval;
+                    bestMove = move;
+                }
+            }
+        }
+
+        return bestMove;
+    }
+
+    private void applyMove1(char[][] board, Move move, char[] hCh) {
+        hCh[0] = board[move.toY][move.toX];
+        board[move.toY][move.toX] = board[move.fromY][move.fromX];
+        board[move.fromY][move.fromX] = ' ';
+    }
+
+    private void undoMove(char[][] board, Move move, char[] hCh) {
+        board[move.fromY][move.fromX] = board[move.toY][move.toX];
+        board[move.toY][move.toX] = hCh[0];
+    }
 
 }

@@ -135,7 +135,7 @@ public class Program {
                             {0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0},
                     };
-                    board[p.y][p.x] = 'b';
+                    board[p.y][p.x] = s;
                     Player player = new Player(true, 10000);
 
                     Move move = player.getNextMove(board);
