@@ -36,7 +36,6 @@ public class Player extends PlayerBase {
         // return findBestMove(board, 5, true, color);
 
 
-
         long start = System.currentTimeMillis();
 
         Move bestMove = null;
@@ -94,13 +93,6 @@ public class Player extends PlayerBase {
         if (bestMove == null) {
             Random random = new Random();
             return possibleMoves.get(random.nextInt(possibleMoves.size()));
-        }
-
-        long end = System.nanoTime();
-        long duration = TimeUnit.MILLISECONDS.convert(end - start, TimeUnit.NANOSECONDS);
-
-        if (getMaxMoveTimeMilliseconds() != Integer.MAX_VALUE && duration > Integer.MAX_VALUE) {
-
         }
 
         return bestMove;
@@ -645,7 +637,7 @@ public class Player extends PlayerBase {
             return bestMoveContainer;
         }
 
-/*        if (possibleMoves.size() > 10) {
+        if (possibleMoves.size() > 10) {
             ArrayList<Move> newArr = new ArrayList<>(10);
             Random r = new Random();
             for (int i = 0; i < 10; i++) {
@@ -655,7 +647,7 @@ public class Player extends PlayerBase {
             }
 
             return newArr;
-        }*/
+        }
 
         return possibleMoves;
     }
