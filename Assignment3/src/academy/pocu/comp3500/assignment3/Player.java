@@ -891,6 +891,8 @@ public class Player extends PlayerBase {
 
     public Move findBestMove(char[][] board, int depth, boolean maximizingPlayer, char color) {
         ArrayList<Move> moves = getPossibleMovesFromPosition(board, color);
+        ArrayList<Move> sameMoves = new ArrayList<>();
+
         Move bestMove = null;
         int bestEval = maximizingPlayer ? -INFINITY : INFINITY;
 
@@ -903,9 +905,15 @@ public class Player extends PlayerBase {
             if (maximizingPlayer && eval > bestEval) {
                 bestEval = eval;
                 bestMove = move;
+                sameMoves.clear();
+                sameMoves.add(move);
             } else if (!maximizingPlayer && eval < bestEval) {
                 bestEval = eval;
                 bestMove = move;
+                sameMoves.clear();
+                sameMoves.add(move);
+            } else if (eval != -INFINITY) {
+                sameMoves.add(move);
             }
         }
 
@@ -919,15 +927,27 @@ public class Player extends PlayerBase {
                 if (maximizingPlayer && eval > bestEval) {
                     bestEval = eval;
                     bestMove = move;
+                    sameMoves.clear();
+                    sameMoves.add(move);
                 } else if (!maximizingPlayer && eval < bestEval) {
                     bestEval = eval;
                     bestMove = move;
+                    sameMoves.clear();
+                    sameMoves.add(move);
+                } else if (eval != -INFINITY) {
+                    sameMoves.add(move);
                 }
             }
         }
 
+        if (sameMoves.size() != 0) {
+            Random random = new Random();
+            return sameMoves.get(random.nextInt(sameMoves.size()));
+        }
+
         return bestMove;
     }
+
 
     private void applyMove1(char[][] board, Move move, char[] hCh) {
         hCh[0] = board[move.toY][move.toX];
