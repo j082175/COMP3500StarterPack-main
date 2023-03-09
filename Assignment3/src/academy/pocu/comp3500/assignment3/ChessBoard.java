@@ -1,5 +1,9 @@
 package academy.pocu.comp3500.assignment3;
 
+import academy.pocu.comp3500.assignment3.chess.Move;
+
+import java.util.ArrayList;
+
 public class ChessBoard {
 
     private static final long H_FILE = 0x8080808080808080L;
@@ -8,21 +12,23 @@ public class ChessBoard {
 
 
     private long boardStatus;
+    public long whiteStatus;
+    public long blackStatus;
     private long[] pieces = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     public enum ChessPiece {
-        whitePawns('p', 1),
-        whiteKnights('n', 3),
-        whiteBishops('b', 3),
-        whiteRooks('r', 5),
-        whiteQueens('q', 9),
-        whiteKing('k', 200),
-        blackPawns('P', -1),
-        blackKnights('N', -3),
-        blackBishops('B', -3),
-        blackRooks('R', -5),
-        blackQueens('Q', -9),
-        blackKing('K', -200);
+        WHITE_PAWNS('p', 1),
+        WHITE_KNIGHTS('n', 3),
+        WHITE_BISHOPS('b', 3),
+        WHITE_ROOKS('r', 5),
+        WHITE_QUEENS('q', 9),
+        WHITE_KING('k', 200),
+        BLACK_PAWNS('P', -1),
+        BLACK_KNIGHTS('N', -3),
+        BLACK_BISHOPS('B', -3),
+        BLACK_ROOKS('R', -5),
+        BLACK_QUEENS('Q', -9),
+        BLACK_KING('K', -200);
 
         private char character;
         private int score;
@@ -75,6 +81,8 @@ public class ChessBoard {
     public ChessBoard(ChessBoard other) {
         setPieces(other.getPieces());
         setBoardStatus(other.getBoardStatus());
+        this.whiteStatus = other.whiteStatus;
+        this.blackStatus = other.blackStatus;
     }
 
     public void boardInitializer(char[][] board) {
@@ -87,51 +95,63 @@ public class ChessBoard {
                 switch (board[y][x]) {
                     case 'p':
                         isChecked = true;
-                        pieces[ChessPiece.whitePawns.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_PAWNS.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'n':
                         isChecked = true;
-                        pieces[ChessPiece.whiteKnights.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_KNIGHTS.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'b':
                         isChecked = true;
-                        pieces[ChessPiece.whiteBishops.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_BISHOPS.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'r':
                         isChecked = true;
-                        pieces[ChessPiece.whiteRooks.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_ROOKS.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'q':
                         isChecked = true;
-                        pieces[ChessPiece.whiteQueens.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_QUEENS.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'k':
                         isChecked = true;
-                        pieces[ChessPiece.whiteKing.ordinal()] |= offset;
+                        pieces[ChessPiece.WHITE_KING.ordinal()] |= offset;
+                        whiteStatus |= offset;
                         break;
                     case 'P':
                         isChecked = true;
-                        pieces[ChessPiece.blackPawns.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_PAWNS.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                     case 'N':
                         isChecked = true;
-                        pieces[ChessPiece.blackKnights.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_KNIGHTS.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                     case 'B':
                         isChecked = true;
-                        pieces[ChessPiece.blackBishops.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_BISHOPS.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                     case 'R':
                         isChecked = true;
-                        pieces[ChessPiece.blackRooks.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_ROOKS.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                     case 'Q':
                         isChecked = true;
-                        pieces[ChessPiece.blackQueens.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_QUEENS.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                     case 'K':
                         isChecked = true;
-                        pieces[ChessPiece.blackKing.ordinal()] |= offset;
+                        pieces[ChessPiece.BLACK_KING.ordinal()] |= offset;
+                        blackStatus |= offset;
                         break;
                 }
 
@@ -170,19 +190,19 @@ public class ChessBoard {
         }
     }
 
-    public void setPieces(long WP, long WN, long WB, long WR, long WQ, long WK, long BP, long BN, long BB, long BR, long BQ, long BK, long boardStatus) {
-        this.pieces[ChessPiece.whitePawns.ordinal()] = WP;
-        this.pieces[ChessPiece.whiteKnights.ordinal()] = WN;
-        this.pieces[ChessPiece.whiteBishops.ordinal()] = WB;
-        this.pieces[ChessPiece.whiteRooks.ordinal()] = WR;
-        this.pieces[ChessPiece.whiteQueens.ordinal()] = WQ;
-        this.pieces[ChessPiece.whiteKing.ordinal()] = WK;
-        this.pieces[ChessPiece.blackPawns.ordinal()] = BP;
-        this.pieces[ChessPiece.blackKnights.ordinal()] = BN;
-        this.pieces[ChessPiece.blackBishops.ordinal()] = BB;
-        this.pieces[ChessPiece.blackRooks.ordinal()] = BR;
-        this.pieces[ChessPiece.blackQueens.ordinal()] = BQ;
-        this.pieces[ChessPiece.blackKing.ordinal()] = BK;
+    public void setPieces(long wp, long wn, long wb, long wr, long wq, long wk, long bp, long bn, long bb, long br, long bq, long bk, long boardStatus) {
+        this.pieces[ChessPiece.WHITE_PAWNS.ordinal()] = wp;
+        this.pieces[ChessPiece.WHITE_KNIGHTS.ordinal()] = wn;
+        this.pieces[ChessPiece.WHITE_BISHOPS.ordinal()] = wb;
+        this.pieces[ChessPiece.WHITE_ROOKS.ordinal()] = wr;
+        this.pieces[ChessPiece.WHITE_QUEENS.ordinal()] = wq;
+        this.pieces[ChessPiece.WHITE_KING.ordinal()] = wk;
+        this.pieces[ChessPiece.BLACK_PAWNS.ordinal()] = bp;
+        this.pieces[ChessPiece.BLACK_KNIGHTS.ordinal()] = bn;
+        this.pieces[ChessPiece.BLACK_BISHOPS.ordinal()] = bb;
+        this.pieces[ChessPiece.BLACK_ROOKS.ordinal()] = br;
+        this.pieces[ChessPiece.BLACK_QUEENS.ordinal()] = bq;
+        this.pieces[ChessPiece.BLACK_KING.ordinal()] = bk;
         this.boardStatus = boardStatus;
     }
 
@@ -194,4 +214,349 @@ public class ChessBoard {
         this.boardStatus = boardStatus;
     }
 
+    public long getQueenMoves(int square, long occupied) {
+        long attacks = getBishopMoves(square, occupied, 1) | getRookMoves(square, occupied);
+        return attacks;
+    }
+
+    public long getRookMoves(int square, long occupied) {
+        long bitboard = 0L;
+        int rank = square / 8;
+        int file = square % 8;
+        int i;
+
+        // Moves in up direction
+        for (i = rank + 1; i <= 7; i++) {
+            if ((occupied & (1L << (i * 8 + file))) != 0L) break;
+            bitboard |= (1L << (i * 8 + file));
+        }
+
+        // Moves in down direction
+        for (i = rank - 1; i >= 0; i--) {
+            if ((occupied & (1L << (i * 8 + file))) != 0L) break;
+            bitboard |= (1L << (i * 8 + file));
+        }
+
+        // Moves in right direction
+        for (i = file + 1; i <= 7; i++) {
+            if ((occupied & (1L << (rank * 8 + i))) != 0L) break;
+            bitboard |= (1L << (rank * 8 + i));
+        }
+
+        // Moves in left direction
+        for (i = file - 1; i >= 0; i--) {
+            if ((occupied & (1L << (rank * 8 + i))) != 0L) break;
+            bitboard |= (1L << (rank * 8 + i));
+        }
+
+        return bitboard;
+    }
+
+    public long getKnightMoves(int square, long occupied) {
+        long bitboard = 0L;
+        int rank = square / 8;
+        int file = square % 8;
+
+
+        int rankOffset = rank + 2;
+        int fileOffset = file + 1;
+
+        if (rankOffset <= 7 && fileOffset <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        fileOffset = file - 1;
+
+        if (rankOffset <= 7 && file - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        rankOffset = rank + 1;
+        fileOffset = file + 2;
+
+        if (rankOffset <= 7 && file + 2 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        fileOffset = file - 2;
+
+        if (rankOffset <= 7 && file - 2 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        rankOffset = rank - 1;
+        fileOffset = file + 2;
+
+        if (rankOffset >= 0 && file + 2 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        fileOffset = file - 2;
+
+        if (rankOffset >= 0 && file - 2 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        rankOffset = rank - 2;
+        fileOffset = file + 1;
+
+        if (rankOffset >= 0 && fileOffset <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        fileOffset = file - 1;
+
+        if (rankOffset >= 0 && file - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+            ;
+        }
+
+        return bitboard;
+    }
+
+    public long getBishopMoves(int square, long occupied, long board) {
+        long bitboard = 0L;
+        int rank = square / 8;
+        int file = square % 8;
+        int i, j;
+
+        // Moves in up-right direction
+        for (i = rank + 1, j = file + 1; i <= 7 && j <= 7; i++, j++) {
+            if ((occupied & (1L << (i * 8 + j))) != 0L) {
+                if ((board & (1L << (i * 8 + j))) != 0L) {
+                    bitboard = 0L;
+                    bitboard |= (1L << (i * 8 + j));
+                    return bitboard;
+                }
+            }
+            bitboard |= (1L << (i * 8 + j));
+        }
+
+        // Moves in up-left direction
+        for (i = rank + 1, j = file - 1; i <= 7 && j >= 0; i++, j--) {
+            if ((occupied & (1L << (i * 8 + j))) != 0L) {
+                if ((board & (1L << (i * 8 + j))) != 0L) {
+                    bitboard = 0L;
+                    bitboard |= (1L << (i * 8 + j));
+                    return bitboard;
+                }
+            }
+            bitboard |= (1L << (i * 8 + j));
+        }
+
+        // Moves in down-right direction
+        for (i = rank - 1, j = file + 1; i >= 0 && j <= 7; i--, j++) {
+            if ((occupied & (1L << (i * 8 + j))) != 0L){
+                if ((board & (1L << (i * 8 + j))) != 0L) {
+                    bitboard = 0L;
+                    bitboard |= (1L << (i * 8 + j));
+                    return bitboard;
+                }
+            }
+            bitboard |= (1L << (i * 8 + j));
+        }
+
+        // Moves in down-left direction
+        for (i = rank - 1, j = file - 1; i >= 0 && j >= 0; i--, j--) {
+            if ((occupied & (1L << (i * 8 + j))) != 0L) {
+                if ((board & (1L << (i * 8 + j))) != 0L) {
+                    bitboard = 0L;
+                    bitboard |= (1L << (i * 8 + j));
+                    return bitboard;
+                }
+            }
+            bitboard |= (1L << (i * 8 + j));
+        }
+
+        return bitboard;
+    }
+
+    public long getKingMoves(int square, long occupied) {
+        long bitboard = 0L;
+        int rank = square / 8;
+        int file = square % 8;
+
+        int rankOffset = rank + 1;
+        int fileOffset = file;
+
+        if (rank + 1 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank - 1;
+        fileOffset = file;
+
+        if (rank - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank;
+        fileOffset = file + 1;
+
+        if (file + 1 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << (rankOffset * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank;
+        fileOffset = file - 1;
+
+        if (file - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << (rankOffset * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank + 1;
+        fileOffset = file + 1;
+
+        if (rank + 1 <= 7 && file + 1 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank - 1;
+        fileOffset = file + 1;
+
+        if (rank - 1 >= 0 && file + 1 <= 7) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank + 1;
+        fileOffset = file - 1;
+
+        if (rank + 1 <= 7 && file - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        rankOffset = rank - 1;
+        fileOffset = file - 1;
+
+        if (rank - 1 >= 0 && file - 1 >= 0) {
+            if (!((occupied & (1L << ((rankOffset) * 8 + fileOffset))) != 0L)) {
+                bitboard |= (1L << ((rankOffset) * 8 + fileOffset));
+            }
+        }
+
+        return bitboard;
+    }
+
+    public long getPawnMoves(int square, long occupied, char color) {
+        long mask, moves = 0L;
+        int rank = square / 8;
+        int file = square % 8;
+
+        // White pawn moves
+        if (color == 'W') {
+            if (rank < 7) {
+                mask = 1L << (square + 8);
+                if ((occupied & mask) == 0) {
+                    moves |= mask;
+                    if (rank == 1) {
+                        mask = 1L << (square + 16);
+                        if ((occupied & mask) == 0) {
+                            moves |= mask;
+                        }
+                    }
+                }
+                if (file > 0) {
+                    mask = 1L << (square + 7);
+                    if ((occupied & mask) != 0) {
+                        moves |= mask;
+                    }
+                }
+                if (file < 7) {
+                    mask = 1L << (square + 9);
+                    if ((occupied & mask) != 0) {
+                        moves |= mask;
+                    }
+                }
+            }
+        }
+
+
+        // Black pawn moves
+        if (color == 'B') {
+            if (rank > 0) {
+                mask = 1L << (square - 8);
+                if ((occupied & mask) == 0) {
+                    moves |= mask;
+                    if (rank == 6) {
+                        mask = 1L << (square - 16);
+                        if ((occupied & mask) == 0) {
+                            moves |= mask;
+                        }
+                    }
+                }
+                if (file > 0) {
+                    mask = 1L << (square - 9);
+                    if ((occupied & mask) != 0) {
+                        moves |= mask;
+                    }
+                }
+                if (file < 7) {
+                    mask = 1L << (square - 7);
+                    if ((occupied & mask) != 0) {
+                        moves |= mask;
+                    }
+                }
+            }
+        }
+
+
+        return moves;
+    }
+
+    public void calculateDecimalFromPowersOfTwo(long decimal, int fromY, int fromX, ArrayList<Move> arrayList) {
+        final long offset = 0b11111111L;
+
+        for (int i = 0; i < 8; i++) {
+            long result = offset & decimal;
+
+            if (result != 0) {
+                String binaryString = Long.toBinaryString(result);
+                for (int j = 0; j < binaryString.length(); j++) {
+                    if (binaryString.charAt(binaryString.length() - 1 - j) == '1') {
+                        int toX = 7 - j;
+                        int toY = 7 - i;
+                        arrayList.add(new Move(fromX, fromY, toX, toY));
+                    }
+                }
+            }
+            decimal >>= 8;
+        }
+    }
 }

@@ -10,17 +10,17 @@ import java.util.Random;
 
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
-    private static final Map<Character, Integer> mapW = new HashMap<>();
+    private static final Map<Character, Integer> MAP_W = new HashMap<>();
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
 
-        mapW.put('p', 1);
-        mapW.put('b', 3);
-        mapW.put('n', 3);
-        mapW.put('r', 5);
-        mapW.put('q', 9);
-        mapW.put('k', 200);
+        MAP_W.put('p', 1);
+        MAP_W.put('b', 3);
+        MAP_W.put('n', 3);
+        MAP_W.put('r', 5);
+        MAP_W.put('q', 9);
+        MAP_W.put('k', 200);
     }
 
     @Override
@@ -175,31 +175,31 @@ public class Player extends PlayerBase {
                             if (pCh == 'k' + chooser) {
                                 priority = 200;
                                 //bestMove.set(0, mapW.get('k'));
-                                bestMove = mapW.get('k');
+                                bestMove = MAP_W.get('k');
                                 bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                             }
 
                             if (pCh == 'q' + chooser) {
-                                if (bestMove < mapW.get('q') && priority < 100) {
+                                if (bestMove < MAP_W.get('q') && priority < 100) {
                                     priority = 100;
                                     //bestMove.set(0, mapW.get('q'));
-                                    bestMove = mapW.get('q');
+                                    bestMove = MAP_W.get('q');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
                             if (pCh == 'r' + chooser) {
-                                if (bestMove < mapW.get('r') && priority < 50) {
+                                if (bestMove < MAP_W.get('r') && priority < 50) {
                                     priority = 50;
-                                    bestMove = mapW.get('r');
+                                    bestMove = MAP_W.get('r');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
 
                             if (pCh == 'b' + chooser || pCh == 'n' + chooser) {
-                                if (bestMove < mapW.get('b') && priority < 30) {
+                                if (bestMove < MAP_W.get('b') && priority < 30) {
                                     priority = 30;
-                                    bestMove = mapW.get('b');
+                                    bestMove = MAP_W.get('b');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
@@ -207,7 +207,7 @@ public class Player extends PlayerBase {
                             if (pCh == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
-                                    bestMove = mapW.get('p');
+                                    bestMove = MAP_W.get('p');
                                     bestMoveContainer.set(0, new Move(x, y, afterXleft, afterY));
                                 }
                             }
@@ -225,33 +225,33 @@ public class Player extends PlayerBase {
                             if (pCh2 == 'k' + chooser) {
 
                                 priority = 200;
-                                bestMove = mapW.get('k');
+                                bestMove = MAP_W.get('k');
                                 bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                 break;
                             }
 
                             if (pCh2 == 'q' + chooser) {
-                                if (bestMove < mapW.get('q') && priority < 100) {
+                                if (bestMove < MAP_W.get('q') && priority < 100) {
                                     priority = 100;
-                                    bestMove = mapW.get('q');
+                                    bestMove = MAP_W.get('q');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                     break;
                                 }
                             }
 
                             if (pCh2 == 'r' + chooser) {
-                                if (bestMove < mapW.get('r') && priority < 50) {
+                                if (bestMove < MAP_W.get('r') && priority < 50) {
                                     priority = 50;
-                                    bestMove = mapW.get('r');
+                                    bestMove = MAP_W.get('r');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                     break;
                                 }
                             }
 
                             if (pCh2 == 'b' + chooser || pCh2 == 'n' + chooser) {
-                                if (bestMove < mapW.get('b') && priority < 30) {
+                                if (bestMove < MAP_W.get('b') && priority < 30) {
                                     priority = 30;
-                                    bestMove = mapW.get('b');
+                                    bestMove = MAP_W.get('b');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                     break;
                                 }
@@ -260,7 +260,7 @@ public class Player extends PlayerBase {
                             if (pCh2 == 'p' + chooser) {
                                 if (priority < 10) {
                                     priority = 10;
-                                    bestMove = mapW.get('p');
+                                    bestMove = MAP_W.get('p');
                                     bestMoveContainer.set(0, new Move(x, y, afterXright, afterY));
                                     break;
                                 }
@@ -291,7 +291,7 @@ public class Player extends PlayerBase {
                                     if (kCh == 'k' + chooser) {
                                         if (priority < 196) {
                                             priority = 196;
-                                            bestMove = mapW.get('k');
+                                            bestMove = MAP_W.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -299,7 +299,7 @@ public class Player extends PlayerBase {
                                     if (kCh == 'q' + chooser) {
                                         if (priority < 96) {
                                             priority = 96;
-                                            bestMove = mapW.get('q');
+                                            bestMove = MAP_W.get('q');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -307,7 +307,7 @@ public class Player extends PlayerBase {
                                     if (kCh == 'r' + chooser) {
                                         if (priority < 46) {
                                             priority = 46;
-                                            bestMove = mapW.get('r');
+                                            bestMove = MAP_W.get('r');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -315,7 +315,7 @@ public class Player extends PlayerBase {
                                     if (kCh == 'b' + chooser || kCh == 'n' + chooser) {
                                         if (priority < 26) {
                                             priority = 26;
-                                            bestMove = mapW.get('b');
+                                            bestMove = MAP_W.get('b');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -323,7 +323,7 @@ public class Player extends PlayerBase {
                                     if (kCh == 'p' + chooser) {
                                         if (priority < 6) {
                                             priority = 6;
-                                            bestMove = mapW.get('p');
+                                            bestMove = MAP_W.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -360,7 +360,7 @@ public class Player extends PlayerBase {
                                     if (qCh == 'k' + chooser) {
                                         if (priority < 197) {
                                             priority = 197;
-                                            bestMove = mapW.get('k');
+                                            bestMove = MAP_W.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -368,7 +368,7 @@ public class Player extends PlayerBase {
                                     if (qCh == 'q' + chooser) {
                                         if (priority < 97) {
                                             priority = 97;
-                                            bestMove = mapW.get('q');
+                                            bestMove = MAP_W.get('q');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -376,7 +376,7 @@ public class Player extends PlayerBase {
                                     if (qCh == 'r' + chooser) {
                                         if (priority < 47) {
                                             priority = 47;
-                                            bestMove = mapW.get('r');
+                                            bestMove = MAP_W.get('r');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -384,7 +384,7 @@ public class Player extends PlayerBase {
                                     if (qCh == 'b' + chooser || qCh == 'n' + chooser) {
                                         if (priority < 27) {
                                             priority = 27;
-                                            bestMove = mapW.get('b');
+                                            bestMove = MAP_W.get('b');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -392,7 +392,7 @@ public class Player extends PlayerBase {
                                     if (qCh == 'p' + chooser) {
                                         if (priority < 7) {
                                             priority = 7;
-                                            bestMove = mapW.get('p');
+                                            bestMove = MAP_W.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -435,15 +435,15 @@ public class Player extends PlayerBase {
                                         if (rCh == 'k' + chooser) {
                                             if (priority < 198) {
                                                 priority = 198;
-                                                bestMove = mapW.get('k');
+                                                bestMove = MAP_W.get('k');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (rCh == 'q' + chooser) {
-                                            if (bestMove < mapW.get('q') && priority < 98) {
+                                            if (bestMove < MAP_W.get('q') && priority < 98) {
                                                 priority = 98;
-                                                bestMove = mapW.get('q');
+                                                bestMove = MAP_W.get('q');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
 
@@ -452,7 +452,7 @@ public class Player extends PlayerBase {
                                         if (rCh == 'r' + chooser) {
                                             if (priority < 48) {
                                                 priority = 48;
-                                                bestMove = mapW.get('r');
+                                                bestMove = MAP_W.get('r');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -460,7 +460,7 @@ public class Player extends PlayerBase {
                                         if (rCh == 'b' + chooser || rCh == 'n' + chooser) {
                                             if (priority < 28) {
                                                 priority = 28;
-                                                bestMove = mapW.get('b');
+                                                bestMove = MAP_W.get('b');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -468,7 +468,7 @@ public class Player extends PlayerBase {
                                         if (rCh == 'p' + chooser) {
                                             if (priority < 8) {
                                                 priority = 8;
-                                                bestMove = mapW.get('p');
+                                                bestMove = MAP_W.get('p');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -515,23 +515,23 @@ public class Player extends PlayerBase {
                                         if (bCh == 'k' + chooser) {
                                             if (priority < 199) {
                                                 priority = 199;
-                                                bestMove = mapW.get('k');
+                                                bestMove = MAP_W.get('k');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (bCh == 'q' + chooser) {
-                                            if (bestMove < mapW.get('q') && priority < 99) {
+                                            if (bestMove < MAP_W.get('q') && priority < 99) {
                                                 priority = 99;
-                                                bestMove = mapW.get('q');
+                                                bestMove = MAP_W.get('q');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (bCh == 'r' + chooser) {
-                                            if (bestMove < mapW.get('r') && priority < 49) {
+                                            if (bestMove < MAP_W.get('r') && priority < 49) {
                                                 priority = 49;
-                                                bestMove = mapW.get('r');
+                                                bestMove = MAP_W.get('r');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -539,15 +539,15 @@ public class Player extends PlayerBase {
                                         if (bCh == 'b' + chooser || bCh == 'n' + chooser) {
                                             if (priority < 29) {
                                                 priority = 29;
-                                                bestMove = mapW.get('b');
+                                                bestMove = MAP_W.get('b');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
 
                                         if (bCh == 'p' + chooser) {
-                                            if (bestMove < mapW.get('p') && priority < 9) {
+                                            if (bestMove < MAP_W.get('p') && priority < 9) {
                                                 priority = 9;
-                                                bestMove = mapW.get('p');
+                                                bestMove = MAP_W.get('p');
                                                 bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                             }
                                         }
@@ -589,23 +589,23 @@ public class Player extends PlayerBase {
                                     if (nCh == 'k' + chooser) {
                                         if (priority < 199) {
                                             priority = 199;
-                                            bestMove = mapW.get('k');
+                                            bestMove = MAP_W.get('k');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (nCh == 'q' + chooser) {
-                                        if (bestMove < mapW.get('q') && priority < 99) {
+                                        if (bestMove < MAP_W.get('q') && priority < 99) {
                                             priority = 99;
-                                            bestMove = mapW.get('q');
+                                            bestMove = MAP_W.get('q');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (nCh == 'r' + chooser) {
-                                        if (bestMove < mapW.get('r') && priority < 49) {
+                                        if (bestMove < MAP_W.get('r') && priority < 49) {
                                             priority = 49;
-                                            bestMove = mapW.get('r');
+                                            bestMove = MAP_W.get('r');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -613,15 +613,15 @@ public class Player extends PlayerBase {
                                     if (nCh == 'b' + chooser || nCh == 'n' + chooser) {
                                         if (priority < 29) {
                                             priority = 29;
-                                            bestMove = mapW.get('b');
+                                            bestMove = MAP_W.get('b');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
 
                                     if (nCh == 'p' + chooser) {
-                                        if (bestMove < mapW.get('p') && priority < 9) {
+                                        if (bestMove < MAP_W.get('p') && priority < 9) {
                                             priority = 9;
-                                            bestMove = mapW.get('p');
+                                            bestMove = MAP_W.get('p');
                                             bestMoveContainer.set(0, new Move(x, y, afterX, afterY));
                                         }
                                     }
@@ -962,6 +962,77 @@ public class Player extends PlayerBase {
         }
 
         return bestScore;
+    }
+
+    private ArrayList<Move> getPossibleMovesFromPositionBinary(ChessBoard chessBoard, char color) {
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+
+        long result;
+
+        int opponentLeft = getOpponentColorToAscii(color);
+        int opponentRight = opponentLeft + 25;
+
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 8; x++) {
+                char ch = checkPiece(chessBoard, y, x);
+                if (ch >= opponentLeft && ch <= opponentRight || ch == 0) {
+                    continue;
+                }
+                int square = ((7 - y) * 8) + (7 - x);
+                switch (ch) {
+                    case 'p':
+                        result = chessBoard.getPawnMoves(square, chessBoard.whiteStatus, color);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'n':
+                        result = chessBoard.getKnightMoves(square, chessBoard.whiteStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'b':
+                        result = chessBoard.getBishopMoves(square, chessBoard.whiteStatus, 1);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'r':
+                        result = chessBoard.getRookMoves(square, chessBoard.whiteStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'q':
+                        result = chessBoard.getQueenMoves(square, chessBoard.whiteStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'k':
+                        result = chessBoard.getKingMoves(square, chessBoard.whiteStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'P':
+                        result = chessBoard.getPawnMoves(square, chessBoard.blackStatus, color);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'N':
+                        result = chessBoard.getKnightMoves(square, chessBoard.blackStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'B':
+                        result = chessBoard.getBishopMoves(square, chessBoard.blackStatus, 1);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'R':
+                        result = chessBoard.getRookMoves(square, chessBoard.blackStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'Q':
+                        result = chessBoard.getQueenMoves(square, chessBoard.blackStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                    case 'K':
+                        result = chessBoard.getKingMoves(square, chessBoard.blackStatus);
+                        chessBoard.calculateDecimalFromPowersOfTwo(result, y, x, possibleMoves);
+                        break;
+                }
+            }
+        }
+
+        return possibleMoves;
     }
 
 }

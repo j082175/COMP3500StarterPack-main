@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Program {
 
     public static void main(String[] args) {
-/*        char[][] board = {
+        char[][] board = {
                 {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
                 {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
                 {'p', 0, 0, 0, 0, 0, 0, 0},
@@ -27,23 +27,15 @@ public class Program {
         ChessBoard chessBoard = new ChessBoard();
         chessBoard.boardInitializer(board);
 
-        char ch3 = Player.checkPiece(chessBoard, 1, 0);
-        char ch4 = Player.checkPiece(chessBoard, 2, 0);
-
-        Player.applyMove(chessBoard, new Move(0, 1, 0, 2));
-
-        char ch = Player.checkPiece(chessBoard, 1, 0);
-        char ch2 = Player.checkPiece(chessBoard, 2, 0);
-
-        long[] p = chessBoard.getPieces();
-        // long e = ChessBoard.kingMoves(63, chessBoard.getBoardStatus());
+        if ((chessBoard.blackStatus | chessBoard.whiteStatus) == chessBoard.getBoardStatus()) {
+            int a = 1;
+        }
 
         System.out.println(Long.toBinaryString(chessBoard.getBoardStatus()));
-        long res = Player.getBishopMoves(35, chessBoard.getBoardStatus());
+        long res = chessBoard.getBishopMoves(17, chessBoard.getBoardStatus(), chessBoard.blackStatus);
 
-        System.out.println(Long.toBinaryString(res));*/
+        System.out.println(Long.toBinaryString(res));
 
-        //ArrayList<Move> arr = Player.calculateDecimalFromPowersOfTwo(res, 7, 7);
 
 
 
