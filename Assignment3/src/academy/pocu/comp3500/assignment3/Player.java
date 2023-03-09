@@ -32,12 +32,12 @@ public class Player extends PlayerBase {
 
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
-        char color = isWhite() ? 'W' : 'B';
-        return findBestMove(board, 5, true, color);
+        // char color = isWhite() ? 'W' : 'B';
+        // return findBestMove(board, 5, true, color);
 
 
 
-        /*long start = System.currentTimeMillis();
+        long start = System.currentTimeMillis();
 
         Move bestMove = null;
         int bestScore = -INFINITY;
@@ -54,12 +54,16 @@ public class Player extends PlayerBase {
 
         // 가능한 모든 수에 대해 상대방이 다음 수로 이동할 수 있는 모든 가능성에 대한 점수를 구합니다.
         for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move);
-            int[] minValue = {INFINITY};
+            // char[][] newBoard = applyMove(board, move);
 
-            int s = minMax(newBoard, getOpponentColor(color), 1, -1, start);
+            char[] hCh = {0};
+            applyMove1(board, move, hCh);
+            int s = minMax(board, getOpponentColor(color), 1, -1, start);
+            undoMove(board, move, hCh);
 
-            int score = minMax(newBoard, getOpponentColor(color), 4, -1, start);
+            applyMove1(board, move, hCh);
+            int score = minMax(board, getOpponentColor(color), 4, -1, start);
+            undoMove(board, move, hCh);
 
             // 가장 높은 점수를 가진 수를 선택합니다.
 
@@ -99,7 +103,7 @@ public class Player extends PlayerBase {
 
         }
 
-        return bestMove;*/
+        return bestMove;
     }
 
     // 현재 위치에서 가능한 모든 수를 반환하는 함수
@@ -790,8 +794,12 @@ public class Player extends PlayerBase {
         }
 
         for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
-            int score = -minMax(newBoard, getOpponentColor(color), depth - 1, check * -1, start); // 새로운 보드에 대해 미니맥스 재귀호출
+            // char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
+
+            char[] hCh = {0};
+            applyMove1(board, move, hCh);
+            int score = -minMax(board, getOpponentColor(color), depth - 1, check * -1, start); // 새로운 보드에 대해 미니맥스 재귀호출
+            undoMove(board, move, hCh);
 
             if (check == 1) {
                 bestScore = Math.max(bestScore, score); // 최적의 점수 갱신
