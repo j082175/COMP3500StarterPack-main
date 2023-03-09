@@ -341,7 +341,8 @@ public class ChessBoard {
         long bitboard = 0L;
         int rank = square / 8;
         int file = square % 8;
-        int i, j;
+        int i;
+        int j;
 
         // Moves in up-right direction
         for (i = rank + 1, j = file + 1; i <= 7 && j <= 7; i++, j++) {
@@ -369,7 +370,7 @@ public class ChessBoard {
 
         // Moves in down-right direction
         for (i = rank - 1, j = file + 1; i >= 0 && j <= 7; i--, j++) {
-            if ((occupied & (1L << (i * 8 + j))) != 0L){
+            if ((occupied & (1L << (i * 8 + j))) != 0L) {
                 if ((board & (1L << (i * 8 + j))) != 0L) {
                     bitboard = 0L;
                     bitboard |= (1L << (i * 8 + j));
@@ -475,7 +476,8 @@ public class ChessBoard {
     }
 
     public long getPawnMoves(int square, long occupied, char color) {
-        long mask, moves = 0L;
+        long mask = 0L;
+        long moves = 0L;
         int rank = square / 8;
         int file = square % 8;
 

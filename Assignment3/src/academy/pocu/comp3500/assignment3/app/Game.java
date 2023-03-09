@@ -511,7 +511,7 @@ final class Game {
     }
 
     private static char[][] createBoard2() {
-/*        char[][] board = new char[][]{
+        char[][] board = new char[][]{
                 { 'P' , 0 , 0 , 0 ,'k', 0 , 0 , 'K' },
                 { 0, 0 , 0 , 0 , 'P' , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
@@ -520,7 +520,7 @@ final class Game {
                 { 0 , 0 , 'p' , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
-        };*/
+        };
 
 /*        char[][] board = new char[][]{
                 {'K', 0 ,'k', 0 },
@@ -529,7 +529,7 @@ final class Game {
                 {'R', 0 , 0 , 0 },
         };*/
 
-        char[][] board = new char[][]{
+/*        char[][] board = new char[][]{
                 { 'q' , 0 , 0 , 0 ,'k', 0 , 0 , 'K' },
                 { 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
@@ -538,7 +538,7 @@ final class Game {
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 },
                 { 0 , 0 ,'Q', 0 , 0 , 0 , 0 , 0 },
-        };
+        };*/
 
 
         return board;
