@@ -36,6 +36,9 @@ public class Program {
         int pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{5}, 10); // 0
         pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{6, 8}, 10); // 1
         pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{3, 3, 4, 4, 30, 12, 10, 10, 6}, 5); // 3
+        pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{2, 2, 2, 2, 3, 3}, 1);
+        assert (pyramidHeight == 2);
+
     }
 
     @Test
@@ -62,6 +65,10 @@ public class Program {
         assert (pyramidHeight == 2);
 
         pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{60, 40, 20, 16, 16, 12, 10, 8, 6, 5}, 10);
+
+        assert (pyramidHeight == 3);
+
+        pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{1, 3, 4, 4, 5, 5, 5, 6, 7, 9, 11, 13, 14, 14, 15, 18}, 10);
 
         assert (pyramidHeight == 3);
 

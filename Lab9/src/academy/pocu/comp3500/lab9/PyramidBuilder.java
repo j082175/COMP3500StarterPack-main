@@ -9,7 +9,7 @@ public class PyramidBuilder {
 
         int height = 0;
         int totalHeight;
-        int rockCount = 2;
+        int rockCount = 0;
         int count = 2;
 
         if (widths.length > 1) {
@@ -19,17 +19,27 @@ public class PyramidBuilder {
         }
 
         for (int i = 1; i < widths.length; i++) {
+
             totalHeight += widths[i];
 
             if (totalHeight > statue && count >= rockCount) {
+
+                if (rockCount == 0) {
+                    rockCount = count + 1;
+                } else {
+                    ++rockCount;
+                }
+
                 ++height;
                 totalHeight = 0;
-                ++rockCount;
                 count = 0;
+
             }
 
             ++count;
         }
+
+
 
         return height;
     }
