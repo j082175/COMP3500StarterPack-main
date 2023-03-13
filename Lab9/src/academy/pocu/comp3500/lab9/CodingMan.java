@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 public class CodingMan {
     public static int findMinClipsCount(final VideoClip[] clips, int time) {
-        quickSort(clips);
+        //quickSort(clips);
+        bubbleSort(clips);
 
         int sum = 0;
         int minClipsCount = 0;
@@ -40,17 +41,31 @@ public class CodingMan {
                         --minClipsCount;
                     }
 
+                    sum += clips[i].getEndTime() - clips[i].getStartTime();
+                    arrayList.add(clips[i]);
+                    ++minClipsCount;
                     lastEnd = clips[i].getEndTime();
                 }
 
+                else {
+                    ++index;
+                    sum += clips[i].getEndTime() - lastEnd;
+                    arrayList.add(clips[i]);
+                    ++minClipsCount;
+                }
 
-                ++index;
 
-                sum += clips[i].getEndTime() - lastEnd;
+            }
+            else if (arrayList.get(arrayList.size() - 1).getEndTime() < clips[i].getEndTime() && arrayList.get(arrayList.size() - 1).getEndTime() >= clips[i].getStartTime()) {
+                sum += clips[i].getEndTime() - clips[i].getStartTime();
                 arrayList.add(clips[i]);
                 ++minClipsCount;
+            }
 
-            } else if (lastEnd < clips[i].getEndTime()) {
+
+            else if (lastEnd < clips[i].getEndTime() && arrayList.get(arrayList.size() - 1).getEndTime() >= clips[i].getStartTime()) {
+
+
                 ++index;
                 VideoClip v = arrayList.get(arrayList.size() - 1);
                 sum += clips[i].getEndTime() - v.getEndTime();
@@ -58,7 +73,7 @@ public class CodingMan {
                 ++minClipsCount;
             }
 
-            if (arrayList.get(arrayList.size() - 1).getEndTime() > time) {
+            if (arrayList.get(arrayList.size() - 1).getEndTime() >= time) {
                 return minClipsCount;
             }
 
@@ -100,6 +115,22 @@ public class CodingMan {
 
     private static int getInterval(VideoClip clip, int width) {
         return clip.getEndTime() - clip.getStartTime() - width;
+    }
+
+    private static void bubbleSort(VideoClip[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j].getStartTime() == arr[j + 1].getStartTime()) {
+                    if (arr[j].getEndTime() < arr[j + 1].getEndTime()) {
+                        swap(arr, j, j + 1);
+                    }
+                }
+
+                if (arr[j].getStartTime() > arr[j + 1].getStartTime()) {
+                    swap(arr, j, j + 1);
+                }
+            }
+        }
     }
 
     private static void quickSort(VideoClip[] arr) {

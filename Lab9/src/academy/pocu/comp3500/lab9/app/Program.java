@@ -171,5 +171,35 @@ public class Program {
 
         assert (count == 4);
 
+        clips = new VideoClip[]{
+                new VideoClip(0, 7),
+                new VideoClip(7, 15),
+                new VideoClip(15, 20),
+                new VideoClip(20, 25),
+                new VideoClip(25, 35)
+        };
+        airTime = 35;
+
+        count = CodingMan.findMinClipsCount(clips, airTime);
+
+        assert (count == 5);
+
+        clips = new VideoClip[]{
+                new VideoClip(0, 7),
+                new VideoClip(4, 8),
+                new VideoClip(5, 15),
+                new VideoClip(13, 16),
+                new VideoClip(15, 34),
+                new VideoClip(20, 35),
+                new VideoClip(23, 37),
+                new VideoClip(35, 60),
+                new VideoClip(38, 62)
+        };
+        airTime = 61;
+
+        count = CodingMan.findMinClipsCount(clips, airTime);
+
+        assert (count == 6);
+
     }
 }
