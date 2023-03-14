@@ -206,9 +206,13 @@ public class Program {
         assert (count == 6);
 
         clips = new VideoClip[]{
-                new VideoClip(1, 3)
+                new VideoClip(0, 3),
+                new VideoClip(2, 4),
+                new VideoClip(3, 5),
+                new VideoClip(6, 12),
+                new VideoClip(8, 17)
         };
-        airTime = 1;
+        airTime = 13;
 
         count = CodingMan.findMinClipsCount(clips, airTime);
 

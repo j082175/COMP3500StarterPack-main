@@ -15,6 +15,10 @@ public class CodingMan {
 
         ArrayList<VideoClip> arrayList = new ArrayList<>();
 
+        if (time < 0) {
+            return -1;
+        }
+
         if (clips.length != 0) {
             arrayList.add(clips[0]);
             sum = getInterval(clips[0], 0);
@@ -34,7 +38,17 @@ public class CodingMan {
         int index = 0;
 
 
-        for (int i = 0; i < clips.length; i++) {
+        for (int i = 1; i < clips.length; i++) {
+
+            if (arrayList.get(arrayList.size() - 1).getEndTime() < clips[i].getStartTime()) {
+                return -1;
+            }
+
+            if (i + 1 != clips.length && clips[i + 1].getStartTime() == clips[i].getStartTime()) {
+                arrayList.add(clips[i]);
+                ++minClipsCount;
+                continue;
+            }
 
             if (i + 1 != clips.length && clips[i + 1].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
                 arrayList.add(clips[i]);
