@@ -237,12 +237,12 @@ public class Program {
 
         clips = new VideoClip[]{
                 new VideoClip(0, 3),
-                new VideoClip(2, 5),
-                new VideoClip(4, 8),
-                new VideoClip(1, 3),
+                new VideoClip(0, 3),
+                new VideoClip(0, 4),
+                new VideoClip(1, 4),
                 new VideoClip(2, 3),
         };
-        airTime = 9;
+        airTime = 4;
 
         count = CodingMan.findMinClipsCount(clips, airTime);
 

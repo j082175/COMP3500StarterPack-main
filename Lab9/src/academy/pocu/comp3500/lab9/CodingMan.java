@@ -27,7 +27,7 @@ public class CodingMan {
             ++minClipsCount;
             lastEnd = clips[0].getEndTime();
 
-            int count = 1;
+/*            int count = 1;
             if (clips.length > 2) {
                 while (clips[count].getStartTime() == 0) {
                     if (clips[count].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
@@ -36,8 +36,7 @@ public class CodingMan {
                     }
                     ++count;
                 }
-            }
-
+            }*/
 
 
             if (clips[0].getStartTime() != 0) {
@@ -51,9 +50,6 @@ public class CodingMan {
         }
 
 
-
-
-
         for (int i = 1; i < clips.length; i++) {
 
 /*            if (i + 1 != clips.length && clips[i + 1].getStartTime() == clips[i].getStartTime()) {
@@ -62,7 +58,10 @@ public class CodingMan {
                 continue;
             }*/
 
-            if (i + 1 != clips.length && clips[i + 1].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
+            if (clips[i].getStartTime() == arrayList.get(arrayList.size() - 1).getStartTime() && clips[i].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
+                arrayList.remove(arrayList.size() - 1);
+                arrayList.add(clips[i]);
+            } else if (i + 1 != clips.length && clips[i + 1].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
                 arrayList.add(clips[i]);
                 ++minClipsCount;
             } else if (arrayList.get(arrayList.size() - 1).getEndTime() >= clips[i].getStartTime() && clips[i].getEndTime() >= time) {
