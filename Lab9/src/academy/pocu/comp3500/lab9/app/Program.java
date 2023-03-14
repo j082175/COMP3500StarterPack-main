@@ -205,6 +205,15 @@ public class Program {
 
         assert (count == 6);
 
+        clips = new VideoClip[]{
+                new VideoClip(1, 3)
+        };
+        airTime = 1;
+
+        count = CodingMan.findMinClipsCount(clips, airTime);
+
+        assert (count == -1);
+
 
     }
 }

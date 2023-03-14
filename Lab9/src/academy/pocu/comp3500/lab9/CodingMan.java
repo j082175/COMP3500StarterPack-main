@@ -21,15 +21,20 @@ public class CodingMan {
             ++minClipsCount;
             lastEnd = clips[0].getEndTime();
 
+            if (clips[0].getStartTime() != 0) {
+                return -1;
+            }
+
             if (clips[0].getEndTime() >= time) {
                 return 1;
             }
+
         }
 
         int index = 0;
 
 
-        for (int i = 1; i < clips.length; i++) {
+        for (int i = 0; i < clips.length; i++) {
 
             if (i + 1 != clips.length && clips[i + 1].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
                 arrayList.add(clips[i]);
