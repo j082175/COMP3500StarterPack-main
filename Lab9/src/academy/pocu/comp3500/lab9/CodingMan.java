@@ -31,8 +31,18 @@ public class CodingMan {
 
         for (int i = 1; i < clips.length; i++) {
 
+            if (i + 1 != clips.length && clips[i + 1].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
+                arrayList.add(clips[i]);
+                ++minClipsCount;
+            } else if (arrayList.get(arrayList.size() - 1).getEndTime() >= clips[i].getStartTime() && clips[i].getEndTime() >= time) {
+                arrayList.add(clips[i]);
+                ++minClipsCount;
+            }
 
-            if (lastEnd < clips[i].getEndTime() && lastEnd >= clips[i].getStartTime()) {
+
+
+
+/*            if (lastEnd < clips[i].getEndTime() && lastEnd >= clips[i].getStartTime()) {
 
                 if (lastEnd == clips[i].getStartTime()) {
                     while (index != 0) {
@@ -71,42 +81,12 @@ public class CodingMan {
                 sum += clips[i].getEndTime() - v.getEndTime();
                 arrayList.add(clips[i]);
                 ++minClipsCount;
-            }
+            }*/
 
             if (arrayList.get(arrayList.size() - 1).getEndTime() >= time) {
                 return minClipsCount;
             }
 
-
-
-/*            if (arrayList.get(arrayList.size() - 1).getEndTime() < clips[i].getEndTime() && arrayList.get(arrayList.size() - 1).getEndTime() > clips[i].getStartTime()) {
-                ++index;
-                VideoClip v = arrayList.get(arrayList.size() - 1);
-                sum += clips[i].getEndTime() - v.getEndTime();
-                arrayList.add(clips[i]);
-                ++minClipsCount;
-            } else if (clips[i].getStartTime() == arrayList.get(arrayList.size() - 1).getEndTime()) {
-
-                if (lastEnd == clips[i].getStartTime()) {
-                    lastEnd = clips[i].getEndTime();
-
-                    while (index != 0) {
-                        arrayList.remove(arrayList.size() - 1);
-                        --index;
-                        --minClipsCount;
-                    }
-                }
-
-                sum += clips[i].getEndTime() - clips[i].getStartTime();
-                arrayList.add(clips[i]);
-                ++minClipsCount;
-            } else if (clips[i].getStartTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
-                return -1;
-            }
-
-            if (sum >= time) {
-                return minClipsCount;
-            }*/
         }
 
 

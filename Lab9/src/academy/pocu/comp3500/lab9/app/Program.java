@@ -6,11 +6,18 @@ import academy.pocu.comp3500.lab9.ProfitCalculator;
 import academy.pocu.comp3500.lab9.PyramidBuilder;
 import academy.pocu.comp3500.lab9.data.Task;
 import academy.pocu.comp3500.lab9.data.VideoClip;
-import org.testng.annotations.Test;
+import org.junit.Test;
+
 
 public class Program {
 
     public static void main(String[] args) {
+
+
+    }
+
+    @Test
+    public void test1() {
         VideoClip[] clips = new VideoClip[]{
                 new VideoClip(0, 15),
                 new VideoClip(10, 20),
@@ -39,12 +46,9 @@ public class Program {
         pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{2, 2, 2, 2, 3, 3}, 1);
         assert (pyramidHeight == 2);
 
-    }
 
-    @Test
-    public void test1() {
         // PyramidBuilder
-        int pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{3}, 2);
+        pyramidHeight = PyramidBuilder.findMaxHeight(new int[]{3}, 2);
 
         assert (pyramidHeight == 0);
 
@@ -73,12 +77,12 @@ public class Program {
         assert (pyramidHeight == 3);
 
         // ProfitCalculator
-        Task[] tasks = new Task[]{
+        tasks = new Task[]{
                 new Task(20, 30),
         };
         int[] skillLevels = new int[]{20};
 
-        int profit = ProfitCalculator.findMaxProfit(tasks, skillLevels);
+        profit = ProfitCalculator.findMaxProfit(tasks, skillLevels);
 
         assert (profit == 30);
 
@@ -114,12 +118,12 @@ public class Program {
         assert (profit == 165);
 
         // CodingMan
-        VideoClip[] clips = new VideoClip[]{
+        clips = new VideoClip[]{
                 new VideoClip(0, 10),
         };
         int airTime = 10;
 
-        int count = CodingMan.findMinClipsCount(clips, airTime);
+        count = CodingMan.findMinClipsCount(clips, airTime);
 
         assert (count == 1);
 
@@ -141,7 +145,7 @@ public class Program {
                 new VideoClip(35, 70),
                 new VideoClip(50, 75)
         };
-        airTime = 60;
+        airTime = 70;
 
         count = CodingMan.findMinClipsCount(clips, airTime);
 
@@ -200,6 +204,7 @@ public class Program {
         count = CodingMan.findMinClipsCount(clips, airTime);
 
         assert (count == 6);
+
 
     }
 }

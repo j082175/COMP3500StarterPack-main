@@ -10,7 +10,6 @@ import java.util.Map;
 public class Player extends PlayerBase {
     private static final int INFINITY = 100000;
     private static final Map<Character, Integer> MAP_W = new HashMap<>();
-    private static Move hMove = new Move();
 
     public Player(boolean isWhite, int maxMoveTimeMilliseconds) {
         super(isWhite, maxMoveTimeMilliseconds);
@@ -30,9 +29,6 @@ public class Player extends PlayerBase {
 
     @Override
     public Move getNextMove(char[][] board, Move opponentMove) {
-/*        char color = isWhite() ? 'W' : 'B';
-        return findBestMove(board, 5, true, color);*/
-
         Move bestMove = null;
         int bestScore = -INFINITY;
         // 현재 플레이어의 색상
@@ -44,14 +40,9 @@ public class Player extends PlayerBase {
 
         ArrayList<Move> sameMoves = new ArrayList<>();
 
-        int isAllCheck = 0;
-        int s = 0;
         // 가능한 모든 수에 대해 상대방이 다음 수로 이동할 수 있는 모든 가능성에 대한 점수를 구합니다.
 
         for (Move move : possibleMoves) {
-
-            // char[][] newBoard = applyMove(board, move);
-
             char[] hCh = {0};
             applyMove1(board, move, hCh);
             int score = minMax(board, getOpponentColor(color), 1, -1);
@@ -64,8 +55,6 @@ public class Player extends PlayerBase {
         }
 
         for (Move move : possibleMoves) {
-            // char[][] newBoard = applyMove(board, move);
-
             char[] hCh = {0};
             applyMove1(board, move, hCh);
             int score = minMax(board, getOpponentColor(color), 3, -1);
@@ -77,24 +66,7 @@ public class Player extends PlayerBase {
                 bestScore = score;
                 bestMove = move;
             }
-
-            if (s == score) {
-                ++isAllCheck;
-            } else {
-                isAllCheck = 0;
-                s = score;
-            }
         }
-
-
-
-
-
-
-
-
-
-
 
 /*        if (sameMoves.size() != 0) {
             Random random = new Random();
@@ -121,16 +93,13 @@ public class Player extends PlayerBase {
 
         int left;
         int right;
-        int chooser; // 소문자를 기준으로 할거임
 
         if (color == 'W') {
             left = 97;
             right = 122;
-            chooser = -32;
         } else {
             left = 65;
             right = 90;
-            chooser = 0;
         }
 
         int lessMin = 0;
@@ -138,7 +107,6 @@ public class Player extends PlayerBase {
 
         int opponentLeft = getOpponentColorToAscii(color);
         int opponentRight = opponentLeft + 25;
-
 
         for (int y = lessMin; y < lessMax; y++) {
             for (int x = lessMin; x < lessMax; x++) {
@@ -648,18 +616,6 @@ public class Player extends PlayerBase {
             return bestMoveContainer;
         }
 
-/*        if (possibleMoves.size() > 10) {
-            ArrayList<Move> newArr = new ArrayList<>(10);
-            Random r = new Random();
-            for (int i = 0; i < 10; i++) {
-                int rand = r.nextInt(possibleMoves.size());
-                newArr.add(possibleMoves.get(rand));
-                possibleMoves.remove(rand);
-            }
-
-            return newArr;
-        }*/
-
         return possibleMoves;
     }
 
@@ -708,77 +664,6 @@ public class Player extends PlayerBase {
         return score;
     }
 
-    private int evaluateBoard2(char[][] board, char color) {
-        int score = 0;
-
-        char[] pieces = {'p', 'n', 'b', 'r', 'q', 'k'};
-
-        char ascii;
-        int ascii2;
-        if (color == 'W') {
-            ascii = 97;
-            ascii2 = -32;
-        } else {
-            ascii = 65;
-            ascii2 = 32;
-        }
-
-        char[] result = changeUpDown(pieces, color);
-
-        int[] scores = {1, 3, 3, 5, 9, 200};
-
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                if (board[row][col] >= ascii && board[row][col] <= ascii + 25) {
-
-                    for (int i = 0; i < 6; i++) {
-                        if (board[row][col] == result[i]) {
-                            score += scores[i];
-                            break;
-                        }
-                    }
-                }
-
-            }
-        }
-
-        return score;
-    }
-
-    // Minimax 알고리즘을 사용하여 최선의 수를 선택합니다.
-/*    private int minMax(char[][] board, char color, int depth, int change) {
-        int score = evaluateBoard(board, color);
-
-        if (depth == 0 || Math.abs(score) == INFINITY) {
-            return score;
-        }
-
-        char opponent;
-        if (change == -1) {
-            opponent = color;
-            change = 1;
-        } else {
-            opponent = getOpponentColor(color);
-            change = -1;
-        }
-
-        int bestScore = score;
-        ArrayList<Move> possibleMoves = getPossibleMovesFromPosition(board, opponent, -1, -1);
-        for (Move move : possibleMoves) {
-            char[][] newBoard = applyMove(board, move);
-            int currentScore = minMax(newBoard, color, depth - 1, change);
-            if (change == 1) {
-                bestScore = Math.max(bestScore, currentScore);
-            } else {
-                bestScore = Math.min(bestScore, currentScore);
-            }
-
-        }
-        return bestScore;
-
-    }*/
-
-
     private int minMax(char[][] board, char color, int depth, int check) {
         if (depth == 0) { // 종료 조건
             return evaluateBoard(board, getOpponentColor(color));
@@ -794,8 +679,6 @@ public class Player extends PlayerBase {
         }
 
         for (Move move : possibleMoves) {
-            // char[][] newBoard = applyMove(board, move); // 현재 수를 적용한 새로운 보드 생성
-
             char[] hCh = {0};
             applyMove1(board, move, hCh);
             int score = -minMax(board, getOpponentColor(color), depth - 1, check * -1); // 새로운 보드에 대해 미니맥스 재귀호출
@@ -825,22 +708,6 @@ public class Player extends PlayerBase {
         return color == 'W' ? 'B' : 'W';
     }
 
-    // 특정 수를 적용한 새로운 보드를 반환합니다.
-    private char[][] applyMove(char[][] board, Move move) {
-        char[][] newBoard = new char[board.length][board[0].length];
-        //char[][] newBoard = board;
-        for (int row = 0; row < board.length; row++) {
-            for (int col = 0; col < board[row].length; col++) {
-                newBoard[col][row] = board[col][row];
-            }
-        }
-
-        newBoard[move.toY][move.toX] = newBoard[move.fromY][move.fromX];
-        newBoard[move.fromY][move.fromX] = 0;
-
-        return newBoard;
-    }
-
     private char[] changeUpDown(char[] arr, char color) {
 
         if (color == 'B') {
@@ -854,109 +721,6 @@ public class Player extends PlayerBase {
         }
     }
 
-
-    public int minimax(char[][] board, int depth, boolean maximizingPlayer, char color) {
-
-        if (depth == 0) {
-            return evaluateBoard(board, color);
-        }
-
-        ArrayList<Move> moves = getPossibleMovesFromPosition(board, color);
-        // Move bestMove = moves.get(0);
-
-        if (maximizingPlayer) {
-            int maxEval = -INFINITY;
-
-            for (Move move : moves) {
-                char[] hCh = {0};
-                applyMove1(board, move, hCh);
-                int eval = minimax(board, depth - 1, false, getOpponentColor(color));
-                undoMove(board, move, hCh);
-
-                if (eval > maxEval) {
-                    maxEval = eval;
-                    //bestMove = move;
-                }
-            }
-            return maxEval;
-        } else {
-            int minEval = INFINITY;
-
-            for (Move move : moves) {
-                char[] hCh = {0};
-                applyMove1(board, move, hCh);
-                int eval = minimax(board, depth - 1, true, getOpponentColor(color));
-                undoMove(board, move, hCh);
-
-                if (eval < minEval) {
-                    minEval = eval;
-                    //bestMove = move;
-                }
-            }
-            return minEval;
-        }
-    }
-
-    public Move findBestMove(char[][] board, int depth, boolean maximizingPlayer, char color) {
-        ArrayList<Move> moves = getPossibleMovesFromPosition(board, color);
-        ArrayList<Move> sameMoves = new ArrayList<>();
-
-        Move bestMove = null;
-        int bestEval = maximizingPlayer ? -INFINITY : INFINITY;
-
-        for (Move move : moves) {
-            char[] hCh = {0};
-            applyMove1(board, move, hCh);
-            int eval = minimax(board, depth - 1, !maximizingPlayer, getOpponentColor(color));
-            undoMove(board, move, hCh);
-
-            if (maximizingPlayer && eval > bestEval) {
-                bestEval = eval;
-                bestMove = move;
-/*                sameMoves.clear();
-                sameMoves.add(move);*/
-            } else if (!maximizingPlayer && eval < bestEval) {
-                bestEval = eval;
-                bestMove = move;
-/*                sameMoves.clear();
-                sameMoves.add(move);*/
-            } else if (eval != -INFINITY) {
-                // sameMoves.add(move);
-            }
-        }
-
-        if (bestMove == null) {
-            for (Move move : moves) {
-                char[] hCh = {0};
-                applyMove1(board, move, hCh);
-                int eval = minimax(board, 1, !maximizingPlayer, getOpponentColor(color));
-                undoMove(board, move, hCh);
-
-                if (maximizingPlayer && eval > bestEval) {
-                    bestEval = eval;
-                    bestMove = move;
-/*                    sameMoves.clear();
-                    sameMoves.add(move);*/
-                } else if (!maximizingPlayer && eval < bestEval) {
-                    bestEval = eval;
-                    bestMove = move;
-/*                    sameMoves.clear();
-                    sameMoves.add(move);*/
-                } else if (eval != -INFINITY) {
-                    // sameMoves.add(move);
-                }
-            }
-        }
-
-/*        if (sameMoves.size() != 0) {
-            Random random = new Random();
-            return sameMoves.get(random.nextInt(sameMoves.size()));
-        }*/
-
-        return bestMove;
-    }
-
-
     private void applyMove1(char[][] board, Move move, char[] hCh) {
         hCh[0] = board[move.toY][move.toX];
         board[move.toY][move.toX] = board[move.fromY][move.fromX];
@@ -967,5 +731,4 @@ public class Player extends PlayerBase {
         board[move.fromY][move.fromX] = board[move.toY][move.toX];
         board[move.toY][move.toX] = hCh[0];
     }
-
 }
