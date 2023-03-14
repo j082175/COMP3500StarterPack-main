@@ -2,18 +2,16 @@ package academy.pocu.comp3500.lab9;
 
 import academy.pocu.comp3500.lab9.data.VideoClip;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class CodingMan {
     public static int findMinClipsCount(final VideoClip[] clips, int time) {
-        //quickSort(clips);
+        quickSort(clips);
         // bubbleSort(clips);
 
-        Arrays.sort(clips, new Comparator<VideoClip>() {
+/*        Arrays.sort(clips, new Comparator<VideoClip>() {
             @Override
             public int compare(VideoClip o1, VideoClip o2) {
                 if (o1.getStartTime() == o2.getStartTime()) {
@@ -22,7 +20,7 @@ public class CodingMan {
 
                 return o1.getStartTime() - o2.getStartTime();
             }
-        });
+        });*/
 
 
 
