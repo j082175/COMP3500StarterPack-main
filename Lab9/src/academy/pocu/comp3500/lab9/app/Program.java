@@ -214,13 +214,26 @@ public class Program {
                 new VideoClip(2, 4),
                 new VideoClip(3, 5),
                 new VideoClip(5, 12),
-                new VideoClip(12, 17)
+                new VideoClip(10, 17)
         };
-        airTime = 14;
+        airTime = 13;
 
         count = CodingMan.findMinClipsCount(clips, airTime);
 
-        assert (count == -1);
+        assert (count == 4);
+
+        clips = new VideoClip[]{
+                new VideoClip(0, 3),
+                new VideoClip(2, 5),
+                new VideoClip(4, 8),
+                new VideoClip(1, 3),
+                new VideoClip(2, 3),
+        };
+        airTime = 7;
+
+        count = CodingMan.findMinClipsCount(clips, airTime);
+
+        assert (count == 3);
 
 
     }

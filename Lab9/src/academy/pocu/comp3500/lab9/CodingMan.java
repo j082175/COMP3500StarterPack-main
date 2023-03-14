@@ -38,6 +38,15 @@ public class CodingMan {
 
         int index = 0;
 
+        int count = 1;
+        while (clips[count].getStartTime() == 0) {
+            if (clips[count].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
+                arrayList.clear();
+                arrayList.add(clips[count]);
+            }
+            ++count;
+        }
+
 
         for (int i = 1; i < clips.length; i++) {
 
@@ -77,7 +86,7 @@ public class CodingMan {
         for (int i = 0; i < arr.length - 1; i++) {
             for (int j = 0; j < arr.length - 1 - i; j++) {
                 if (arr[j].getStartTime() == arr[j + 1].getStartTime()) {
-                    if (arr[j].getEndTime() < arr[j + 1].getEndTime()) {
+                    if (arr[j].getEndTime() > arr[j + 1].getEndTime()) {
                         swap(arr, j, j + 1);
                     }
                 }
