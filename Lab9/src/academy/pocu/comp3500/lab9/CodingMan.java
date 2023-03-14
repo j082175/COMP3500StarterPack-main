@@ -8,26 +8,20 @@ import java.util.Comparator;
 
 public class CodingMan {
     public static int findMinClipsCount(final VideoClip[] clips, int time) {
-        quickSort(clips);
+        // quickSort(clips);
         // bubbleSort(clips);
 
-/*        Arrays.sort(clips, new Comparator<VideoClip>() {
+        Arrays.sort(clips, new Comparator<>() {
             @Override
             public int compare(VideoClip o1, VideoClip o2) {
                 if (o1.getStartTime() == o2.getStartTime()) {
                     return o1.getEndTime() - o2.getEndTime();
                 }
-
                 return o1.getStartTime() - o2.getStartTime();
             }
-        });*/
+        });
 
-
-
-        int sum = 0;
         int minClipsCount = 0;
-        int lastEnd = 0;
-        int index = 0;
 
         ArrayList<VideoClip> arrayList = new ArrayList<>();
 
@@ -37,21 +31,7 @@ public class CodingMan {
 
         if (clips.length != 0) {
             arrayList.add(clips[0]);
-            sum = getInterval(clips[0], 0);
             ++minClipsCount;
-            lastEnd = clips[0].getEndTime();
-
-/*            int count = 1;
-            if (clips.length > 2) {
-                while (clips[count].getStartTime() == 0) {
-                    if (clips[count].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
-                        arrayList.clear();
-                        arrayList.add(clips[count]);
-                    }
-                    ++count;
-                }
-            }*/
-
 
             if (clips[0].getStartTime() != 0) {
                 return -1;
@@ -63,14 +43,7 @@ public class CodingMan {
 
         }
 
-
         for (int i = 1; i < clips.length; i++) {
-
-/*            if (i + 1 != clips.length && clips[i + 1].getStartTime() == clips[i].getStartTime()) {
-                arrayList.add(clips[i]);
-                ++minClipsCount;
-                continue;
-            }*/
 
             if (clips[i].getStartTime() == arrayList.get(arrayList.size() - 1).getStartTime() && clips[i].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
                 arrayList.remove(arrayList.size() - 1);
@@ -93,14 +66,9 @@ public class CodingMan {
 
         }
 
-
         return -1;
     }
 
-
-    private static int getInterval(VideoClip clip, int width) {
-        return clip.getEndTime() - clip.getStartTime() - width;
-    }
 
     private static void bubbleSort(VideoClip[] arr) {
         for (int i = 0; i < arr.length - 1; i++) {
