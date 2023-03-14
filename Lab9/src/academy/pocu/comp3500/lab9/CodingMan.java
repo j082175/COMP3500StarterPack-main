@@ -7,8 +7,8 @@ import java.util.Arrays;
 
 public class CodingMan {
     public static int findMinClipsCount(final VideoClip[] clips, int time) {
-        quickSort(clips);
-        //bubbleSort(clips);
+        //quickSort(clips);
+        bubbleSort(clips);
 
         int sum = 0;
         int minClipsCount = 0;
