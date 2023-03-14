@@ -25,9 +25,13 @@ public class Program {
         };
 
         int count = CodingMan.findMinClipsCount(clips, 10); // 1
+        assert count == 1;
         count = CodingMan.findMinClipsCount(clips, 20); // 2
+        assert count == 2;
         count = CodingMan.findMinClipsCount(clips, 25); // -1
+        assert count == -1;
         count = CodingMan.findMinClipsCount(clips, 35); // -1
+        assert count == -1;
 
         Task[] tasks = new Task[]{
                 new Task(20, 30),
@@ -209,10 +213,10 @@ public class Program {
                 new VideoClip(0, 3),
                 new VideoClip(2, 4),
                 new VideoClip(3, 5),
-                new VideoClip(6, 12),
-                new VideoClip(8, 17)
+                new VideoClip(5, 12),
+                new VideoClip(12, 17)
         };
-        airTime = 13;
+        airTime = 14;
 
         count = CodingMan.findMinClipsCount(clips, airTime);
 
