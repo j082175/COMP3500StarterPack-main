@@ -13,6 +13,7 @@ public class CodingMan {
         int sum = 0;
         int minClipsCount = 0;
         int lastEnd = 0;
+        int index = 0;
 
         ArrayList<VideoClip> arrayList = new ArrayList<>();
 
@@ -26,6 +27,19 @@ public class CodingMan {
             ++minClipsCount;
             lastEnd = clips[0].getEndTime();
 
+            int count = 1;
+            if (clips.length > 2) {
+                while (clips[count].getStartTime() == 0) {
+                    if (clips[count].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
+                        arrayList.clear();
+                        arrayList.add(clips[count]);
+                    }
+                    ++count;
+                }
+            }
+
+
+
             if (clips[0].getStartTime() != 0) {
                 return -1;
             }
@@ -36,16 +50,8 @@ public class CodingMan {
 
         }
 
-        int index = 0;
 
-        int count = 1;
-        while (clips[count].getStartTime() == 0) {
-            if (clips[count].getEndTime() > arrayList.get(arrayList.size() - 1).getEndTime()) {
-                arrayList.clear();
-                arrayList.add(clips[count]);
-            }
-            ++count;
-        }
+
 
 
         for (int i = 1; i < clips.length; i++) {
