@@ -63,6 +63,18 @@ public class Program {
             assert (schedule.indexOf("D") < schedule.indexOf("G"));
             assert (schedule.indexOf("G") < schedule.indexOf("H"));
         }
+
+        {
+            Task[] tasks = createTasks2();
+
+            List<String> schedule = Project.findSchedule(tasks, true);
+
+            tasks = createTasks3();
+            schedule = Project.findSchedule(tasks, true);
+
+            assert (schedule.size() == 9);
+
+        }
     }
 
     private static Task[] createTasks() {
@@ -89,5 +101,74 @@ public class Program {
                 a, b, c, d, e, f, g, h, i
         };
 
+    }
+
+    private static Task[] createTasks2() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+
+        i.addPredecessor(f);
+        f.addPredecessor(e);
+        e.addPredecessor(b, c);
+        d.addPredecessor(c, k);
+        c.addPredecessor(b);
+        b.addPredecessor(a);
+        h.addPredecessor(g);
+        g.addPredecessor(d);
+        j.addPredecessor(h);
+        k.addPredecessor(j);
+        l.addPredecessor(n);
+        m.addPredecessor(l);
+        n.addPredecessor(m, c);
+
+        return new Task[]{
+                a, b, c, d, e, f, g, h, i, j, k, l, m, n
+        };
+    }
+
+    private static Task[] createTasks3() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+
+
+        b.addPredecessor(a);
+        c.addPredecessor(b);
+        i.addPredecessor(h);
+        e.addPredecessor(d, i);
+        f.addPredecessor(e);
+        j.addPredecessor(e);
+        g.addPredecessor(c, f, j);
+        k.addPredecessor(g, n);
+        n.addPredecessor(m);
+        m.addPredecessor(l);
+        l.addPredecessor(k);
+
+        return new Task[]{
+                a, b, c, d, e, f, g, h, i, j, k, l, m, n
+        };
     }
 }
