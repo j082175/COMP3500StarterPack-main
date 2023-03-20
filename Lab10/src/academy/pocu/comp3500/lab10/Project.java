@@ -25,7 +25,10 @@ public class Project {
             }
 
             boolean[] isCheck = new boolean[]{false};
-            findRecursive(task, discovered, l, includeMaintenance, new HashSet<>(), isCheck, new Task(null, 0));
+            HashSet<Task> isSame = new HashSet<>();
+            isSame.add(task);
+            findRecursive(task, discovered, l, includeMaintenance, isSame, isCheck, new Task(null, 0));
+            isSame.clear();
 
             list.addAll(l);
 
@@ -35,14 +38,10 @@ public class Project {
     }
 
     private static List<String> findRecursive(final Task tasks, HashSet<Task> discovered, List<String> list, boolean includeMaintenance, HashSet<Task> isSame, boolean[] isCheck, Task pivot) {
-        isSame.add(tasks);
 
         for (Task task : tasks.getPredecessors()) {
 
             if (isSame.contains(task) && !includeMaintenance) {
-/*                for (int i = 0; i < isSame.size(); i++) {
-                    list.remove(0);
-                }*/
                 list.clear();
                 return null;
             } else if (isSame.contains(task) && includeMaintenance) {
@@ -53,7 +52,6 @@ public class Project {
             if (!discovered.contains(task)) {
                 discovered.add(task);
                 list.add(0, task.getTitle());
-                findRecursive(task, discovered, list, includeMaintenance, isSame, isCheck, pivot);
 
 /*                if (list != null) {
                     list.addAll(list);
@@ -66,7 +64,7 @@ public class Project {
                 pivot = tasks;
             }
 
-            if (isCheck[0] == true) {
+            if (isCheck[0]) {
                 List<String> l1 = new LinkedList<>();
                 for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).equals(pivot.getTitle())) {
@@ -83,6 +81,35 @@ public class Project {
             }
 
         }
+
+        for (Task task : tasks.getPredecessors()) {
+
+            if (task.getPredecessors().size() != 0 && !discovered.contains(task.getPredecessors().get(0))) {
+                findRecursive(task, discovered, list, includeMaintenance, isSame, isCheck, pivot);
+            } else if (task.getPredecessors().size() == 1 && isSame.contains(task.getPredecessors().get(0))) {
+
+                if (!includeMaintenance) {
+                    list.clear();
+                    return null;
+                }
+
+                List<String> l1 = new LinkedList<>();
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).equals(pivot.getTitle())) {
+                        for (int j = 0; j < i; j++) {
+                            list.remove(0);
+                        }
+                        list.addAll(l1);
+                        isCheck[0] = false;
+                        break;
+                    }
+                    l1.add(list.get(i));
+                }
+            }
+
+        }
+
+
 
         return null;
     }

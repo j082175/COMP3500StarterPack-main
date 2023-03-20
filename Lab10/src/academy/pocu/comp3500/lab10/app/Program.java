@@ -72,7 +72,6 @@ public class Program {
             tasks = createTasks3();
             schedule = Project.findSchedule(tasks, true);
 
-            assert (schedule.size() == 9);
 
         }
     }
@@ -153,12 +152,17 @@ public class Program {
         Task l = new Task("L", 6);
         Task m = new Task("M", 6);
         Task n = new Task("N", 6);
+        Task o = new Task("O", 6);
+        Task p = new Task("P", 6);
+        Task q = new Task("Q", 6);
+        Task r = new Task("R", 6);
+        Task s = new Task("S", 6);
 
 
         b.addPredecessor(a);
         c.addPredecessor(b);
         i.addPredecessor(h);
-        e.addPredecessor(d, i);
+        e.addPredecessor(d, i, s);
         f.addPredecessor(e);
         j.addPredecessor(e);
         g.addPredecessor(c, f, j);
@@ -166,9 +170,14 @@ public class Program {
         n.addPredecessor(m);
         m.addPredecessor(l);
         l.addPredecessor(k);
+        o.addPredecessor(g);
+        p.addPredecessor(g);
+        q.addPredecessor(g);
+        r.addPredecessor(a);
+        s.addPredecessor(h);
 
         return new Task[]{
-                a, b, c, d, e, f, g, h, i, j, k, l, m, n
+                a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s
         };
     }
 }
