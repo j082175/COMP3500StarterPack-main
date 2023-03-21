@@ -3,13 +3,10 @@ package academy.pocu.comp3500.lab10;
 import academy.pocu.comp3500.lab10.project.Task;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 import java.util.Stack;
 
 public class Project {
@@ -76,6 +73,7 @@ public class Project {
     }
 
     private static List<String> findRecursive(final Task tasks, HashSet<Task> discovered, List<String> list, boolean includeMaintenance, HashSet<Task> isSame, boolean[] isCheck, Task pivot) {
+
 
         for (Task task : tasks.getPredecessors()) {
 
@@ -330,7 +328,7 @@ public class Project {
         HashSet<Task> discovered = new HashSet<>();
         LinkedList<String> sortedList = new LinkedList<>();
         HashSet<Task> overlap = new HashSet<>();
-        Task[] isLoop = new Task[]{null};
+        HashSet<String> isLoop = new HashSet<>();
         boolean[] isCheck = new boolean[]{false};
         LinkedList<String> backup = new LinkedList<>();
 
@@ -351,16 +349,28 @@ public class Project {
             overlap.clear();
 
             if (isCheck[0]) {
-                Task t = isLoop[0];
-                int index = sortedList.indexOf(t.getTitle());
+                String t = null;
+
+                for (int i = 0; i < sortedList.size(); i++) {
+                    if (isLoop.contains(sortedList.get(i))) {
+                        t = sortedList.get(i);
+                    }
+                }
+
+                int index = sortedList.indexOf(t);
                 List<String> backward = sortedList.subList(0, index);
                 List<String> foreward = sortedList.subList(index, sortedList.size());
                 LinkedList<String> n = new LinkedList<>(foreward);
                 sortedList = n;
                 sortedList.addAll(backward);
 
-                backup.addAll(sortedList);
-                sortedList = backup;
+                LinkedList<String> b1 = new LinkedList<>(backup);
+
+                b1.addAll(sortedList);
+                sortedList = b1;
+
+                isCheck[0] = false;
+                isLoop.clear();
             }
 
         }
@@ -368,14 +378,16 @@ public class Project {
         return sortedList;
     }
 
-    private static boolean topologicalSortRecursive(Task task, HashSet<Task> discovered, LinkedList<String> linkedList, HashSet<Task> overlap, boolean includeMaintenance, Task[] isLoop, boolean[] isCheck, LinkedList<String> backup) {
+    private static boolean topologicalSortRecursive(Task task, HashSet<Task> discovered, LinkedList<String> linkedList, HashSet<Task> overlap, boolean includeMaintenance, HashSet<String> isLoop, boolean[] isCheck, LinkedList<String> backup) {
         discovered.add(task);
         boolean check = false;
 
         for (Task nextTask : task.getPredecessors()) {
 
             if (nextTask.getPredecessors().size() > 1) {
-                isLoop[0] = nextTask;
+
+                isLoop.add(nextTask.getTitle());
+
             }
 
             if (overlap.contains(nextTask)) {
@@ -383,7 +395,12 @@ public class Project {
                 if (!includeMaintenance) {
                     return true;
                 } else {
-                    backup.addAll(linkedList);
+
+                    backup.clear();
+                    for (int i = 0; i < linkedList.size(); i++) {
+                        String str = new String(linkedList.get(i));
+                        backup.add(str);
+                    }
                     linkedList.clear();
                     isCheck[0] = true;
                 }

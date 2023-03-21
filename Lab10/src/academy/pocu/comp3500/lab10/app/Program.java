@@ -2,7 +2,8 @@ package academy.pocu.comp3500.lab10.app;
 
 import academy.pocu.comp3500.lab10.Project;
 import academy.pocu.comp3500.lab10.project.Task;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
 
 import java.util.List;
 
@@ -74,6 +75,10 @@ public class Program {
             schedule = Project.findSchedule(tasks, true);
 
 
+            tasks = createTasks4();
+            schedule = Project.findSchedule(tasks, true);
+
+            int a = 1;
         }
     }
 
@@ -179,6 +184,63 @@ public class Program {
 
         return new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s
+        };
+    }
+
+    private static Task[] createTasks4() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+        Task o = new Task("O", 6);
+        Task p = new Task("P", 6);
+        Task q = new Task("Q", 6);
+        Task r = new Task("R", 6);
+        Task s = new Task("S", 6);
+        Task t = new Task("T", 6);
+        Task u = new Task("U", 6);
+        Task v = new Task("V", 6);
+        Task w = new Task("W", 6);
+        Task x = new Task("X", 6);
+        Task y = new Task("Y", 6);
+        Task z = new Task("Z", 6);
+
+        h.addPredecessor(a);
+        i.addPredecessor(k, h);
+        j.addPredecessor(i);
+        k.addPredecessor(j);
+        l.addPredecessor(h);
+        g.addPredecessor(l, b, c);
+        d.addPredecessor(c, f);
+        e.addPredecessor(d);
+        f.addPredecessor(e);
+        m.addPredecessor(g);
+        q.addPredecessor(m);
+        r.addPredecessor(q);
+        s.addPredecessor(q);
+        p.addPredecessor(m);
+        o.addPredecessor(m);
+        n.addPredecessor(m);
+        t.addPredecessor(m, z);
+        u.addPredecessor(t);
+        v.addPredecessor(u);
+        x.addPredecessor(v);
+        y.addPredecessor(x);
+        z.addPredecessor(y);
+        w.addPredecessor(p);
+
+        return new Task[]{
+                z, y, x, w, v, u, t, s, r, q, p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a
         };
     }
 }
