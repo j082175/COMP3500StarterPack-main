@@ -2,20 +2,58 @@ package academy.pocu.comp3500.lab10;
 
 import academy.pocu.comp3500.lab10.project.Task;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 public class Project {
     public static List<String> findSchedule(final Task[] tasks, final boolean includeMaintenance) {
 
-        HashSet<Task> discovered = new HashSet<>();
-        List<String> list = new LinkedList<>();
+
+        List<String> result = sortTopologically(tasks, includeMaintenance);
+        return result;
+
+
+
+        /////////////////////////////////////
+
+
+/*        List<String> totalList = new LinkedList<>();
 
         for (Task task : tasks) {
-/*            if (discovered.contains(task)) {
+            List<String> resultList = searchBreadthFirst1(task, includeMaintenance, new HashSet<>(), new HashSet<>(), new HashSet<>(), new boolean[]{false});
+
+            if (!totalList.containsAll(resultList)) {
+                List<String> mergedList = new ArrayList<>(resultList);
+                mergedList.removeAll(totalList);
+                totalList.addAll(mergedList);
+            }
+        }
+
+        return totalList;*/
+
+
+
+
+//////////////////////////////////////////////
+
+
+
+
+
+        /*HashSet<Task> discovered = new HashSet<>();
+        List<String> totalList = new LinkedList<>();
+
+        for (Task task : tasks) {
+*//*            if (discovered.contains(task)) {
                 continue;
-            }*/
+            }*//*
 
             List<String> l = new LinkedList<>();
 
@@ -30,11 +68,11 @@ public class Project {
             findRecursive(task, discovered, l, includeMaintenance, isSame, isCheck, new Task(null, 0));
             isSame.clear();
 
-            list.addAll(l);
+            totalList.addAll(l);
 
         }
 
-        return list;
+        return totalList;*/
     }
 
     private static List<String> findRecursive(final Task tasks, HashSet<Task> discovered, List<String> list, boolean includeMaintenance, HashSet<Task> isSame, boolean[] isCheck, Task pivot) {
@@ -110,7 +148,273 @@ public class Project {
         }
 
 
-
         return null;
+    }
+
+    private static List<String> searchBreadthFirst(Task task, boolean includeMaintenance) {
+        HashSet<Task> discovered = new HashSet<>();
+        Stack<Task> stack = new Stack<>();
+        List<String> list = new LinkedList<>();
+        HashSet<Task> isRingBuffer = new HashSet<>();
+        Stack<Task> overTwo = new Stack<>();
+        isRingBuffer.add(task);
+
+        stack.push(task);
+        discovered.add(task);
+
+        while (!stack.isEmpty()) {
+
+            Task next = stack.pop();
+
+            // System.out.print(next.data + " ");
+            if (!list.contains(next.getTitle())) {
+                list.add(0, next.getTitle());
+            }
+
+            for (Task neighbor : next.getPredecessors()) {
+                if (next.getPredecessors().size() > 1) {
+                    if (!overTwo.contains(next)) {
+                        overTwo.push(next);
+                    }
+                }
+
+                if (isRingBuffer.contains(neighbor) && !includeMaintenance) {
+                    list.clear();
+                } else if (isRingBuffer.contains(neighbor)) {
+                    Task t = overTwo.pop();
+                    int index = list.indexOf(t.getTitle());
+                    List<String> backward = list.subList(0, index);
+                    List<String> foreward = list.subList(index, list.size());
+                    list = foreward;
+                    list.addAll(backward);
+                }
+
+                if (!discovered.contains(neighbor)) {
+                    stack.push(neighbor);
+                    discovered.add(next);
+                }
+
+
+            }
+        }
+
+        return list;
+    }
+
+    private static List<String> searchBreadthFirst1(Task task, boolean includeMaintenance, HashSet<Task> overlap, HashSet<Task> compare, HashSet<Task> discovered, boolean[] isLoop) {
+        //HashSet<Task> discovered = new HashSet<>();
+        Stack<Task> stack = new Stack<>();
+        List<String> list = new LinkedList<>();
+        HashSet<Task> isRingBuffer = new HashSet<>();
+        Stack<Task> overTwo = new Stack<>();
+        isRingBuffer.add(task);
+
+        Task next = task;
+
+        while (next != null) {
+
+            // System.out.print(next.data + " ");
+
+
+            if (next.getPredecessors().size() > 1 && !overlap.contains(next)) {
+
+                overlap.add(next);
+                Stack<List<String>> s = new Stack<>();
+
+                for (Task neighbor : next.getPredecessors()) {
+                    List<String> result = searchBreadthFirst1(neighbor, includeMaintenance, overlap, compare, discovered, isLoop);
+
+                    if (isLoop[0]) {
+                        list.clear();
+                    }
+
+                    if (result != null) {
+                        s.add(result);
+                    }
+                }
+
+                if (!isLoop[0]) {
+                    overlap.clear();
+                }
+
+
+                if (!overlap.contains(next)) {
+                    if (!list.contains(next.getTitle())) {
+                        list.add(0, next.getTitle());
+                    }
+                }
+
+
+                if (s.size() != 0) {
+                    list.clear();
+                }
+
+                while (s.size() != 0) {
+                    List<String> result = s.pop();
+                    // list.addAll(0, result);
+
+                    list.addAll(result);
+
+                }
+
+
+                return list;
+
+            }
+
+            if (!list.contains(next.getTitle())) {
+                list.add(0, next.getTitle());
+            }
+
+
+            if (overlap.contains(next) && !includeMaintenance) {
+                list.clear();
+                isLoop[0] = true;
+                return list;
+            } else if (overlap.contains(next) && includeMaintenance) {
+                Iterator iter = overlap.iterator();
+                Task t = (Task) iter.next();
+
+                int index = list.indexOf(t.getTitle());
+                List<String> backward = list.subList(0, index);
+                List<String> foreward = list.subList(index, list.size());
+                list = foreward;
+                list.addAll(backward);
+
+            }
+
+            if (next.getPredecessors().size() != 0) {
+                next = next.getPredecessors().get(0);
+            } else {
+                next = null;
+            }
+
+
+        }
+
+        return list;
+    }
+
+    private static List<String> searchBreadthFirstRecursive(Task next, boolean includeMaintenance, HashSet<Task> discovered) {
+
+        List<String> list = new LinkedList<>();
+
+        if (discovered.contains(next)) {
+            if (!includeMaintenance) {
+                return null;
+            }
+        }
+
+        for (Task neighbor : next.getPredecessors()) {
+            if (next.getPredecessors().size() > 1) {
+                discovered.add(next);
+                List<String> resultList = searchBreadthFirstRecursive(neighbor, includeMaintenance, discovered);
+                if (resultList != null) {
+
+                    List<String> mergedList = new ArrayList<>(resultList);
+                    mergedList.removeAll(list);
+                    list.addAll(mergedList);
+
+
+                    // list.addAll(resultList);
+                } else {
+                    return list;
+                }
+            }
+        }
+
+        return list;
+    }
+
+    private static LinkedList<String> sortTopologically(Task[] tasks, boolean includeMaintenance) {
+        HashSet<Task> discovered = new HashSet<>();
+        LinkedList<String> sortedList = new LinkedList<>();
+        HashSet<Task> overlap = new HashSet<>();
+        Task[] isLoop = new Task[]{null};
+        boolean[] isCheck = new boolean[]{false};
+        LinkedList<String> backup = new LinkedList<>();
+
+        for (Task task : tasks) {
+            if (discovered.contains(task)) {
+                continue;
+            }
+
+            overlap.add(task);
+            topologicalSortRecursive(task,
+                    discovered,
+                    sortedList,
+                    overlap,
+                    includeMaintenance,
+                    isLoop,
+                    isCheck,
+                    backup);
+            overlap.clear();
+
+            if (isCheck[0]) {
+                Task t = isLoop[0];
+                int index = sortedList.indexOf(t.getTitle());
+                List<String> backward = sortedList.subList(0, index);
+                List<String> foreward = sortedList.subList(index, sortedList.size());
+                LinkedList<String> n = new LinkedList<>(foreward);
+                sortedList = n;
+                sortedList.addAll(backward);
+
+                backup.addAll(sortedList);
+                sortedList = backup;
+            }
+
+        }
+
+        return sortedList;
+    }
+
+    private static boolean topologicalSortRecursive(Task task, HashSet<Task> discovered, LinkedList<String> linkedList, HashSet<Task> overlap, boolean includeMaintenance, Task[] isLoop, boolean[] isCheck, LinkedList<String> backup) {
+        discovered.add(task);
+        boolean check = false;
+
+        for (Task nextTask : task.getPredecessors()) {
+
+            if (nextTask.getPredecessors().size() > 1) {
+                isLoop[0] = nextTask;
+            }
+
+            if (overlap.contains(nextTask)) {
+
+                if (!includeMaintenance) {
+                    return true;
+                } else {
+                    backup.addAll(linkedList);
+                    linkedList.clear();
+                    isCheck[0] = true;
+                }
+
+            }
+
+            if (discovered.contains(nextTask)) {
+                continue;
+            }
+
+            check = topologicalSortRecursive(nextTask,
+                    discovered,
+                    linkedList,
+                    overlap,
+                    includeMaintenance,
+                    isLoop,
+                    isCheck,
+                    backup);
+
+
+        }
+
+        if (check) {
+
+            if (!includeMaintenance) {
+                return true;
+            }
+
+        }
+
+        linkedList.addLast(task.getTitle());
+        return false;
     }
 }

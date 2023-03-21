@@ -2,7 +2,7 @@ package academy.pocu.comp3500.lab10.app;
 
 import academy.pocu.comp3500.lab10.Project;
 import academy.pocu.comp3500.lab10.project.Task;
-import org.junit.Test;
+import org.testng.annotations.Test;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ public class Program {
     public static void main(String[] args) {
 
     }
+
 
     @Test
     public void test1() {

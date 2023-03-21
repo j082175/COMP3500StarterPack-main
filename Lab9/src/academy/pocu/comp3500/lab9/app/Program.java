@@ -6,7 +6,7 @@ import academy.pocu.comp3500.lab9.ProfitCalculator;
 import academy.pocu.comp3500.lab9.PyramidBuilder;
 import academy.pocu.comp3500.lab9.data.Task;
 import academy.pocu.comp3500.lab9.data.VideoClip;
-import org.junit.Test;
+
 
 
 public class Program {
@@ -16,7 +16,7 @@ public class Program {
 
     }
 
-    @Test
+
     public void test1() {
         VideoClip[] clips = new VideoClip[]{
                 new VideoClip(0, 15),
