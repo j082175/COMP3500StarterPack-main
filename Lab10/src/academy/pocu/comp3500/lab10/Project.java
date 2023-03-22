@@ -90,9 +90,9 @@ public class Project {
                     if (!includeMaintenance) {
 
                         // 새로 추가한 코드 만약 루프노드도 포함해야한다면
-                        if (!linkedList.contains(nextTask.getTitle())) {
+/*                        if (!linkedList.contains(nextTask.getTitle())) {
                             linkedList.add(nextTask.getTitle());
-                        }
+                        }*/
                         //
 
                         return true;
@@ -175,6 +175,10 @@ public class Project {
             }
 
             if (discovered.contains(nextTask)) {
+
+                if (isLoop.contains(nextTask.getTitle()) && !includeMaintenance) {
+                    return true;
+                }
                 continue;
             }
 
