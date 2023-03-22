@@ -75,6 +75,11 @@ public class Program {
             tasks = createTasks8_2loop();
             schedule = Project.findSchedule(tasks, false);
 
+            tasks = createTasks8_3loop();
+            schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks8_3loop();
+            schedule = Project.findSchedule(tasks, false);
+
             tasks = createTasks2();
             schedule = Project.findSchedule(tasks, true);
             tasks = createTasks2();
@@ -460,9 +465,41 @@ public class Program {
         g.addPredecessor(f);
 
 
-
         return new Task[]{
                 h, g, f, e, d, c, b, a,
+
+        };
+    }
+
+    private static Task[] createTasks8_3loop() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 13);
+        Task j = new Task("J", 13);
+        Task k = new Task("K", 13);
+        Task l = new Task("L", 13);
+
+        b.addPredecessor(a);
+        h.addPredecessor(b);
+        c.addPredecessor(b, e, g, j, l);
+        d.addPredecessor(c);
+        e.addPredecessor(d);
+        f.addPredecessor(c);
+        g.addPredecessor(f);
+        j.addPredecessor(i);
+        i.addPredecessor(c);
+        l.addPredecessor(k);
+        k.addPredecessor(c);
+
+
+        return new Task[]{
+                l, k, j, i, h, g, f, e, d, c, b, a,
 
         };
     }

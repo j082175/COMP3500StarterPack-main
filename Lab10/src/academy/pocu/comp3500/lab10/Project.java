@@ -435,7 +435,10 @@ public class Project {
                                 backup.add(str);
                             }
                         }
-                        backup.add(new String(nextTask.getTitle()));
+                        if (!backup.contains(nextTask.getTitle())) {
+                            backup.add(new String(nextTask.getTitle()));
+                        }
+
                         linkedList.clear();
                         isCheck[0] = true;
                     }
