@@ -5,6 +5,8 @@ import academy.pocu.comp3500.lab10.project.Task;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Program {
@@ -66,17 +68,37 @@ public class Program {
             assert (schedule.indexOf("G") < schedule.indexOf("H"));
         }
 
-        {
-            Task[] tasks = createTasks2();
 
+        {
+            Task[] tasks = createTasks8_2loop();
             List<String> schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks8_2loop();
+            schedule = Project.findSchedule(tasks, false);
+
+            tasks = createTasks2();
+            schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks2();
+            schedule = Project.findSchedule(tasks, false);
 
             tasks = createTasks3();
             schedule = Project.findSchedule(tasks, true);
-
+            tasks = createTasks3();
+            schedule = Project.findSchedule(tasks, false);
 
             tasks = createTasks4();
             schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks4();
+            schedule = Project.findSchedule(tasks, false);
+
+            tasks = createTasks5();
+            schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks5();
+            schedule = Project.findSchedule(tasks, false);
+
+            tasks = createTasks6();
+            schedule = Project.findSchedule(tasks, true);
+            tasks = createTasks6();
+            schedule = Project.findSchedule(tasks, false);
 
             int a = 1;
         }
@@ -241,6 +263,207 @@ public class Program {
 
         return new Task[]{
                 z, y, x, w, v, u, t, s, r, q, p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a
+        };
+    }
+
+    private static Task[] createTasks5() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+        Task o = new Task("O", 6);
+        Task p = new Task("P", 6);
+        Task q = new Task("Q", 6);
+        Task r = new Task("R", 6);
+        Task s = new Task("S", 6);
+        Task t = new Task("T", 6);
+        Task u = new Task("U", 6);
+        Task v = new Task("V", 6);
+        Task w = new Task("W", 6);
+        Task x = new Task("X", 6);
+        Task y = new Task("Y", 6);
+        Task z = new Task("Z", 6);
+
+        Task c1 = new Task("C1", 6);
+        Task c2 = new Task("C2", 6);
+        Task b1 = new Task("B1", 6);
+        Task b2 = new Task("B2", 6);
+        Task a1 = new Task("A1", 6);
+        Task a2 = new Task("A2", 6);
+        Task a3 = new Task("A3", 6);
+        Task a4 = new Task("A4", 6);
+        Task a5 = new Task("A5", 6);
+
+        Task a11 = new Task("A11", 6);
+        Task a12 = new Task("A12", 6);
+        Task a13 = new Task("A13", 6);
+
+        h.addPredecessor(a);
+        i.addPredecessor(k, h);
+        j.addPredecessor(i);
+        k.addPredecessor(j);
+        l.addPredecessor(h);
+        g.addPredecessor(l, b, c);
+        d.addPredecessor(c, f);
+        e.addPredecessor(d);
+        f.addPredecessor(e);
+        m.addPredecessor(g);
+        q.addPredecessor(m);
+        r.addPredecessor(q);
+        s.addPredecessor(q);
+        p.addPredecessor(m);
+        o.addPredecessor(m);
+        n.addPredecessor(m);
+        t.addPredecessor(m, z);
+        u.addPredecessor(t);
+        v.addPredecessor(u);
+        x.addPredecessor(v);
+        y.addPredecessor(x);
+        z.addPredecessor(y);
+        w.addPredecessor(p);
+
+        a.addPredecessor(a1, a2, a3, a4, a5);
+        b.addPredecessor(b1, b2);
+        c.addPredecessor(c1, c2);
+        a11.addPredecessor(a3, a13);
+        a12.addPredecessor(a11);
+        a13.addPredecessor(a12);
+
+        return new Task[]{
+                 t, s, r, q, p,z, y, x, w,v, u, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a,
+                a1, a2, a3, a4, a5, a11, a12, a13, b1, b2, c1, c2
+        };
+    }
+
+    private static Task[] createTasks6() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task e1 = new Task("E1", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+        Task o = new Task("O", 6);
+        Task p = new Task("P", 6);
+        Task q = new Task("Q", 6);
+
+        b.addPredecessor(a);
+        c.addPredecessor(b, e1);
+        d.addPredecessor(c);
+        e1.addPredecessor(d);
+
+        e.addPredecessor(b);
+        f.addPredecessor(e, h);
+        g.addPredecessor(f);
+        h.addPredecessor(g);
+
+        i.addPredecessor(e);
+        j.addPredecessor(i, l);
+        k.addPredecessor(j);
+        l.addPredecessor(k);
+
+        m.addPredecessor(b, e, i);
+        q.addPredecessor(m);
+        n.addPredecessor(m, p);
+        p.addPredecessor(o);
+        o.addPredecessor(n);
+
+
+        return new Task[]{
+                q, p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a, e1
+
+        };
+    }
+
+    private static Task[] createTasks7noloop() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task e1 = new Task("E1", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 6);
+        Task k = new Task("K", 6);
+        Task l = new Task("L", 6);
+        Task m = new Task("M", 6);
+        Task n = new Task("N", 6);
+        Task o = new Task("O", 6);
+        Task p = new Task("P", 6);
+        Task q = new Task("Q", 6);
+
+        b.addPredecessor(a);
+        c.addPredecessor(b, e1);
+        d.addPredecessor(c);
+        e1.addPredecessor(d);
+
+        e.addPredecessor(b);
+        f.addPredecessor(e, h);
+        g.addPredecessor(f);
+        h.addPredecessor(g);
+
+        i.addPredecessor(e);
+        j.addPredecessor(i, l);
+        k.addPredecessor(j);
+        l.addPredecessor(k);
+
+        m.addPredecessor(b, e, i);
+        q.addPredecessor(m);
+        n.addPredecessor(m, p);
+        p.addPredecessor(o);
+        o.addPredecessor(n);
+
+
+        return new Task[]{
+                q, p, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a, e1
+
+        };
+    }
+
+    private static Task[] createTasks8_2loop() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+
+        b.addPredecessor(a);
+        h.addPredecessor(b);
+        c.addPredecessor(b, e, g);
+        d.addPredecessor(c);
+        e.addPredecessor(d);
+        f.addPredecessor(c);
+        g.addPredecessor(f);
+
+
+
+        return new Task[]{
+                h, g, f, e, d, c, b, a,
+
         };
     }
 }
