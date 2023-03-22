@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 
 public class Project {
@@ -15,7 +16,6 @@ public class Project {
 
         List<String> result = sortTopologically(tasks, includeMaintenance);
         return result;
-
 
 
         /////////////////////////////////////
@@ -34,8 +34,6 @@ public class Project {
         }
 
         return totalList;*/
-
-
 
 
 //////////////////////////////////////////////
@@ -421,11 +419,11 @@ public class Project {
 
         for (Task nextTask : task.getPredecessors()) {
 
-
             if (nextTask.getPredecessors().size() > 1) {
 
-
                 if (isLoop.contains(nextTask.getTitle())) {
+
+
                     if (!includeMaintenance) {
                         return true;
                     } else {
@@ -442,24 +440,33 @@ public class Project {
                         linkedList.clear();
                         isCheck[0] = true;
                     }
+
+
                 }
-                isLoop.add(nextTask.getTitle());
 
-/*                for (Task nextTask2 : nextTask.getPredecessors()) {
-                    if (overlap.contains(nextTask2)) {
-                        discovered.add(nextTask);
-                        if (!linkedList.contains(nextTask.getTitle())) {
-                            linkedList.add(nextTask.getTitle());
+                // 이 노드가 isLoop 인지 조건검사
+                Task pivot = nextTask;
+                boolean loopCheck = false;
+
+                for (Task t : pivot.getPredecessors()) {
+                    while (t.getPredecessors().size() != 0) {
+                        if (t.getPredecessors().size() > 1) {
+                            break;
                         }
+                        t = t.getPredecessors().get(0);
+                    }
 
-                        nextTask = nextTask2;
+                    if (t.getTitle().equals(pivot.getTitle())) {
+                        loopCheck = true;
+                        isLoop.add(nextTask.getTitle());
                         break;
                     }
-                }*/
-
-
-
+                }
             }
+
+
+
+
 
             if (overlap.contains(nextTask)) {
 
@@ -481,25 +488,6 @@ public class Project {
             }
 
             if (discovered.contains(nextTask)) {
-/*                if (discovered2.contains(nextTask)) {
-                    if (!includeMaintenance) {
-                        return true;
-                    } else {
-
-                        if (!linkedList.contains(nextTask.getTitle())) {
-                            linkedList.add(nextTask.getTitle());
-                        }
-
-                        for (int i = 0; i < linkedList.size(); i++) {
-                            String str = new String(linkedList.get(i));
-                            if (!backup.contains(str)) {
-                                backup.add(str);
-                            }
-                        }
-                        linkedList.clear();
-                        isCheck[0] = true;
-                    }
-                }*/
                 continue;
             }
 
@@ -512,7 +500,6 @@ public class Project {
                     isCheck,
                     backup,
                     discovered2);
-
 
         }
 
