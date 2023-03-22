@@ -88,6 +88,13 @@ public class Project {
                 if (isLoop.contains(nextTask.getTitle())) {
 
                     if (!includeMaintenance) {
+
+                        // 새로 추가한 코드 만약 루프노드도 포함해야한다면
+                        if (!linkedList.contains(nextTask.getTitle())) {
+                            linkedList.add(nextTask.getTitle());
+                        }
+                        //
+
                         return true;
                     } else {
                         for (int i = 0; i < linkedList.size(); i++) {
