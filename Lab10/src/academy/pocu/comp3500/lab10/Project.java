@@ -67,6 +67,19 @@ public class Project {
 
             }
 
+            if (!includeMaintenance) {
+
+                Task t = task;
+                while (t.getPredecessors().size() == 1) {
+                    t = t.getPredecessors().get(0);
+                }
+
+                if (!sortedList.contains(t.getTitle())) {
+                    sortedList.remove(task.getTitle());
+                }
+
+            }
+
             isCheck[0] = false;
             isLoop.clear();
             backup.clear();
@@ -175,10 +188,6 @@ public class Project {
             }
 
             if (discovered.contains(nextTask)) {
-
-                if (isLoop.contains(nextTask.getTitle()) && !includeMaintenance) {
-                    return true;
-                }
                 continue;
             }
 

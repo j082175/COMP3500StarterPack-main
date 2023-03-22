@@ -584,6 +584,9 @@ public class Program {
         Task b4 = new Task("B4", 13);
         Task b5 = new Task("B5", 13);
 
+        Task h1 = new Task("H1", 13);
+        Task r = new Task("R", 13);
+
         b.addPredecessor(a, b2, b5);
         h.addPredecessor(b);
         c.addPredecessor(b, e, g, j, l);
@@ -612,11 +615,15 @@ public class Program {
         b4.addPredecessor(b3);
         b5.addPredecessor(b4);
 
+        h1.addPredecessor(h);
+        r.addPredecessor(b);
+
         return new Task[]{
                 g1, e1, k1, j1,
                 l, k, j, i, h, g, f, e, d, c, b, a,
                n, m, o, p, q,
-                b0, b1, b2, b3, b4 ,b5
+                b0, b1, b2, b3, b4 ,b5,
+                h1, r
 
         };
     }
