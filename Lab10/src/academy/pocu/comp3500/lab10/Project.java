@@ -93,6 +93,51 @@ public class Project {
         discovered.add(task);
         boolean check = false;
 
+        // 루프 돌기전 자기자신이 loop 인지를 check
+        if (task.getPredecessors().size() > 1) {
+            if (!isLoop.contains(task.getTitle())) {
+                // 이 노드가 isLoop 인지 조건검사
+                Task pivot = task;
+                boolean c = false;
+
+                for (Task t : pivot.getPredecessors()) {
+                    while (t.getPredecessors().size() != 0) {
+
+                        if (overlap.contains(t) && includeMaintenance) {
+                            c = true;
+                            overlap.clear();
+                            for (int i = 0; i < linkedList.size(); i++) {
+                                String str = new String(linkedList.get(i));
+                                if (!backup.contains(str)) {
+                                    backup.add(str);
+                                }
+                            }
+
+                            linkedList.clear();
+                            isCheck[0] = true;
+                        }
+
+                        if (t.getPredecessors().size() > 1) {
+                            break;
+                        }
+
+                        if (c) {
+                            discovered.remove(t);
+                        }
+
+                        t = t.getPredecessors().get(0);
+                    }
+
+                    c = false;
+
+                    if (t.getTitle().equals(pivot.getTitle())) {
+                        isLoop.add(task.getTitle());
+                    }
+                }
+            }
+        }
+
+
         for (Task nextTask : task.getPredecessors()) {
 
             if (nextTask.getPredecessors().size() > 1) {
@@ -139,8 +184,8 @@ public class Project {
                                     if (!backup.contains(str)) {
                                         backup.add(str);
                                     }
-
                                 }
+
                                 linkedList.clear();
                                 isCheck[0] = true;
                             }

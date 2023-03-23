@@ -111,6 +111,11 @@ public class Program {
             tasks = createTasks8_4loop();
             schedule = Project.findSchedule(tasks, false);
 
+            tasks = createTaskscycleErrorloop();
+            schedule = Project.findSchedule(tasks, true);
+            tasks = createTaskscycleErrorloop();
+            schedule = Project.findSchedule(tasks, false);
+
             int a = 1;
         }
     }
@@ -625,6 +630,42 @@ public class Program {
                 b0, b1, b2, b3, b4 ,b5,
                 h1, r
 
+        };
+    }
+
+    private static Task[] createTaskscycleErrorloop() {
+        Task a1 = new Task("1", 12);
+        Task a2 = new Task("2", 7);
+        Task a3 = new Task("3", 10);
+        Task a4 = new Task("4", 9);
+        Task a5 = new Task("5", 8);
+        Task a6 = new Task("6", 11);
+        Task a7 = new Task("7", 14);
+        Task a8 = new Task("8", 13);
+        Task a9 = new Task("9", 13);
+        Task a10 = new Task("10", 13);
+        Task a11 = new Task("11", 13);
+        Task a12 = new Task("12", 13);
+        Task a13 = new Task("13", 13);
+        Task a14 = new Task("14", 13);
+
+        a2.addPredecessor(a1);
+        a3.addPredecessor(a2);
+        a5.addPredecessor(a1);
+        a6.addPredecessor(a5, a2);
+        a4.addPredecessor(a6, a3);
+        a7.addPredecessor(a4);
+        a8.addPredecessor(a7, a9);
+        a9.addPredecessor(a4);
+        a10.addPredecessor(a4, a12, a14);
+        a11.addPredecessor(a10);
+        a12.addPredecessor(a11);
+        a13.addPredecessor(a10);
+        a14.addPredecessor(a13);
+
+
+        return new Task[]{
+                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14
         };
     }
 
