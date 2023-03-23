@@ -3,13 +3,19 @@ package academy.pocu.comp3500.lab10.app;
 import academy.pocu.comp3500.lab10.Project;
 import academy.pocu.comp3500.lab10.project.Task;
 import org.junit.jupiter.api.Test;
-
-
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Program {
+
+    private static void shiftOnce(Task[] tasks) {
+        Task right = tasks[tasks.length - 1];
+
+        for (int i = 1; i < tasks.length; i++) {
+            tasks[tasks.length -i] = tasks[tasks.length - 1 - i];
+        }
+
+        tasks[0] = right;
+    }
 
     public static void main(String[] args) {
 
@@ -73,13 +79,94 @@ public class Program {
 
             Task[] tasks = createTasks8_2loop();
             List<String> schedule = Project.findSchedule(tasks, true);
-            tasks = createTasks8_2loop();
-            schedule = Project.findSchedule(tasks, false);
+            for (int i = 0; i < tasks.length; i++) {
+                tasks = createTasks8_2loop();
+                schedule = Project.findSchedule(tasks, true);
+                assert (schedule.size() == 9);
+                assert (schedule.get(0).equals("A"));
+                assert (schedule.get(1).equals("B"));
+                assert (schedule.indexOf("B") < schedule.indexOf("H"));
+                assert (schedule.indexOf("B") < schedule.indexOf("C"));
+                assert (schedule.indexOf("C") < schedule.indexOf("D"));
+                assert (schedule.indexOf("D") < schedule.indexOf("E"));
+                assert (schedule.indexOf("C") < schedule.indexOf("F"));
+                assert (schedule.indexOf("F") < schedule.indexOf("I"));
+                assert (schedule.indexOf("I") < schedule.indexOf("G"));
+
+                tasks = createTasks8_2loop();
+                schedule = Project.findSchedule(tasks, false);
+                assert (schedule.size() == 3);
+                assert (schedule.get(0).equals("A"));
+                assert (schedule.get(1).equals("B"));
+                assert (schedule.get(2).equals("H"));
+                shiftOnce(tasks);
+            }
+
 
             tasks = createTasks8_3loop();
             schedule = Project.findSchedule(tasks, true);
-            tasks = createTasks8_3loop();
-            schedule = Project.findSchedule(tasks, false);
+            for (int i = 0; i < tasks.length; i++) {
+                tasks = createTasks8_3loop();
+                schedule = Project.findSchedule(tasks, true);
+                assert (schedule.size() == 31);
+                assert (schedule.indexOf("A") < schedule.indexOf("B"));
+                assert (schedule.indexOf("A") < schedule.indexOf("R"));
+                assert (schedule.indexOf("B") < schedule.indexOf("C"));
+                assert (schedule.indexOf("C") < schedule.indexOf("G"));
+                assert (schedule.indexOf("F") < schedule.indexOf("G"));
+                assert (schedule.indexOf("J") < schedule.indexOf("G"));
+                assert (schedule.indexOf("E") < schedule.indexOf("F"));
+                assert (schedule.indexOf("E") < schedule.indexOf("J"));
+                assert (schedule.indexOf("D") < schedule.indexOf("E"));
+                assert (schedule.indexOf("I") < schedule.indexOf("E"));
+                assert (schedule.indexOf("S") < schedule.indexOf("E"));
+                assert (schedule.indexOf("H") < schedule.indexOf("I"));
+                assert (schedule.indexOf("H") < schedule.indexOf("S"));
+                assert (schedule.indexOf("G") < schedule.indexOf("K"));
+                assert (schedule.indexOf("K") < schedule.indexOf("L"));
+                assert (schedule.indexOf("L") < schedule.indexOf("M"));
+                assert (schedule.indexOf("M") < schedule.indexOf("N"));
+                assert (schedule.indexOf("G") < schedule.indexOf("O"));
+                assert (schedule.indexOf("G") < schedule.indexOf("P"));
+                assert (schedule.indexOf("G") < schedule.indexOf("Q"));
+                assert (schedule.indexOf("Q") < schedule.indexOf("A1"));
+                assert (schedule.indexOf("A1") < schedule.indexOf("B1"));
+                assert (schedule.indexOf("B1") < schedule.indexOf("H1"));
+                assert (schedule.indexOf("B1") < schedule.indexOf("C1"));
+                assert (schedule.indexOf("C1") < schedule.indexOf("F1"));
+                assert (schedule.indexOf("F1") < schedule.indexOf("G1"));
+                assert (schedule.indexOf("C1") < schedule.indexOf("D1"));
+                assert (schedule.indexOf("D1") < schedule.indexOf("E1"));
+                assert (schedule.indexOf("C1") < schedule.indexOf("I1"));
+                assert (schedule.indexOf("I1") < schedule.indexOf("J1"));
+                assert (schedule.indexOf("C1") < schedule.indexOf("K1"));
+                assert (schedule.indexOf("K1") < schedule.indexOf("L1"));
+
+                tasks = createTasks8_3loop();
+                schedule = Project.findSchedule(tasks, false);
+                assert (schedule.size() == 18);
+                assert (schedule.indexOf("A") < schedule.indexOf("B"));
+                assert (schedule.indexOf("A") < schedule.indexOf("R"));
+                assert (schedule.indexOf("B") < schedule.indexOf("C"));
+                assert (schedule.indexOf("C") < schedule.indexOf("G"));
+                assert (schedule.indexOf("F") < schedule.indexOf("G"));
+                assert (schedule.indexOf("J") < schedule.indexOf("G"));
+                assert (schedule.indexOf("E") < schedule.indexOf("F"));
+                assert (schedule.indexOf("E") < schedule.indexOf("J"));
+                assert (schedule.indexOf("D") < schedule.indexOf("E"));
+                assert (schedule.indexOf("I") < schedule.indexOf("E"));
+                assert (schedule.indexOf("S") < schedule.indexOf("E"));
+                assert (schedule.indexOf("H") < schedule.indexOf("I"));
+                assert (schedule.indexOf("H") < schedule.indexOf("S"));
+                assert (schedule.indexOf("G") < schedule.indexOf("O"));
+                assert (schedule.indexOf("G") < schedule.indexOf("P"));
+                assert (schedule.indexOf("G") < schedule.indexOf("Q"));
+                assert (schedule.indexOf("Q") < schedule.indexOf("A1"));
+                assert (schedule.indexOf("A1") < schedule.indexOf("B1"));
+                assert (schedule.indexOf("B1") < schedule.indexOf("H1"));
+                shiftOnce(tasks);
+            }
+
 
             tasks = createTasks2();
             schedule = Project.findSchedule(tasks, true);
@@ -108,13 +195,111 @@ public class Program {
 
             tasks = createTasks8_4loop();
             schedule = Project.findSchedule(tasks, true);
-            tasks = createTasks8_4loop();
-            schedule = Project.findSchedule(tasks, false);
+            for (int i = 0; i < tasks.length; i++) {
+                tasks = createTasks8_4loop();
+                schedule = Project.findSchedule(tasks, true);
+                assert (schedule.size() == 29);
+                assert (schedule.indexOf("O") < schedule.indexOf("N"));
+                assert (schedule.indexOf("P") < schedule.indexOf("N"));
+                assert (schedule.indexOf("Q") < schedule.indexOf("N"));
+                assert (schedule.indexOf("N") < schedule.indexOf("A"));
+                assert (schedule.indexOf("M") < schedule.indexOf("A"));
+                assert (schedule.indexOf("A") < schedule.indexOf("B"));
+                assert (schedule.indexOf("B") < schedule.indexOf("B0"));
+                assert (schedule.indexOf("B0") < schedule.indexOf("B1"));
+                assert (schedule.indexOf("B1") < schedule.indexOf("B2"));
+                assert (schedule.indexOf("B") < schedule.indexOf("B3"));
+                assert (schedule.indexOf("B3") < schedule.indexOf("B4"));
+                assert (schedule.indexOf("B4") < schedule.indexOf("B5"));
+                assert (schedule.indexOf("B") < schedule.indexOf("H"));
+                assert (schedule.indexOf("H") < schedule.indexOf("H1"));
+                assert (schedule.indexOf("B") < schedule.indexOf("R"));
+                assert (schedule.indexOf("B") < schedule.indexOf("C"));
+                assert (schedule.indexOf("C") < schedule.indexOf("F"));
+                assert (schedule.indexOf("F") < schedule.indexOf("G1"));
+                assert (schedule.indexOf("G1") < schedule.indexOf("G"));
+                assert (schedule.indexOf("C") < schedule.indexOf("D"));
+                assert (schedule.indexOf("D") < schedule.indexOf("E1"));
+                assert (schedule.indexOf("E1") < schedule.indexOf("E"));
+                assert (schedule.indexOf("C") < schedule.indexOf("I"));
+                assert (schedule.indexOf("I") < schedule.indexOf("J1"));
+                assert (schedule.indexOf("J1") < schedule.indexOf("J"));
+                assert (schedule.indexOf("C") < schedule.indexOf("K"));
+                assert (schedule.indexOf("K") < schedule.indexOf("K1"));
+                assert (schedule.indexOf("K1") < schedule.indexOf("L"));
+
+                tasks = createTasks8_4loop();
+                schedule = Project.findSchedule(tasks, false);
+                assert (schedule.size() == 6);
+                assert (schedule.indexOf("O") < schedule.indexOf("N"));
+                assert (schedule.indexOf("P") < schedule.indexOf("N"));
+                assert (schedule.indexOf("Q") < schedule.indexOf("N"));
+                assert (schedule.indexOf("N") < schedule.indexOf("A"));
+                assert (schedule.indexOf("M") < schedule.indexOf("A"));
+
+                shiftOnce(tasks);
+            }
+
 
             tasks = createTaskscycleErrorloop();
-            schedule = Project.findSchedule(tasks, true);
-            tasks = createTaskscycleErrorloop();
             schedule = Project.findSchedule(tasks, false);
+            for (int i = 0; i < tasks.length; i++) {
+                tasks = createTaskscycleErrorloop();
+                schedule = Project.findSchedule(tasks, true);
+                assert (schedule.size() == 14);
+                assert (schedule.indexOf("1") < schedule.indexOf("2"));
+                assert (schedule.indexOf("2") < schedule.indexOf("3"));
+                assert (schedule.indexOf("1") < schedule.indexOf("5"));
+                assert (schedule.indexOf("5") < schedule.indexOf("6"));
+                assert (schedule.indexOf("2") < schedule.indexOf("6"));
+                assert (schedule.indexOf("3") < schedule.indexOf("4"));
+                assert (schedule.indexOf("6") < schedule.indexOf("4"));
+                assert (schedule.indexOf("4") < schedule.indexOf("7"));
+                assert (schedule.indexOf("4") < schedule.indexOf("9"));
+                assert (schedule.indexOf("7") < schedule.indexOf("8"));
+                assert (schedule.indexOf("9") < schedule.indexOf("8"));
+                assert (schedule.indexOf("4") < schedule.indexOf("10"));
+                assert (schedule.indexOf("10") < schedule.indexOf("11"));
+                assert (schedule.indexOf("11") < schedule.indexOf("12"));
+                assert (schedule.indexOf("10") < schedule.indexOf("13"));
+                assert (schedule.indexOf("13") < schedule.indexOf("14"));
+
+                tasks = createTaskscycleErrorloop();
+                schedule = Project.findSchedule(tasks, false);
+                assert (schedule.size() == 9);
+                assert (schedule.indexOf("1") < schedule.indexOf("2"));
+                assert (schedule.indexOf("2") < schedule.indexOf("3"));
+                assert (schedule.indexOf("1") < schedule.indexOf("5"));
+                assert (schedule.indexOf("5") < schedule.indexOf("6"));
+                assert (schedule.indexOf("2") < schedule.indexOf("6"));
+                assert (schedule.indexOf("3") < schedule.indexOf("4"));
+                assert (schedule.indexOf("6") < schedule.indexOf("4"));
+                assert (schedule.indexOf("4") < schedule.indexOf("7"));
+                assert (schedule.indexOf("4") < schedule.indexOf("9"));
+                assert (schedule.indexOf("7") < schedule.indexOf("8"));
+                assert (schedule.indexOf("9") < schedule.indexOf("8"));
+                shiftOnce(tasks);
+            }
+
+
+            tasks = createTasks22();
+            schedule = Project.findSchedule(tasks, true);
+
+            assert (schedule.size() == 11);
+            assert (schedule.get(0).equals("A"));
+            assert (schedule.get(1).equals("B"));
+            assert (schedule.get(2).equals("C"));
+            assert (schedule.indexOf("C") < schedule.indexOf("E"));
+            assert (schedule.indexOf("E") < schedule.indexOf("F"));
+            assert (schedule.indexOf("F") < schedule.indexOf("I"));
+
+            assert (schedule.indexOf("C") < schedule.indexOf("D"));
+            assert (schedule.indexOf("D") < schedule.indexOf("G"));
+            assert (schedule.indexOf("D") < schedule.indexOf("J"));
+            assert (schedule.indexOf("G") < schedule.indexOf("H"));
+            assert (schedule.indexOf("J") < schedule.indexOf("K"));
+            assert (schedule.indexOf("K") < schedule.indexOf("H"));
+
 
             int a = 1;
         }
@@ -663,9 +848,38 @@ public class Program {
         a13.addPredecessor(a10);
         a14.addPredecessor(a13);
 
+        return new Task[]{
+                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14,
+        };
+    }
+
+    private static Task[] createTasks22() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 14);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 6);
+        Task j = new Task("J", 10);
+        Task k = new Task("K", 10);
+
+        i.addPredecessor(f);
+        f.addPredecessor(e);
+        e.addPredecessor(b, c);
+        d.addPredecessor(c, h);
+        c.addPredecessor(b);
+        b.addPredecessor(a);
+        h.addPredecessor(g, k);
+        g.addPredecessor(d);
+        j.addPredecessor(d);
+        k.addPredecessor(j);
+
 
         return new Task[]{
-                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14
+                a, b, c, d, e, f, g, h, i, j, k
         };
     }
 

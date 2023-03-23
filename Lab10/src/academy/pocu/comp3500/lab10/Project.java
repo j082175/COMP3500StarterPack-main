@@ -118,7 +118,16 @@ public class Project {
                         }
 
                         if (t.getPredecessors().size() > 1) {
-                            break;
+                            for (Task t2 : t.getPredecessors()) {
+                                while (t2.getPredecessors().size() != 0) {
+                                    t2 = t2.getPredecessors().get(0);
+                                }
+
+                                if (t2.getTitle().equals(pivot.getTitle())) {
+                                    isLoop.add(task.getTitle());
+                                    break;
+                                }
+                            }
                         }
 
                         if (c) {
