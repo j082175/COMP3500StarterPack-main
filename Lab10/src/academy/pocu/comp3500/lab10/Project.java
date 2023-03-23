@@ -120,6 +120,9 @@ public class Project {
                         if (t.getPredecessors().size() > 1) {
                             for (Task t2 : t.getPredecessors()) {
                                 while (t2.getPredecessors().size() != 0) {
+                                    if (overlap.contains(t2) && includeMaintenance) {
+                                        break;
+                                    }
                                     t2 = t2.getPredecessors().get(0);
                                 }
 
@@ -128,6 +131,7 @@ public class Project {
                                     break;
                                 }
                             }
+                            break;
                         }
 
                         if (c) {

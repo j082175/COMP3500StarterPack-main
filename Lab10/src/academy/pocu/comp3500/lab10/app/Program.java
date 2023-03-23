@@ -866,6 +866,7 @@ public class Program {
         Task j = new Task("J", 10);
         Task k = new Task("K", 10);
 
+
         i.addPredecessor(f);
         f.addPredecessor(e);
         e.addPredecessor(b, c);
@@ -876,7 +877,6 @@ public class Program {
         g.addPredecessor(d);
         j.addPredecessor(d);
         k.addPredecessor(j);
-
 
         return new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k
