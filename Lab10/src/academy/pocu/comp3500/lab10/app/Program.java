@@ -284,21 +284,26 @@ public class Program {
 
             tasks = createTasks22();
             schedule = Project.findSchedule(tasks, true);
+            for (int i = 0; i < tasks.length; i++) {
+                tasks = createTasks22();
+                schedule = Project.findSchedule(tasks, true);
+                assert (schedule.size() == 11);
+                assert (schedule.get(0).equals("A"));
+                assert (schedule.get(1).equals("B"));
+                assert (schedule.get(2).equals("C"));
+                assert (schedule.indexOf("C") < schedule.indexOf("E"));
+                assert (schedule.indexOf("E") < schedule.indexOf("F"));
+                assert (schedule.indexOf("F") < schedule.indexOf("I"));
 
-            assert (schedule.size() == 11);
-            assert (schedule.get(0).equals("A"));
-            assert (schedule.get(1).equals("B"));
-            assert (schedule.get(2).equals("C"));
-            assert (schedule.indexOf("C") < schedule.indexOf("E"));
-            assert (schedule.indexOf("E") < schedule.indexOf("F"));
-            assert (schedule.indexOf("F") < schedule.indexOf("I"));
+                assert (schedule.indexOf("C") < schedule.indexOf("D"));
+                assert (schedule.indexOf("D") < schedule.indexOf("G"));
+                assert (schedule.indexOf("D") < schedule.indexOf("J"));
+                assert (schedule.indexOf("G") < schedule.indexOf("H"));
+                assert (schedule.indexOf("J") < schedule.indexOf("K"));
+                assert (schedule.indexOf("K") < schedule.indexOf("H"));
+                shiftOnce(tasks);
+            }
 
-            assert (schedule.indexOf("C") < schedule.indexOf("D"));
-            assert (schedule.indexOf("D") < schedule.indexOf("G"));
-            assert (schedule.indexOf("D") < schedule.indexOf("J"));
-            assert (schedule.indexOf("G") < schedule.indexOf("H"));
-            assert (schedule.indexOf("J") < schedule.indexOf("K"));
-            assert (schedule.indexOf("K") < schedule.indexOf("H"));
 
 
             int a = 1;
@@ -664,7 +669,7 @@ public class Program {
 
 
         return new Task[]{
-                h, g, f, e, d, c, b, a,
+                i, h, g, f, e, d, c, b, a,
 
         };
     }

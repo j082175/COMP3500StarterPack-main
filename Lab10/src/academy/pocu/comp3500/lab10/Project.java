@@ -2,15 +2,92 @@ package academy.pocu.comp3500.lab10;
 
 import academy.pocu.comp3500.lab10.project.Task;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
 
 public class Project {
     public static List<String> findSchedule(final Task[] tasks, final boolean includeMaintenance) {
 
-        List<String> result = sortTopologically(tasks, includeMaintenance);
-        return result;
+        // create graph using task dependencies
+        Map<Task, List<Task>> graph = new HashMap<>();
+        Map<Task, Integer> inDegrees = new HashMap<>();
+        for (Task task : tasks) {
+            inDegrees.put(task, 0);
+            graph.put(task, new ArrayList<>());
+        }
+        for (Task task : tasks) {
+            for (Task predecessor : task.getPredecessors()) {
+                graph.get(predecessor).add(task);
+                inDegrees.put(task, inDegrees.get(task) + 1);
+            }
+        }
+
+        HashSet<Task> discovered = new HashSet<>();
+        List<String> list = new LinkedList<>();
+
+        for (Task task : tasks) {
+            if (inDegrees.get(task) == 0) {
+                List<String> result = searchDepthFirst(task, graph, discovered, includeMaintenance);
+                list.addAll(0, result);
+            }
+        }
+
+        return list;
+
+
+
+
+
+
+        /*// perform topological sort
+        List<String> schedule = new ArrayList<>();
+        Queue<String> queue = new LinkedList<>();
+        for (String title : inDegrees.keySet()) {
+            if (inDegrees.get(title) == 0 && (includeMaintenance || !isInCycle(graph, title))) {
+                queue.offer(title);
+            }
+        }
+
+        HashSet<String> discovered = new HashSet<>();
+
+        while (!queue.isEmpty()) {
+            String title = queue.poll();
+            discovered.add(title);
+            schedule.add(title);
+            for (String nextTitle : graph.get(title)) {
+                inDegrees.put(nextTitle, inDegrees.get(nextTitle) - 1);
+*//*                if (inDegrees.get(nextTitle) == 0 && (includeMaintenance || !isInCycle(graph, nextTitle))) {
+                    queue.offer(nextTitle);
+                }*//*
+
+                if (includeMaintenance && discovered.contains(nextTitle)) {
+                    continue;
+                }
+
+                if (includeMaintenance) {
+                    queue.offer(nextTitle);
+
+                } else if (inDegrees.get(nextTitle) == 0 && (includeMaintenance || !isInCycle(graph, nextTitle))) {
+                    queue.offer(nextTitle);
+                }
+
+                discovered.add(nextTitle);
+            }
+        }
+
+        return schedule;*/
+
+
+        //////////////////////////
+/*        List<String> result = sortTopologically(tasks, includeMaintenance);
+        return result;*/
     }
 
     private static LinkedList<String> sortTopologically(Task[] tasks, boolean includeMaintenance) {
@@ -273,5 +350,91 @@ public class Project {
         }
 
         return false;
+    }
+
+    ////////////////
+
+    private static boolean isInCycle(Map<Task, List<Task>> graph, Task title) {
+        Set<Task> visited = new HashSet<>();
+        Stack<Task> stack = new Stack<>();
+        stack.push(title);
+        while (!stack.isEmpty()) {
+            Task currTitle = stack.pop();
+            if (visited.contains(currTitle)) {
+                return true;
+            }
+            visited.add(currTitle);
+            for (Task nextTitle : graph.get(currTitle)) {
+                if (!visited.contains(nextTitle)) { // only add if not already visited
+                    stack.push(nextTitle);
+                } else if (nextTitle.equals(title)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static List<String> searchDepthFirst(Task node, Map<Task, List<Task>> graph, HashSet<Task> discovered, boolean includeMaintenance) {
+        Queue<Task> stack = new LinkedList<>();
+        List<String> list = new LinkedList<>();
+
+        stack.add(node);
+        discovered.add(node);
+
+        while (!stack.isEmpty()) {
+            Task next = stack.poll();
+
+            if (!includeMaintenance) {
+                if (isInCycle(graph, next)) {
+                    continue;
+                }
+            }
+
+            // System.out.println(next);
+            if (isInCycle(graph, next) && next.getPredecessors().size() > 1) {
+                boolean check = false;
+                for (int i = 0; i < next.getPredecessors().size(); i++) {
+                    if (list.contains(next.getPredecessors().get(i).getTitle())) {
+                        check = true;
+                    } else {
+                        check = false;
+                        break;
+                    }
+                }
+
+                if (check) {
+                    list.add(next.getTitle());
+                }
+
+            } else {
+                list.add(next.getTitle());
+            }
+
+            for (Task neighbor : graph.get(next)) {
+
+/*                if (!discovered.contains(neighbor)) {
+                    if (graph.get(next).size() > 1) {
+                        for (int i = 0; i < graph.get(neighbor).size(); i++) {
+                            Task t = graph.get(neighbor).get(i);
+                            if (graph.get(next).contains(t)) {
+                                if (!discovered.contains(t)) {
+                                    stack.push(t);
+                                    discovered.add(t);
+                                }
+                            }
+                        }
+                    }
+                }*/
+
+
+                if (!discovered.contains(neighbor)) {
+                    stack.add(neighbor);
+                    discovered.add(neighbor);
+                }
+            }
+        }
+
+        return list;
     }
 }
