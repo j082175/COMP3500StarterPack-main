@@ -35,7 +35,7 @@ public class Project {
         for (Task task : tasks) {
             if (inDegrees.get(task) == 0) {
                 List<String> result = searchDepthFirst(task, graph, discovered, includeMaintenance);
-                list.addAll(0, result);
+                list.addAll(result);
             }
         }
 
@@ -360,6 +360,7 @@ public class Project {
         stack.push(title);
         while (!stack.isEmpty()) {
             Task currTitle = stack.pop();
+
             if (visited.contains(currTitle)) {
                 return true;
             }
@@ -372,27 +373,24 @@ public class Project {
                 }
             }
         }
+
         return false;
     }
 
     public static List<String> searchDepthFirst(Task node, Map<Task, List<Task>> graph, HashSet<Task> discovered, boolean includeMaintenance) {
-        Queue<Task> stack = new LinkedList<>();
+        Stack<Task> stack = new Stack<>();
         List<String> list = new LinkedList<>();
+        Queue<Task> predecessorCheck = new LinkedList<>();
 
-        stack.add(node);
+
+        stack.push(node);
         discovered.add(node);
 
-        while (!stack.isEmpty()) {
-            Task next = stack.poll();
-
-            if (!includeMaintenance) {
-                if (isInCycle(graph, next)) {
-                    continue;
-                }
-            }
+        while (!stack.empty()) {
+            Task next = stack.pop();
 
             // System.out.println(next);
-            if (isInCycle(graph, next) && next.getPredecessors().size() > 1) {
+/*            if (isInCycle(graph, next) && next.getPredecessors().size() > 1) {
                 boolean check = false;
                 for (int i = 0; i < next.getPredecessors().size(); i++) {
                     if (list.contains(next.getPredecessors().get(i).getTitle())) {
@@ -408,31 +406,44 @@ public class Project {
                 }
 
             } else {
-                list.add(next.getTitle());
-            }
+
+            }*/
+
+            list.add(next.getTitle());
 
             for (Task neighbor : graph.get(next)) {
+                boolean isCheck = false;
+                boolean isCycle = false;
 
-/*                if (!discovered.contains(neighbor)) {
-                    if (graph.get(next).size() > 1) {
-                        for (int i = 0; i < graph.get(neighbor).size(); i++) {
-                            Task t = graph.get(neighbor).get(i);
-                            if (graph.get(next).contains(t)) {
-                                if (!discovered.contains(t)) {
-                                    stack.push(t);
-                                    discovered.add(t);
-                                }
+                if (isInCycle(graph, neighbor)) {
+                    isCycle = true;
+                    if (!includeMaintenance) {
+                        continue;
+                    }
+                }
+
+                if (!discovered.contains(neighbor)) {
+                    if (neighbor.getPredecessors().size() > 1 && !isCycle) {
+                        for (int i = 0; i < neighbor.getPredecessors().size(); i++) {
+                            if (stack.contains(neighbor.getPredecessors().get(i)) || !discovered.contains(neighbor.getPredecessors().get(i))) {
+                                isCheck = true;
+                                break;
                             }
                         }
                     }
-                }*/
 
+                    if (isCheck) {
+                        continue;
+                    }
 
-                if (!discovered.contains(neighbor)) {
-                    stack.add(neighbor);
+                    stack.push(neighbor);
                     discovered.add(neighbor);
                 }
             }
+
+
+
+
         }
 
         return list;
