@@ -26,11 +26,11 @@ public class Program {
     @Test
     public void test1() {
 
-/*        {
+        {
             Task[] tasks = createTasksTakim();
             List<String> schedule = Project.findSchedule(tasks, true);
             int a = 1;
-        }*/
+        }
 
         {
             Task[] tasks = createTasksSample();
