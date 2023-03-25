@@ -3,6 +3,7 @@ package academy.pocu.comp3500.lab10.app;
 import academy.pocu.comp3500.lab10.Project;
 import academy.pocu.comp3500.lab10.project.Task;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 public class Program {
@@ -11,7 +12,7 @@ public class Program {
         Task right = tasks[tasks.length - 1];
 
         for (int i = 1; i < tasks.length; i++) {
-            tasks[tasks.length -i] = tasks[tasks.length - 1 - i];
+            tasks[tasks.length - i] = tasks[tasks.length - 1 - i];
         }
 
         tasks[0] = right;
@@ -24,6 +25,25 @@ public class Program {
 
     @Test
     public void test1() {
+
+/*        {
+            Task[] tasks = createTasksTakim();
+            List<String> schedule = Project.findSchedule(tasks, true);
+            int a = 1;
+        }*/
+
+        {
+            Task[] tasks = createTasksSample();
+            List<String> schedule = Project.findSchedule(tasks, true);
+            int a = 1;
+        }
+
+        {
+            Task[] tasks = createTasks23();
+            List<String> schedule = Project.findSchedule(tasks, true);
+            int a = 1;
+        }
+
         {
             Task a = new Task("A", 15);
             Task b = new Task("B", 12);
@@ -36,10 +56,10 @@ public class Program {
 
             List<String> schedule = Project.findSchedule(tasks, false);
 
-/*            assert (schedule.size() == 3);
+            assert (schedule.size() == 3);
             assert (schedule.get(0).equals("A"));
             assert (schedule.get(1).equals("B"));
-            assert (schedule.get(2).equals("C"));*/
+            assert (schedule.get(2).equals("C"));
         }
 
         {
@@ -47,13 +67,13 @@ public class Program {
 
             List<String> schedule = Project.findSchedule(tasks, false);
 
-/*            assert (schedule.size() == 6);
+            assert (schedule.size() == 6);
             assert (schedule.get(0).equals("A"));
             assert (schedule.get(1).equals("B"));
             assert (schedule.get(2).equals("C"));
             assert (schedule.get(3).equals("E"));
             assert (schedule.get(4).equals("F"));
-            assert (schedule.get(5).equals("I"));*/
+            assert (schedule.get(5).equals("I"));
         }
 
         {
@@ -305,6 +325,8 @@ public class Program {
             }
 
 
+            tasks = createTasks23();
+            schedule = Project.findSchedule(tasks, true);
 
             int a = 1;
         }
@@ -546,7 +568,7 @@ public class Program {
         a13.addPredecessor(a12);
 
         return new Task[]{
-                 t, s, r, q, p,z, y, x, w,v, u, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a,
+                t, s, r, q, p, z, y, x, w, v, u, o, n, m, l, k, j, i, h, g, f, e, d, c, b, a,
                 a1, a2, a3, a4, a5, a11, a12, a13, b1, b2, c1, c2
         };
     }
@@ -816,8 +838,8 @@ public class Program {
         return new Task[]{
                 g1, e1, k1, j1,
                 l, k, j, i, h, g, f, e, d, c, b, a,
-               n, m, o, p, q,
-                b0, b1, b2, b3, b4 ,b5,
+                n, m, o, p, q,
+                b0, b1, b2, b3, b4, b5,
                 h1, r
 
         };
@@ -885,6 +907,98 @@ public class Program {
 
         return new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k
+        };
+    }
+
+    private static Task[] createTasks23() {
+        Task a1 = new Task("1", 12);
+        Task a2 = new Task("2", 7);
+        Task a3 = new Task("3", 10);
+        Task a4 = new Task("4", 9);
+        Task a5 = new Task("5", 8);
+        Task a6 = new Task("6", 11);
+        Task a7 = new Task("7", 14);
+        Task a8 = new Task("8", 13);
+        Task a9 = new Task("9", 6);
+        Task a10 = new Task("10", 10);
+        Task a11 = new Task("11", 10);
+        Task a12 = new Task("12", 10);
+        Task a13 = new Task("13", 10);
+        Task a14 = new Task("14", 10);
+        Task a15 = new Task("15", 10);
+        Task a16 = new Task("16", 10);
+        Task a17 = new Task("17", 10);
+        Task a18 = new Task("18", 10);
+
+
+        a2.addPredecessor(a1);
+        a3.addPredecessor(a2);
+        a4.addPredecessor(a3, a16);
+        a5.addPredecessor(a4);
+        a6.addPredecessor(a5);
+        a7.addPredecessor(a5);
+        a8.addPredecessor(a6);
+        a9.addPredecessor(a7, a8);
+        a10.addPredecessor(a9);
+        a11.addPredecessor(a10, a12);
+        a12.addPredecessor(a4);
+        a13.addPredecessor(a11);
+        a14.addPredecessor(a13);
+        a15.addPredecessor(a13);
+        a16.addPredecessor(a14, a15, a18);
+        a17.addPredecessor(a15);
+        a18.addPredecessor(a17);
+
+        return new Task[]{
+                a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15, a16, a17, a18
+        };
+    }
+
+    private static Task[] createTasksSample() {
+        Task a0 = new Task("0", 12);
+        Task a1 = new Task("1", 7);
+        Task a2 = new Task("2", 10);
+        Task a3 = new Task("3", 9);
+        Task a4 = new Task("4", 8);
+        Task a5 = new Task("5", 11);
+        Task a6 = new Task("6", 11);
+
+        a3.addPredecessor(a2);
+        a2.addPredecessor(a3, a0);
+        a0.addPredecessor(a1, a5);
+        a1.addPredecessor(a6);
+        a4.addPredecessor(a0);
+        a5.addPredecessor(a4);
+
+
+        return new Task[]{
+                a3, a2, a0, a1, a4, a5, a6
+        };
+    }
+
+    private static Task[] createTasksTakim() {
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 7);
+        Task c = new Task("C", 10);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 8);
+        Task f = new Task("F", 11);
+        Task g = new Task("G", 11);
+        Task h = new Task("H", 11);
+        Task i = new Task("I", 11);
+
+        a.addPredecessor(b);
+        b.addPredecessor(c, e);
+        c.addPredecessor(d, e);
+        d.addPredecessor(g);
+        e.addPredecessor(f);
+        f.addPredecessor(i);
+        g.addPredecessor(h);
+        h.addPredecessor(d);
+
+
+        return new Task[]{
+                a, b, c, d, e, f, g, h, i
         };
     }
 
