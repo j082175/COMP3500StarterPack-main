@@ -63,7 +63,6 @@ public class Project {
     public static List<String> searchDepthFirst(Task node, Map<Task, List<Task>> graph, HashSet<Task> discovered, boolean includeMaintenance) {
         Stack<Task> stack = new Stack<>();
         List<String> list = new LinkedList<>();
-        // Queue<Task> predecessorCheck = new LinkedList<>();
 
         stack.push(node);
         discovered.add(node);
@@ -106,11 +105,6 @@ public class Project {
                     discovered.add(neighbor);
                 }
             }
-
-/*            if (stack.empty() && predecessorCheck.size() != 0) {
-                stack.push(predecessorCheck.poll());
-            }*/
-
         }
 
         return list;
