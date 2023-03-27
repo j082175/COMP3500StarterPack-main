@@ -3,17 +3,12 @@ package academy.pocu.comp3500.lab11;
 import academy.pocu.comp3500.lab11.data.Point;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 public class BallBoy {
     public static List<Point> findPath(final Point[] points) {
 
-        return findPath2(points);
-
-/*        final Point origin = new Point(0, 0);
+        final Point origin = new Point(0, 0);
 
         final List<Point> path = new ArrayList<>();
         path.add(origin);
@@ -34,7 +29,7 @@ public class BallBoy {
         }
 
         path.add(origin);
-        return path;*/
+        return path;
     }
 
     private static Point findNearestPoint(final Point current, final List<Point> candidates) {
@@ -50,33 +45,6 @@ public class BallBoy {
         }
 
         return nearestPoint;
-    }
-
-    public static List<Point> findPath2(final Point[] points) {
-        final Point origin = new Point(0, 0);
-
-        final List<Point> path = new LinkedList<>();
-        path.add(origin);
-
-        if (points.length == 0) {
-            if (!path.contains(origin)) {
-                path.add(origin);
-            }
-            return path;
-        }
-
-        final PriorityQueue<Point> remainingPoints = new PriorityQueue<>(Comparator.comparingInt(o -> getSquaredDistanceTo(o, origin)));
-        for (Point point : points) {
-            remainingPoints.add(point);
-        }
-
-        while (!remainingPoints.isEmpty()) {
-            final Point nextPoint = remainingPoints.poll();
-            path.add(nextPoint);
-        }
-
-        path.add(origin);
-        return path;
     }
 
     public static int getSquaredDistanceTo(Point p1, Point p2) {
