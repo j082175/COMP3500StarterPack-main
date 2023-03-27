@@ -10,7 +10,10 @@ import java.util.PriorityQueue;
 
 public class BallBoy {
     public static List<Point> findPath(final Point[] points) {
-        final Point origin = new Point(0, 0);
+
+        return findPath2(points);
+
+/*        final Point origin = new Point(0, 0);
 
         final List<Point> path = new ArrayList<>();
         path.add(origin);
@@ -31,7 +34,7 @@ public class BallBoy {
         }
 
         path.add(origin);
-        return path;
+        return path;*/
     }
 
     private static Point findNearestPoint(final Point current, final List<Point> candidates) {
@@ -56,7 +59,9 @@ public class BallBoy {
         path.add(origin);
 
         if (points.length == 0) {
-            path.add(origin);
+            if (!path.contains(origin)) {
+                path.add(origin);
+            }
             return path;
         }
 
