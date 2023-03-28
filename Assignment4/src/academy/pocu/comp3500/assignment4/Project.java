@@ -31,15 +31,7 @@ public final class Project {
     }
 
     public int findTotalManMonths(final String task) {
-        int result = 0;
-
-/*        for (Task t : tasks) {
-            if (t.getTitle().equals(task)) {
-                // result = searchOnlyDiscoveredBackwardTotal(t, discovered);
-                result = searchDepthTotal(t);
-            }
-        }*/
-
+        int result = -1;
         if (this.hashMap.containsKey(task)) {
             result = searchDepthTotal(this.hashMap.get(task));
         }
@@ -49,16 +41,10 @@ public final class Project {
 
     public int findMinDuration(final String task) {
         // 직원 1명만 투입가능
-
-        HashMap<Task, Integer> discovered = new HashMap<>();
-        int result = 0;
-
-        for (Task t : tasks) {
-            if (t.getTitle().equals(task)) {
-                result = searchOnlyDiscoveredBackwardMin(t, discovered);
-            }
+        int result = -1;
+        if (this.hashMap.containsKey(task)) {
+            result = searchOnlyDiscoveredBackwardMin(this.hashMap.get(task));
         }
-
         return result;
     }
 
@@ -174,43 +160,72 @@ public final class Project {
         return task;
     }
 
-    public static int searchOnlyDiscoveredBackwardMin(Task task, HashMap<Task, Integer> discovered) {
-        int min = Integer.MAX_VALUE;
-        int[] history = new int[]{0};
+    public static int searchOnlyDiscoveredBackwardMin(Task task) {
+        HashMap<Task, Integer> discovered = new HashMap<>();
+        int max = Integer.MIN_VALUE;
+        Task[] history = new Task[]{null};
+        int[] maxValue = new int[]{Integer.MIN_VALUE};
         for (Task t : task.getPredecessors()) {
+
             if (discovered.containsKey(t)) {
                 continue;
             }
-            discovered.put(task, 0);
 
-            int result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history);
-            if (history[0] < min) {
-                min = history[0];
+            discovered.put(task, 0);
+            int result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, 0);
+            if (max < result) {
+                max = result;
             }
 
-            history[0] = 0;
         }
 
-        return min;
+        max += task.getEstimate();
+
+        return max;
     }
 
-    public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, int[] history) {
+    public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, Task[] history, int min) {
         discovered.put(task, 0);
-        int min = Integer.MAX_VALUE;
 
-        for (Task t : task.getPredecessors()) {
-            history[0] = 0;
-            if (discovered.containsKey(t)) {
-                continue;
+        // history[0] += task.getEstimate();
+        Task taskResult = task;
+        int maxValue = Integer.MIN_VALUE;
+        int result = min;
+
+        if (taskResult.getPredecessors().size() > 1) {
+            for (Task t : taskResult.getPredecessors()) {
+
+                if (discovered.containsKey(t)) {
+                    continue;
+                }
+
+                result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, min);
+                if (maxValue < result) {
+                    maxValue = result;
+                }
+
+                int a = 1;
             }
-            history[0] += searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history);
-            if (min > history[0]) {
-                min = history[0];
+        } else {
+            result = searchDepthMin(task, history, result);
+            if (maxValue < result) {
+                maxValue = result;
             }
 
         }
 
-        return task.getEstimate();
+
+        if (history[0].getPredecessors().size() > 1) {
+            for (Task t : history[0].getPredecessors()) {
+                int r = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, result);
+                if (r > maxValue) {
+                    maxValue = r;
+                }
+                int a = 1;
+            }
+        }
+
+        return maxValue;
     }
 
     public static int searchOnlyDiscoveredBackwardTotal(Task task, HashMap<Task, Integer> discovered) {
@@ -261,6 +276,36 @@ public final class Project {
                 }
             }
         }
+
+        return total;
+    }
+
+    public static int searchDepthMin(Task task, Task[] taskHistory, int min) {
+        HashMap<Task, Integer> discovered = new HashMap<>();
+        Stack<Task> stack = new Stack<>();
+        Task next = null;
+        int total = min;
+
+        stack.push(task);
+        discovered.put(task, 0);
+
+        while (!stack.empty()) {
+            next = stack.pop();
+
+            total += next.getEstimate();
+            // total[0] += next.getEstimate();
+
+            if (next.getPredecessors().size() == 1) {
+                if (!discovered.containsKey(next.getPredecessors().get(0))) {
+                    stack.push(next.getPredecessors().get(0));
+                    discovered.put(next.getPredecessors().get(0), 0);
+                }
+            }
+
+        }
+
+        taskHistory[0] = next;
+
 
         return total;
     }

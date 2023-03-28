@@ -16,8 +16,7 @@ public class Program {
         {
             Task[] tasks = createTasks3();
             Project project = new Project(tasks);
-            int total = project.findTotalManMonths("G");
-            int shortest = project.findMinDuration("G");
+            int maximum = project.findMinDuration("G");
             int a = 1;
         }
 
@@ -210,24 +209,24 @@ public class Program {
 
     private static Task[] createTasks3() {
         Task a = new Task("A", 1);
-        Task b = new Task("B", 2);
-        Task c = new Task("C", 3);
-        Task d = new Task("D", 4);
-        Task e = new Task("E", 5);
-        Task f = new Task("F", 6);
-        Task g = new Task("G", 7);
-        Task h = new Task("H", 8);
-        Task i = new Task("I", 9);
-        Task j = new Task("J", 10);
-        Task k = new Task("K", 11);
-        Task l = new Task("L", 12);
-        Task m = new Task("M", 13);
-        Task n = new Task("N", 14);
-        Task o = new Task("O", 15);
-        Task p = new Task("P", 16);
-        Task q = new Task("Q", 17);
-        Task r = new Task("R", 18);
-        Task s = new Task("S", 19);
+        Task b = new Task("B", 1);
+        Task c = new Task("C", 1);
+        Task d = new Task("D", 1);
+        Task e = new Task("E", 1);
+        Task f = new Task("F", 1);
+        Task g = new Task("G", 1);
+        Task h = new Task("H", 1);
+        Task i = new Task("I", 1);
+        Task j = new Task("J", 1);
+        Task k = new Task("K", 1);
+        Task l = new Task("L", 1);
+        Task m = new Task("M", 1);
+        Task n = new Task("N", 1);
+        Task o = new Task("O", 1);
+        Task p = new Task("P", 1);
+        Task q = new Task("Q", 1);
+        Task r = new Task("R", 1);
+        Task s = new Task("S", 1);
 
 
         b.addPredecessor(a);
