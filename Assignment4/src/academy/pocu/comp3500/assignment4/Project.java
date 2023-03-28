@@ -11,9 +11,14 @@ import java.util.Stack;
 public final class Project {
     // private Map<Task, List<Task>> graph = new HashMap<>();
     private Task[] tasks;
+    HashMap<String, Task> hashMap = new HashMap<>();
 
     public Project(final Task[] tasks) {
         this.tasks = tasks;
+
+        for (Task task : tasks) {
+            hashMap.put(task.getTitle(), task);
+        }
 
 /*        for (Task task : tasks) {
             graph.put(task, new ArrayList<>());
@@ -28,11 +33,15 @@ public final class Project {
     public int findTotalManMonths(final String task) {
         int result = 0;
 
-        for (Task t : tasks) {
+/*        for (Task t : tasks) {
             if (t.getTitle().equals(task)) {
                 // result = searchOnlyDiscoveredBackwardTotal(t, discovered);
                 result = searchDepthTotal(t);
             }
+        }*/
+
+        if (this.hashMap.containsKey(task)) {
+            result = searchDepthTotal(this.hashMap.get(task));
         }
 
         return result;
