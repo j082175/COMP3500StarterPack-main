@@ -4,11 +4,9 @@ import academy.pocu.comp3500.assignment4.project.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 public final class Project {
@@ -29,7 +27,7 @@ public final class Project {
     }
 
     public int findTotalManMonths(final String task) {
-        HashSet<Task> discovered = new HashSet<>();
+        HashMap<Task, Integer> discovered = new HashMap<>();
         List<String> list = new LinkedList<>();
         int[] total = new int[]{0};
 
@@ -52,18 +50,18 @@ public final class Project {
     }
 
     private static boolean isInCycle(Map<Task, List<Task>> graph, Task title) {
-        Set<Task> visited = new HashSet<>();
+        HashMap<Task, Integer> visited = new HashMap();
         Stack<Task> stack = new Stack<>();
         stack.push(title);
         while (!stack.isEmpty()) {
             Task currTitle = stack.pop();
 
-            if (visited.contains(currTitle)) {
+            if (visited.containsKey(currTitle)) {
                 return true;
             }
-            visited.add(currTitle);
+            visited.put(currTitle, 0);
             for (Task nextTitle : graph.get(currTitle)) {
-                if (!visited.contains(nextTitle)) { // only add if not already visited
+                if (!visited.containsKey(nextTitle)) { // only add if not already visited
                     stack.push(nextTitle);
                 } else if (nextTitle.equals(title)) {
                     return true;
@@ -74,12 +72,12 @@ public final class Project {
         return false;
     }
 
-    public static List<String> searchDepthFirst(Task node, Map<Task, List<Task>> graph, HashSet<Task> discovered, boolean includeMaintenance, String goal, int[] total) {
+    public static List<String> searchDepthFirst(Task node, Map<Task, List<Task>> graph, HashMap<Task, Integer> discovered, boolean includeMaintenance, String goal, int[] total) {
         Stack<Task> stack = new Stack<>();
         List<String> list = new LinkedList<>();
 
         stack.push(node);
-        discovered.add(node);
+        discovered.put(node, 0);
 
         while (!stack.empty()) {
             Task next = stack.pop();
@@ -95,7 +93,7 @@ public final class Project {
             for (Task neighbor : graph.get(next)) {
                 boolean isCheck = false;
 
-                if (!discovered.contains(neighbor)) {
+                if (!discovered.containsKey(neighbor)) {
                     if (neighbor.getPredecessors().size() > 1) {
 
                         if (isInCycle(graph, neighbor)) {
@@ -107,7 +105,7 @@ public final class Project {
                             }
                         } else {
                             for (int i = 0; i < neighbor.getPredecessors().size(); i++) {
-                                if (stack.contains(neighbor.getPredecessors().get(i)) || !discovered.contains(neighbor.getPredecessors().get(i))) {
+                                if (stack.contains(neighbor.getPredecessors().get(i)) || !discovered.containsKey(neighbor.getPredecessors().get(i))) {
                                     isCheck = true;
                                     break;
                                 }
@@ -120,7 +118,7 @@ public final class Project {
                     }
 
                     stack.push(neighbor);
-                    discovered.add(neighbor);
+                    discovered.put(neighbor, 0);
                 }
             }
         }
@@ -128,7 +126,7 @@ public final class Project {
         return list;
     }
 
-    public static List<String> searchOnlyDiscovered(Task task, Map<Task, List<Task>> graph, HashSet<Task> discovered) {
+    public static List<String> searchOnlyDiscovered(Task task, Map<Task, List<Task>> graph, HashMap<Task, Integer> discovered) {
         List<Task> list = new LinkedList<>();
 
         searchOnlyDiscoveredRecursive(task, graph, discovered, list);
@@ -142,12 +140,12 @@ public final class Project {
         return returnList;
     }
 
-    public static Task searchOnlyDiscoveredRecursive(Task task, Map<Task, List<Task>> graph, HashSet<Task> discovered, List<Task> list) {
+    public static Task searchOnlyDiscoveredRecursive(Task task, Map<Task, List<Task>> graph, HashMap<Task, Integer> discovered, List<Task> list) {
         for (Task t : graph.get(task)) {
-            if (discovered.contains(t)) {
+            if (discovered.containsKey(t)) {
                 continue;
             }
-            discovered.add(task);
+            discovered.put(task, 0);
 
             Task task1 = searchOnlyDiscoveredRecursive(t, graph, discovered, list);
             if (!list.contains(task1)) {

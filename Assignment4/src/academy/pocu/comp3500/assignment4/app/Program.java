@@ -2,7 +2,8 @@ package academy.pocu.comp3500.assignment4.app;
 
 import academy.pocu.comp3500.assignment4.Project;
 import academy.pocu.comp3500.assignment4.project.Task;
-import org.junit.Test;
+import org.testng.annotations.Test;
+
 public class Program {
 
     public static void main(String[] args) {
