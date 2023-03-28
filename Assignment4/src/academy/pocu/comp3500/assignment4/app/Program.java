@@ -2,7 +2,7 @@ package academy.pocu.comp3500.assignment4.app;
 
 import academy.pocu.comp3500.assignment4.Project;
 import academy.pocu.comp3500.assignment4.project.Task;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 public class Program {
 
@@ -14,9 +14,9 @@ public class Program {
     public void test1() {
 
         {
-            Task[] tasks = createTasksTakim();
+            Task[] tasks = createTasks3();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int shortest = project.findTotalManMonths("G");
             int a = 1;
         }
 
@@ -208,25 +208,25 @@ public class Program {
     }
 
     private static Task[] createTasks3() {
-        Task a = new Task("A", 12);
-        Task b = new Task("B", 7);
-        Task c = new Task("C", 10);
-        Task d = new Task("D", 9);
-        Task e = new Task("E", 8);
-        Task f = new Task("F", 11);
-        Task g = new Task("G", 14);
-        Task h = new Task("H", 13);
-        Task i = new Task("I", 6);
-        Task j = new Task("J", 6);
-        Task k = new Task("K", 6);
-        Task l = new Task("L", 6);
-        Task m = new Task("M", 6);
-        Task n = new Task("N", 6);
-        Task o = new Task("O", 6);
-        Task p = new Task("P", 6);
-        Task q = new Task("Q", 6);
-        Task r = new Task("R", 6);
-        Task s = new Task("S", 6);
+        Task a = new Task("A", 1);
+        Task b = new Task("B", 2);
+        Task c = new Task("C", 3);
+        Task d = new Task("D", 4);
+        Task e = new Task("E", 5);
+        Task f = new Task("F", 6);
+        Task g = new Task("G", 7);
+        Task h = new Task("H", 8);
+        Task i = new Task("I", 9);
+        Task j = new Task("J", 10);
+        Task k = new Task("K", 11);
+        Task l = new Task("L", 12);
+        Task m = new Task("M", 13);
+        Task n = new Task("N", 14);
+        Task o = new Task("O", 15);
+        Task p = new Task("P", 16);
+        Task q = new Task("Q", 17);
+        Task r = new Task("R", 18);
+        Task s = new Task("S", 19);
 
 
         b.addPredecessor(a);

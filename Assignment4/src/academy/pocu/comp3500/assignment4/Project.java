@@ -2,6 +2,7 @@ package academy.pocu.comp3500.assignment4;
 
 import academy.pocu.comp3500.assignment4.project.Task;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,21 +29,30 @@ public final class Project {
 
     public int findTotalManMonths(final String task) {
         HashMap<Task, Integer> discovered = new HashMap<>();
-        List<String> list = new LinkedList<>();
-        int[] total = new int[]{0};
+        int result = 0;
 
         for (Task t : tasks) {
-            if (t.getPredecessors().size() == 0) {
-                List<String> result = searchDepthFirst(t, graph, discovered, false, task, total);
-                list.addAll(result);
+            if (t.getTitle().equals(task)) {
+                result = searchOnlyDiscoveredBackwardTotal(t, discovered);
             }
         }
 
-        return total[0];
+        return result;
     }
 
     public int findMinDuration(final String task) {
-        return -1;
+        // 직원 1명만 투입가능
+
+        HashMap<Task, Integer> discovered = new HashMap<>();
+        int result = 0;
+
+        for (Task t : tasks) {
+            if (t.getTitle().equals(task)) {
+                result = searchOnlyDiscoveredBackwardMin(t, discovered);
+            }
+        }
+
+        return result;
     }
 
     public int findMaxBonusCount(final String task) {
@@ -50,7 +60,7 @@ public final class Project {
     }
 
     private static boolean isInCycle(Map<Task, List<Task>> graph, Task title) {
-        HashMap<Task, Integer> visited = new HashMap();
+        HashMap<Task, Integer> visited = new HashMap<>();
         Stack<Task> stack = new Stack<>();
         stack.push(title);
         while (!stack.isEmpty()) {
@@ -155,5 +165,67 @@ public final class Project {
         }
 
         return task;
+    }
+
+    public static int searchOnlyDiscoveredBackwardMin(Task task, HashMap<Task, Integer> discovered) {
+        int min = Integer.MAX_VALUE;
+        int[] duration = new int[]{0};
+        for (Task t : task.getPredecessors()) {
+            if (discovered.containsKey(t)) {
+                continue;
+            }
+            discovered.put(task, 0);
+
+            searchOnlyDiscoveredBackwardMinRecursive(t, discovered, duration, new int[]{0});
+            if (duration[0] < min) {
+                min = duration[0];
+            }
+
+            duration[0] = 0;
+        }
+
+        return min;
+    }
+
+    public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, int[] duration, int[] history) {
+        discovered.put(task, 0);
+        duration[0] += task.getEstimate();
+
+        for (Task t : task.getPredecessors()) {
+            if (discovered.containsKey(t)) {
+                continue;
+            }
+            history[0] += searchOnlyDiscoveredBackwardMinRecursive(t, discovered, duration, history);
+        }
+
+        return task.getEstimate();
+    }
+
+    public static int searchOnlyDiscoveredBackwardTotal(Task task, HashMap<Task, Integer> discovered) {
+        int[] duration = new int[]{0};
+        for (Task t : task.getPredecessors()) {
+            if (discovered.containsKey(t)) {
+                continue;
+            }
+            discovered.put(task, 0);
+
+            searchOnlyDiscoveredBackwardTotalRecursive(t, discovered, duration);
+        }
+
+        duration[0] += task.getEstimate();
+        return duration[0];
+    }
+
+    public static void searchOnlyDiscoveredBackwardTotalRecursive(Task task, HashMap<Task, Integer> discovered, int[] duration) {
+        discovered.put(task, 0);
+        duration[0] += task.getEstimate();
+
+        for (Task t : task.getPredecessors()) {
+            if (discovered.containsKey(t)) {
+                continue;
+            }
+            searchOnlyDiscoveredBackwardTotalRecursive(t, discovered, duration);
+        }
+
     }
 }
