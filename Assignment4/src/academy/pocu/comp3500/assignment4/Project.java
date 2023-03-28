@@ -164,7 +164,7 @@ public final class Project {
         HashMap<Task, Integer> discovered = new HashMap<>();
         int max = Integer.MIN_VALUE;
         Task[] history = new Task[]{null};
-        int[] maxValue = new int[]{Integer.MIN_VALUE};
+
         for (Task t : task.getPredecessors()) {
 
             if (discovered.containsKey(t)) {
@@ -199,7 +199,7 @@ public final class Project {
                     continue;
                 }
 
-                result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, min);
+                result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, taskResult.getEstimate());
                 if (maxValue < result) {
                     maxValue = result;
                 }
@@ -207,7 +207,12 @@ public final class Project {
                 int a = 1;
             }
         } else {
-            result = searchDepthMin(task, history, result);
+            if (taskResult.getPredecessors().size() != 0) {
+                result = searchDepthMin(taskResult, history, result);
+            } else {
+                history[0] = taskResult;
+            }
+
             if (maxValue < result) {
                 maxValue = result;
             }

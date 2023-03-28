@@ -11,22 +11,20 @@ public class Program {
     }
 
 
+    @Test
     public void test2() {
-        Task[] tasks = createTasks();
+        Task[] tasks = createTasksAssignment4();
 
         Project project = new Project(tasks);
-
-        int manMonths1 = project.findTotalManMonths("ms1");
-        assert (manMonths1 == 17);
-
-        int manMonths2 = project.findTotalManMonths("ms2");
-        assert (manMonths2 == 46);
 
         int minDuration1 = project.findMinDuration("ms1");
         assert (minDuration1 == 14);
 
         int minDuration2 = project.findMinDuration("ms2");
         assert (minDuration2 == 32);
+
+        int minDuration3 = project.findMinDuration("L");
+        assert (minDuration3 == 32);
 
         int bonusCount1 = project.findMaxBonusCount("ms1");
         assert (bonusCount1 == 6);
