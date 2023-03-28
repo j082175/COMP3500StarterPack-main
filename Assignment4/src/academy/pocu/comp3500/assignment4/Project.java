@@ -2,8 +2,6 @@ package academy.pocu.comp3500.assignment4;
 
 import academy.pocu.comp3500.assignment4.project.Task;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,24 +9,23 @@ import java.util.Map;
 import java.util.Stack;
 
 public final class Project {
-    private Map<Task, List<Task>> graph = new HashMap<>();
+    // private Map<Task, List<Task>> graph = new HashMap<>();
     private Task[] tasks;
 
     public Project(final Task[] tasks) {
         this.tasks = tasks;
 
-        for (Task task : tasks) {
+/*        for (Task task : tasks) {
             graph.put(task, new ArrayList<>());
         }
         for (Task task : tasks) {
             for (Task predecessor : task.getPredecessors()) {
                 graph.get(predecessor).add(task);
             }
-        }
+        }*/
     }
 
     public int findTotalManMonths(final String task) {
-        HashMap<Task, Integer> discovered = new HashMap<>();
         int result = 0;
 
         for (Task t : tasks) {
@@ -170,33 +167,38 @@ public final class Project {
 
     public static int searchOnlyDiscoveredBackwardMin(Task task, HashMap<Task, Integer> discovered) {
         int min = Integer.MAX_VALUE;
-        int[] duration = new int[]{0};
+        int[] history = new int[]{0};
         for (Task t : task.getPredecessors()) {
             if (discovered.containsKey(t)) {
                 continue;
             }
             discovered.put(task, 0);
 
-            searchOnlyDiscoveredBackwardMinRecursive(t, discovered, duration, new int[]{0});
-            if (duration[0] < min) {
-                min = duration[0];
+            int result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history);
+            if (history[0] < min) {
+                min = history[0];
             }
 
-            duration[0] = 0;
+            history[0] = 0;
         }
 
         return min;
     }
 
-    public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, int[] duration, int[] history) {
+    public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, int[] history) {
         discovered.put(task, 0);
-        duration[0] += task.getEstimate();
+        int min = Integer.MAX_VALUE;
 
         for (Task t : task.getPredecessors()) {
+            history[0] = 0;
             if (discovered.containsKey(t)) {
                 continue;
             }
-            history[0] += searchOnlyDiscoveredBackwardMinRecursive(t, discovered, duration, history);
+            history[0] += searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history);
+            if (min > history[0]) {
+                min = history[0];
+            }
+
         }
 
         return task.getEstimate();
@@ -238,13 +240,13 @@ public final class Project {
         stack.push(task);
         discovered.put(task, 0);
 
-        while (!stack.empty())  {
+        while (!stack.empty()) {
             Task next = stack.pop();
 
             total += next.getEstimate();
 
-            for (Task neighbor : next.getPredecessors())  {
-                if (!discovered.containsKey(neighbor))  {
+            for (Task neighbor : next.getPredecessors()) {
+                if (!discovered.containsKey(neighbor)) {
                     stack.push(neighbor);
                     discovered.put(neighbor, 0);
                 }
