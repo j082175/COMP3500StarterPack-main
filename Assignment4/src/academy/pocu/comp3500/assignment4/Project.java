@@ -33,7 +33,8 @@ public final class Project {
 
         for (Task t : tasks) {
             if (t.getTitle().equals(task)) {
-                result = searchOnlyDiscoveredBackwardTotal(t, discovered);
+                // result = searchOnlyDiscoveredBackwardTotal(t, discovered);
+                result = searchDepthTotal(t);
             }
         }
 
@@ -227,5 +228,29 @@ public final class Project {
             searchOnlyDiscoveredBackwardTotalRecursive(t, discovered, duration);
         }
 
+    }
+
+    public static int searchDepthTotal(Task task) {
+        HashMap<Task, Integer> discovered = new HashMap<>();
+        Stack<Task> stack = new Stack<>();
+        int total = 0;
+
+        stack.push(task);
+        discovered.put(task, 0);
+
+        while (!stack.empty())  {
+            Task next = stack.pop();
+
+            total += next.getEstimate();
+
+            for (Task neighbor : next.getPredecessors())  {
+                if (!discovered.containsKey(neighbor))  {
+                    stack.push(neighbor);
+                    discovered.put(neighbor, 0);
+                }
+            }
+        }
+
+        return total;
     }
 }

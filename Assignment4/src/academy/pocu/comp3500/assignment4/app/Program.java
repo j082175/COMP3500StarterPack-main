@@ -16,7 +16,7 @@ public class Program {
         {
             Task[] tasks = createTasks3();
             Project project = new Project(tasks);
-            int shortest = project.findTotalManMonths("G");
+            int shortest = project.findTotalManMonths("F");
             int a = 1;
         }
 
