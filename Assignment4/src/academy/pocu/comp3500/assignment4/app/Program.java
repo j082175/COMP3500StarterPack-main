@@ -10,6 +10,30 @@ public class Program {
         // write your code here
     }
 
+
+    public void test2() {
+        Task[] tasks = createTasks();
+
+        Project project = new Project(tasks);
+
+        int manMonths1 = project.findTotalManMonths("ms1");
+        assert (manMonths1 == 17);
+
+        int manMonths2 = project.findTotalManMonths("ms2");
+        assert (manMonths2 == 46);
+
+        int minDuration1 = project.findMinDuration("ms1");
+        assert (minDuration1 == 14);
+
+        int minDuration2 = project.findMinDuration("ms2");
+        assert (minDuration2 == 32);
+
+        int bonusCount1 = project.findMaxBonusCount("ms1");
+        assert (bonusCount1 == 6);
+
+        int bonusCount2 = project.findMaxBonusCount("ms2");
+        assert (bonusCount2 == 6);
+    }
     @Test
     public void test1() {
 
@@ -815,8 +839,9 @@ public class Program {
                 a, b, c, d, e, f, g, h, i
         };
     }
+
     @Test
-    public void test2() {
+    public void test3() {
         {
             Task[] tasks = createTasksAssignment4();
 
