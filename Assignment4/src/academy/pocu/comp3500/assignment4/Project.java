@@ -179,7 +179,12 @@ public final class Project {
 
         }
 
-        max += task.getEstimate();
+        if (max != Integer.MIN_VALUE) {
+            max += task.getEstimate();
+        } else {
+            max = task.getEstimate();
+        }
+
 
         return max;
     }
