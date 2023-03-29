@@ -215,7 +215,7 @@ public final class Project {
             if (taskResult.getPredecessors().size() != 0) {
                 result = searchDepthMin(taskResult, history, result);
             } else {
-                result = taskResult.getEstimate();
+                result += taskResult.getEstimate();
                 history[0] = taskResult;
             }
 

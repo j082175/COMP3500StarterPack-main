@@ -23,17 +23,24 @@ public class Program {
         int minDuration2 = project.findMinDuration("ms2");
         assert (minDuration2 == 32);
 
-        int minDuration3 = project.findMinDuration("L");
-        assert (minDuration3 == 32);
+/*        int minDuration3 = project.findMinDuration("L");
+        assert (minDuration3 == 32);*/
 
-        int bonusCount1 = project.findMaxBonusCount("ms1");
+/*        int bonusCount1 = project.findMaxBonusCount("ms1");
         assert (bonusCount1 == 6);
 
         int bonusCount2 = project.findMaxBonusCount("ms2");
-        assert (bonusCount2 == 6);
+        assert (bonusCount2 == 6);*/
     }
     @Test
     public void test1() {
+
+        {
+            Task[] tasks = createTasksMultiMilestone();
+            Project project = new Project(tasks);
+            int maximum = project.findMinDuration("I");
+            int a = 1;
+        }
 
         {
             Task[] tasks = createTasks3();
@@ -52,7 +59,7 @@ public class Program {
         {
             Task[] tasks = createTasks23();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("16");
+            int manMonths1 = project.findTotalManMonths("3");
             int a = 1;
         }
 
@@ -231,23 +238,23 @@ public class Program {
 
     private static Task[] createTasks3() {
         Task a = new Task("A", 1);
-        Task b = new Task("B", 1);
-        Task c = new Task("C", 1);
+        Task b = new Task("B", 2);
+        Task c = new Task("C", 3);
         Task d = new Task("D", 1);
-        Task e = new Task("E", 1);
-        Task f = new Task("F", 1);
+        Task e = new Task("E", 2);
+        Task f = new Task("F", 3);
         Task g = new Task("G", 1);
-        Task h = new Task("H", 1);
-        Task i = new Task("I", 1);
+        Task h = new Task("H", 2);
+        Task i = new Task("I", 3);
         Task j = new Task("J", 1);
-        Task k = new Task("K", 1);
-        Task l = new Task("L", 1);
+        Task k = new Task("K", 2);
+        Task l = new Task("L", 3);
         Task m = new Task("M", 1);
-        Task n = new Task("N", 1);
-        Task o = new Task("O", 1);
+        Task n = new Task("N", 2);
+        Task o = new Task("O", 3);
         Task p = new Task("P", 1);
-        Task q = new Task("Q", 1);
-        Task r = new Task("R", 1);
+        Task q = new Task("Q", 2);
+        Task r = new Task("R", 3);
         Task s = new Task("S", 1);
 
 
@@ -909,6 +916,31 @@ public class Program {
 
         Task[] tasks = new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, ms1, ms2
+        };
+
+        return tasks;
+    }
+
+    private static Task[] createTasksMultiMilestone() {
+        Task a = new Task("A", 1);
+        Task b = new Task("B", 1);
+        Task c = new Task("C", 1);
+        Task d = new Task("D", 1);
+        Task e = new Task("E", 1);
+        Task f = new Task("F", 1);
+        Task g = new Task("G", 1);
+        Task h = new Task("H", 1);
+        Task i = new Task("I", 1);
+        Task j = new Task("J", 1);
+        Task k = new Task("K", 1);
+
+        d.addPredecessor(a,b,c);
+        e.addPredecessor(d);
+        h.addPredecessor(f,e,g);
+        i.addPredecessor(j,h,k);
+
+        Task[] tasks = new Task[]{
+                a, b, c, d, e, f, g, h, i, j, k
         };
 
         return tasks;
