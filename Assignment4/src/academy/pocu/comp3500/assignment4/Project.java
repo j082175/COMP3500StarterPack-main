@@ -172,19 +172,16 @@ public final class Project {
             }
 
             discovered.put(task, 0);
-            int result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, 0);
+            int result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, task.getEstimate());
             if (max < result) {
                 max = result;
             }
 
         }
 
-        if (max != Integer.MIN_VALUE) {
-            max += task.getEstimate();
-        } else {
+        if (max == Integer.MIN_VALUE) {
             max = task.getEstimate();
         }
-
 
         return max;
     }
@@ -192,48 +189,26 @@ public final class Project {
     public static int searchOnlyDiscoveredBackwardMinRecursive(Task task, HashMap<Task, Integer> discovered, Task[] history, int min) {
         discovered.put(task, 0);
 
-        // history[0] += task.getEstimate();
         Task taskResult = task;
         int maxValue = Integer.MIN_VALUE;
         int result = min;
 
-        if (taskResult.getPredecessors().size() > 1) {
-            for (Task t : taskResult.getPredecessors()) {
+        result = searchDepthMin(taskResult, history, result);
+        taskResult = history[0];
 
-                if (discovered.containsKey(t)) {
-                    continue;
-                }
-
-                result = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, taskResult.getEstimate());
-                if (maxValue < result) {
-                    maxValue = result;
-                }
-
-                int a = 1;
-            }
-        } else {
-            if (taskResult.getPredecessors().size() != 0) {
-                result = searchDepthMin(taskResult, history, result);
-            } else {
-                result += taskResult.getEstimate();
-                history[0] = taskResult;
-            }
-
-            if (maxValue < result) {
-                maxValue = result;
-            }
-
+        if (maxValue < result) {
+            maxValue = result;
         }
 
+        if (taskResult != null && taskResult.getPredecessors().size() > 1) {
+            for (Task t : taskResult.getPredecessors()) {
 
-        if (history[0].getPredecessors().size() > 1) {
-            for (Task t : history[0].getPredecessors()) {
-                int r = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, result);
-                if (r > maxValue) {
-                    maxValue = r;
+                int result1 = searchOnlyDiscoveredBackwardMinRecursive(t, discovered, history, result);
+                if (maxValue < result1) {
+                    maxValue = result1;
                 }
-                int a = 1;
             }
+
         }
 
         return maxValue;
@@ -315,7 +290,11 @@ public final class Project {
 
         }
 
-        taskHistory[0] = next;
+        if (task.getPredecessors().size() == 0 && next == task) {
+            taskHistory[0] = null;
+        } else {
+            taskHistory[0] = next;
+        }
 
 
         return total;

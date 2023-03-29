@@ -32,6 +32,7 @@ public class Program {
         int bonusCount2 = project.findMaxBonusCount("ms2");
         assert (bonusCount2 == 6);*/
     }
+
     @Test
     public void test1() {
 
@@ -257,6 +258,14 @@ public class Program {
         Task r = new Task("R", 3);
         Task s = new Task("S", 1);
 
+        Task t = new Task("T", 1);
+        Task u = new Task("U", 2);
+        Task v = new Task("V", 2);
+        Task w = new Task("W", 1);
+        Task x = new Task("X", 2);
+        Task y = new Task("Y", 3);
+        Task z = new Task("Z", 3);
+
 
         b.addPredecessor(a);
         c.addPredecessor(b);
@@ -274,6 +283,11 @@ public class Program {
         q.addPredecessor(g);
         r.addPredecessor(a);
         s.addPredecessor(h);
+
+        t.addPredecessor(x, w, z);
+        u.addPredecessor(w);
+        v.addPredecessor(y);
+        h.addPredecessor(v, t, u);
 
         return new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s
@@ -934,10 +948,10 @@ public class Program {
         Task j = new Task("J", 1);
         Task k = new Task("K", 1);
 
-        d.addPredecessor(a,b,c);
+        d.addPredecessor(a, b, c);
         e.addPredecessor(d);
-        h.addPredecessor(f,e,g);
-        i.addPredecessor(j,h,k);
+        h.addPredecessor(f, e, g);
+        i.addPredecessor(j, h, k);
 
         Task[] tasks = new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k
