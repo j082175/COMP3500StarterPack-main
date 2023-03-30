@@ -5,6 +5,7 @@ import academy.pocu.comp3500.assignment4.project.Task;
 import java.net.NetworkInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,8 @@ import java.util.TreeMap;
 
 public final class Project {
     private final Map<Task, List<Task>> graph = new HashMap<>();
-    private final Map<Task, Map<Task, Integer>> backedge = new HashMap<>();
-    private final Map<Task, Map<Task, Integer>> frontedge = new HashMap<>();
+    private final Map<String, Map<String, Integer>> backedge = new HashMap<>();
+    private final Map<String, Map<String, Integer>> frontedge = new HashMap<>();
     private Task[] tasks;
     HashMap<String, Task> hashMap = new HashMap<>();
     ArrayList<Task> startTask = new ArrayList<>();
@@ -30,8 +31,8 @@ public final class Project {
                 startTask.add(task);
             }
 
-            backedge.put(task, new HashMap<>());
-            frontedge.put(task, new HashMap<>());
+            backedge.put(task.getTitle(), new HashMap<>());
+            frontedge.put(task.getTitle(), new HashMap<>());
         }
 
 /*        for (Task task : tasks) {
@@ -40,8 +41,8 @@ public final class Project {
         for (Task task : tasks) {
             for (Task predecessor : task.getPredecessors()) {
                 graph.get(predecessor).add(task);
-                frontedge.get(task).put(predecessor, predecessor.getEstimate());
-                backedge.get(predecessor).put(task, 0);
+                frontedge.get(task.getTitle()).put(predecessor.getTitle(), predecessor.getEstimate());
+                backedge.get(predecessor.getTitle()).put(task.getTitle(), 0);
             }
         }
     }
@@ -66,12 +67,25 @@ public final class Project {
     }
 
     public int findMaxBonusCount(final String task) {
-        Map<Task, Map<Task, Integer>> backedge1 = new HashMap<>(backedge);
-        Map<Task, Map<Task, Integer>> frontedge1 = new HashMap<>(frontedge);
+        Map<String, Map<String, Integer>> backedge1 = new HashMap<>(backedge);
+        Map<String, Map<String, Integer>> frontedge1 = new HashMap<>(frontedge);
 
 
-        backedge1.putAll(backedge);
-        frontedge1.putAll(frontedge);
+/*        Iterator<String> iter1 = backedge.keySet().iterator();
+        while (iter1.hasNext()) {
+            backedge1.put(iter1.next(), new HashMap<>());
+            Iterator<String> iter11 = backedge.get(iter1.next()).keySet().iterator();
+            while (iter11.hasNext()) {
+                backedge1.get(iter1.next()).putAll(backedge.get(iter1.next()));
+            }
+
+        }
+
+        Iterator<String> iter2 = frontedge.keySet().iterator();
+        while (iter2.hasNext()) {
+            frontedge1.put(iter2.next(), new HashMap<>());
+            frontedge1.get(iter2.next()).putAll(frontedge.get(iter2.next()));
+        }*/
 
         int min = this.hashMap.get(task).getEstimate();
 
@@ -79,13 +93,28 @@ public final class Project {
         int result = 0;
         while (true) {
             // result = findShortestDistance(this.hashMap.get(task), graph, frontedge1, backedge1);
-            result = searchOnlyDiscoveredBackwardMinFlux(hashMap.get(task), min);
+            result = searchOnlyDiscoveredBackwardMinFlux(hashMap.get(task), min, frontedge1, backedge1);
             if (result == -1 || result == 0) {
                 break;
             } else {
                 min -= result;
                 sum += result;
 
+            }
+        }
+
+        for (Task task2 : tasks) {
+            backedge.put(task2.getTitle(), new HashMap<>());
+            frontedge.put(task2.getTitle(), new HashMap<>());
+        }
+
+/*        for (Task task : tasks) {
+            graph.put(task, new ArrayList<>());
+        }*/
+        for (Task task2 : tasks) {
+            for (Task predecessor : task2.getPredecessors()) {
+                frontedge.get(task2.getTitle()).put(predecessor.getTitle(), predecessor.getEstimate());
+                backedge.get(predecessor.getTitle()).put(task2.getTitle(), 0);
             }
         }
 
@@ -417,14 +446,14 @@ public final class Project {
         return -1;
     }
 
-    public int searchOnlyDiscoveredBackwardMinFlux(Task task, int min) {
+    public int searchOnlyDiscoveredBackwardMinFlux(Task task, int min, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge) {
 
         int result = searchOnlyDiscoveredBackwardMinFluxRecursive(task, frontedge, backedge, min, task, graph, new boolean[]{false});
 
         return result;
     }
 
-    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<Task, Map<Task, Integer>> frontedge, Map<Task, Map<Task, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd) {
+    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<String , Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd) {
         //discovered.put(task, 0);
 
 /*        Task taskResult = task;
@@ -447,10 +476,10 @@ public final class Project {
 
         for (Task neighbor : task.getPredecessors()) {
 
-            if (frontedge.get(next).containsKey(neighbor) && frontedge.get(next).get(neighbor) > 0) {
+            if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
 
-                if (min > frontedge.get(next).get(neighbor)) {
-                    min = frontedge.get(next).get(neighbor);
+                if (min > frontedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                    min = frontedge.get(next.getTitle()).get(neighbor.getTitle());
                 }
 
                 int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
@@ -460,10 +489,10 @@ public final class Project {
 
                 min = result1;
 
-                if (result1 <= frontedge.get(next).get(neighbor)) {
+                if (result1 <= frontedge.get(next.getTitle()).get(neighbor.getTitle())) {
                     for (Task t1 : graph.get(neighbor)) {
-                        frontedge.get(t1).put(neighbor, frontedge.get(t1).get(neighbor) - result1);
-                        backedge.get(neighbor).put(t1, backedge.get(neighbor).get(t1) + result1);
+                        frontedge.get(t1.getTitle()).put(neighbor.getTitle(), frontedge.get(t1.getTitle()).get(neighbor.getTitle()) - result1);
+                        backedge.get(neighbor.getTitle()).put(t1.getTitle(), backedge.get(neighbor.getTitle()).get(t1.getTitle()) + result1);
                     }
 
 /*                    frontedge.get(next).put(neighbor, frontedge.get(next).get(neighbor) - result1);
@@ -471,18 +500,18 @@ public final class Project {
                     break;
                 } else {
                     for (Task t1 : graph.get(neighbor)) {
-                        frontedge.get(t1).put(neighbor, frontedge.get(t1).get(neighbor) - frontedge.get(t1).get(neighbor));
-                        backedge.get(neighbor).put(t1, backedge.get(neighbor).get(t1) + frontedge.get(t1).get(neighbor));
+                        frontedge.get(t1.getTitle()).put(neighbor.getTitle(), frontedge.get(t1.getTitle()).get(neighbor.getTitle()) - frontedge.get(t1.getTitle()).get(neighbor.getTitle()));
+                        backedge.get(neighbor.getTitle()).put(t1.getTitle(), backedge.get(neighbor.getTitle()).get(t1.getTitle()) + frontedge.get(t1.getTitle()).get(neighbor.getTitle()));
                     }
-                    min = result1 - frontedge.get(next).get(neighbor);
+                    min = result1 - frontedge.get(next.getTitle()).get(neighbor.getTitle());
 
                 }
 
 
-            } else if (backedge.get(next).containsKey(neighbor) && backedge.get(next).get(neighbor) > 0) {
+            } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
 
-                if (min > backedge.get(next).get(neighbor)) {
-                    min = backedge.get(next).get(neighbor);
+                if (min > backedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                    min = backedge.get(next.getTitle()).get(neighbor.getTitle());
                 }
 
                 int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
@@ -492,20 +521,20 @@ public final class Project {
 
                 min = result1;
 
-                if (result1 < backedge.get(next).get(neighbor)) {
+                if (result1 < backedge.get(next.getTitle()).get(neighbor.getTitle())) {
                     for (Task t1 : graph.get(neighbor)) {
-                        frontedge.get(t1).put(neighbor, frontedge.get(t1).get(neighbor) + result1);
-                        backedge.get(neighbor).put(t1, backedge.get(neighbor).get(t1) - result1);
+                        frontedge.get(t1.getTitle()).put(neighbor.getTitle(), frontedge.get(t1.getTitle()).get(neighbor.getTitle()) + result1);
+                        backedge.get(neighbor.getTitle()).put(t1.getTitle(), backedge.get(neighbor.getTitle()).get(t1.getTitle()) - result1);
                     }
 
                     break;
                 } else {
                     for (Task t1 : graph.get(neighbor)) {
-                        frontedge.get(t1).put(neighbor, frontedge.get(t1).get(neighbor) + backedge.get(t1).get(neighbor));
-                        backedge.get(neighbor).put(t1, backedge.get(neighbor).get(t1) - backedge.get(t1).get(neighbor));
+                        frontedge.get(t1.getTitle()).put(neighbor.getTitle(), frontedge.get(t1.getTitle()).get(neighbor.getTitle()) + backedge.get(t1.getTitle()).get(neighbor.getTitle()));
+                        backedge.get(neighbor.getTitle()).put(t1.getTitle(), backedge.get(neighbor.getTitle()).get(t1.getTitle()) - backedge.get(t1.getTitle()).get(neighbor.getTitle()));
                     }
 
-                    min = result1 - backedge.get(next).get(neighbor);
+                    min = result1 - backedge.get(next.getTitle()).get(neighbor.getTitle());
 
                 }
 
