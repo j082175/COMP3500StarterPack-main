@@ -23,18 +23,22 @@ public class Program {
         int minDuration2 = project.findMinDuration("ms2");
         assert (minDuration2 == 32);
 
-/*        int minDuration3 = project.findMinDuration("L");
-        assert (minDuration3 == 32);*/
-
-/*        int bonusCount1 = project.findMaxBonusCount("ms1");
+        int bonusCount1 = project.findMaxBonusCount("ms1");
         assert (bonusCount1 == 6);
 
         int bonusCount2 = project.findMaxBonusCount("ms2");
-        assert (bonusCount2 == 6);*/
+        assert (bonusCount2 == 6);
     }
 
     @Test
     public void test1() {
+
+        {
+            Task[] tasks = createTasksMaximumFlow();
+            Project project = new Project(tasks);
+            int maximum = project.findMinDuration("T");
+            int a = 1;
+        }
 
         {
             Task[] tasks = createTasksMultiMilestone();
@@ -955,6 +959,27 @@ public class Program {
 
         Task[] tasks = new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k
+        };
+
+        return tasks;
+    }
+
+    private static Task[] createTasksMaximumFlow() {
+        Task a = new Task("A", 1);
+        Task b = new Task("B", 1);
+        Task c = new Task("C", 1);
+        Task d = new Task("D", 1);
+        Task s = new Task("S", 1);
+        Task t = new Task("T", 1);
+
+        a.addPredecessor(s);
+        b.addPredecessor(s);
+        c.addPredecessor(a, b);
+        d.addPredecessor(b, c);
+        t.addPredecessor(c, d);
+
+        Task[] tasks = new Task[]{
+                a, b, c, d, s, t
         };
 
         return tasks;

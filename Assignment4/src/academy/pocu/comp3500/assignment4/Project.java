@@ -2,6 +2,7 @@ package academy.pocu.comp3500.assignment4;
 
 import academy.pocu.comp3500.assignment4.project.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public final class Project {
-    // private Map<Task, List<Task>> graph = new HashMap<>();
+    private Map<Task, List<Task>> graph = new HashMap<>();
     private Task[] tasks;
     HashMap<String, Task> hashMap = new HashMap<>();
 
@@ -20,14 +21,14 @@ public final class Project {
             hashMap.put(task.getTitle(), task);
         }
 
-/*        for (Task task : tasks) {
+        for (Task task : tasks) {
             graph.put(task, new ArrayList<>());
         }
         for (Task task : tasks) {
             for (Task predecessor : task.getPredecessors()) {
                 graph.get(predecessor).add(task);
             }
-        }*/
+        }
     }
 
     public int findTotalManMonths(final String task) {
@@ -49,6 +50,9 @@ public final class Project {
     }
 
     public int findMaxBonusCount(final String task) {
+
+
+
         return -1;
     }
 
