@@ -94,7 +94,7 @@ public final class Project {
         while (true) {
             // result = findShortestDistance(this.hashMap.get(task), graph, frontedge1, backedge1);
             result = searchOnlyDiscoveredBackwardMinFlux(hashMap.get(task), min, frontedge1, backedge1);
-            if (result == -1 || result == 0) {
+            if (result == Integer.MAX_VALUE || result == 0) {
                 break;
             } else {
                 min -= result;
@@ -453,7 +453,7 @@ public final class Project {
         return result;
     }
 
-    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<String , Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd) {
+    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd) {
         //discovered.put(task, 0);
 
 /*        Task taskResult = task;
@@ -485,6 +485,8 @@ public final class Project {
                 int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
                 if (result1 == -1) {
                     return -1;
+                } else if (result1 == Integer.MAX_VALUE) {
+                    continue;
                 }
 
                 min = result1;
@@ -517,6 +519,8 @@ public final class Project {
                 int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
                 if (result1 == -1) {
                     return -1;
+                } else if (result1 == Integer.MAX_VALUE) {
+                    return Integer.MAX_VALUE;
                 }
 
                 min = result1;
@@ -544,7 +548,8 @@ public final class Project {
         }
 
         if (!isEnd[0]) {
-            return -1;
+            return Integer.MAX_VALUE;
+            // return -1;
         }
 
         return min;

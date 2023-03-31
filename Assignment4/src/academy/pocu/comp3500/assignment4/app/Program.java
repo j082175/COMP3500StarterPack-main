@@ -128,6 +128,13 @@ public class Program {
     public void test1() {
 
         {
+            Task[] tasks = createTasksMaximumFlow2();
+            Project project = new Project(tasks);
+            int maximum = project.findMaxBonusCount("6");
+            int a = 1;
+        }
+
+        {
             Task[] tasks = createTasksMaximumFlow();
             Project project = new Project(tasks);
             int maximum = project.findMaxBonusCount("T");
@@ -1080,21 +1087,22 @@ public class Program {
     }
 
     private static Task[] createTasksMaximumFlow2() {
-        Task a = new Task("1", 7);
-        Task b = new Task("2", 5);
-        Task c = new Task("3", 3);
-        Task d = new Task("4", 4);
-        Task s = new Task("S", 2);
-        Task t = new Task("T", 6);
+        Task a = new Task("0", 2);
+        Task b = new Task("1", 1);
+        Task c = new Task("2", 3);
+        Task d = new Task("3", 5);
+        Task e = new Task("4", 7);
+        Task f = new Task("5", 2);
+        Task g = new Task("6", 11);
 
-        a.addPredecessor(s);
-        b.addPredecessor(s);
-        c.addPredecessor(a, b);
-        d.addPredecessor(b, c);
-        t.addPredecessor(c, d);
+        b.addPredecessor(a);
+        c.addPredecessor(b);
+        d.addPredecessor(c);
+        f.addPredecessor(b, e);
+        g.addPredecessor(d, f);
 
         Task[] tasks = new Task[]{
-                a, b, c, d, s, t
+                a, b, c, d, e, f, g
         };
 
         return tasks;
