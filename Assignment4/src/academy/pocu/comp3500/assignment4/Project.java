@@ -4,6 +4,7 @@ import academy.pocu.comp3500.assignment4.project.Task;
 
 import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -14,6 +15,10 @@ import java.util.Stack;
 import java.util.TreeMap;
 
 public final class Project {
+    private final Map<String, Integer> taskIndexMap = new HashMap<>();
+    private final ArrayList<Task> tasksList = new ArrayList<>();
+////////////////////////////
+
     private final Map<Task, List<Task>> graph = new HashMap<>();
     private final Map<String, Map<String, Integer>> backedge = new HashMap<>();
     private final Map<String, Map<String, Integer>> frontedge = new HashMap<>();
@@ -24,6 +29,15 @@ public final class Project {
     // List<int[]>[] adjacencyList = new List[100];
 
     public Project(final Task[] tasks) {
+        int index = 0;
+        for (Task task : tasks) {
+            taskIndexMap.put(task.getTitle(), index++);
+            tasksList.add(task);
+        }
+
+
+
+        /////////////////
         this.tasks = tasks;
         adjacencyList = new List[tasks.length];
         int count = 0;
@@ -64,6 +78,90 @@ public final class Project {
 
 
     }
+
+/*    public int findMaxBonusCount(final String taskTitle) {
+        int taskIndex = taskIndexMap.get(taskTitle);
+        int[][] capacities = buildCapacityMatrix();
+        int maxFlow = findMaxFlow(capacities, taskIndex + 1, capacities.length - 1);
+        return maxFlow;
+    }
+
+    private int[][] buildCapacityMatrix() {
+        int n = tasksList.size() + 2;
+        int[][] capacities = new int[n][n];
+
+        // Connect start node to source nodes
+        for (int i = 0; i < tasksList.size(); i++) {
+            Task task = tasksList.get(i);
+            if (task.getPredecessors().isEmpty()) {
+                capacities[0][i + 1] = task.getEstimate();
+            }
+        }
+
+        // Connect task nodes to task nodes and end node
+        for (int i = 0; i < tasksList.size(); i++) {
+            Task task = tasksList.get(i);
+            for (Task predecessor : task.getPredecessors()) {
+                int j = taskIndexMap.get(predecessor.getTitle()) + 1;
+                capacities[j][i + 1] = Integer.MAX_VALUE;
+            }
+            capacities[i + 1][n - 1] = 0;
+        }
+
+        return capacities;
+    }
+
+    private int findMaxFlow(int[][] capacities, int source, int sink) {
+        int maxFlow = 0;
+        int[] parent = new int[capacities.length];
+
+        while (bfs(capacities, source, sink, parent)) {
+            int pathFlow = Integer.MAX_VALUE;
+
+            // find the maximum flow through the path found by BFS
+            for (int v = sink; v != source; v = parent[v]) {
+                int u = parent[v];
+                pathFlow = Math.min(pathFlow, capacities[u][v]);
+            }
+
+            // update residual capacities of the edges and reverse edges along the path
+            for (int v = sink; v != source; v = parent[v]) {
+                int u = parent[v];
+                capacities[u][v] -= pathFlow;
+                capacities[v][u] += pathFlow;
+            }
+
+            maxFlow += pathFlow;
+        }
+
+        return maxFlow;
+    }
+
+    private boolean bfs(int[][] capacities, int source, int sink, int[] parent) {
+        boolean[] visited = new boolean[capacities.length];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.offer(source);
+        visited[source] = true;
+        parent[source] = -1;
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+
+            for (int next = 0; next < capacities.length; next++) {
+                if (!visited[next] && capacities[current][next] > 0) {
+                    queue.offer(next);
+                    visited[next] = true;
+                    parent[next] = current;
+                    if (next == sink) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }*/
+
 
     public int findTotalManMonths(final String task) {
         int result = -1;
@@ -125,6 +223,7 @@ public final class Project {
 
         return sum;
     }
+
 
     private boolean isInCycle(Map<Task, List<Task>> graph, Task title) {
         HashMap<Task, Integer> visited = new HashMap<>();
@@ -396,9 +495,9 @@ public final class Project {
 
         for (Task neighbor : task.getPredecessors()) {
 
-            if (isInCycle(graph, neighbor)) {
+/*            if (isInCycle(graph, neighbor)) {
                 continue;
-            }
+            }*/
 
             if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
 
