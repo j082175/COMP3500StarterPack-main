@@ -4,80 +4,147 @@ import academy.pocu.comp3500.assignment4.Project;
 import academy.pocu.comp3500.assignment4.project.Task;
 import org.junit.Test;
 
-public class Program {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-    public static void main(String[] args) {
+public class Program {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st = null;
+
+    static final int MAX_SIZE = 52;
+    static int N, maxFlow, S, T = 25, aPath[], capacity[][], flow[][];
+    static Queue<Integer> queue;
+    public static void main(String[] args) throws IOException {
         // write your code here
+        capacity = new int[MAX_SIZE][MAX_SIZE];
+        flow = new int[MAX_SIZE][MAX_SIZE];
+
+        N = Integer.parseInt(br.readLine());
+        for(int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            int start = charToInt(st.nextToken().charAt(0));
+            int end = charToInt(st.nextToken().charAt(0));
+            int weight = Integer.parseInt(st.nextToken());
+            // 여기서는 그냥 연결이기 때문에 무향 그래프라서 양방향으로 웨이트를 둘 다 더해줌
+            capacity[start][end] += weight;
+            // capacity[end][start] += weight;
+        }
+
+        queue = new LinkedList<>();
+        aPath = new int[MAX_SIZE];
+        // 더 이상 증가경로가 없을 때 까지 반복
+        while(true) {
+            // 큐, 증가경로 초기화
+            queue.clear();
+            Arrays.fill(aPath, -1);
+            aPath[S] = S;
+            queue.add(S);
+
+            // BFS로 최단거리 증가경로 찾기
+            while(!queue.isEmpty() && aPath[T] == -1) {
+                int from = queue.poll();
+                for(int to = 0; to < MAX_SIZE; to++) {
+                    // 유량이 흐를 수 있으면서, 아직 방문하지 않았다면
+                    if(capacity[from][to] > flow[from][to] && aPath[to] == -1) {
+                        queue.add(to);
+                        aPath[to] = from;
+                    }
+                }
+            }
+
+            // 경로가 없으면 종료
+            if(aPath[T] == -1) break;
+
+            // 찾은 증가 경로의 r(u,v)의 최솟값 (최소 잔여 용량)을 찾음
+            int flowAmount = Integer.MAX_VALUE;
+            for(int i = T; i != S; i = aPath[i])
+                flowAmount = Math.min(capacity[aPath[i]][i] - flow[aPath[i]][i], flowAmount);
+
+            for(int i = T; i != S; i = aPath[i]) {
+                flow[aPath[i]][i] += flowAmount; // 경로들에 유량 흘러줌
+                flow[i][aPath[i]] -= flowAmount; // 유량의 대칭성으로 반대 경로에 - 유량 흘림
+            }
+
+            maxFlow += flowAmount;
+        }
+
+        System.out.println(maxFlow);
     }
 
+    // 문자를 인덱스로 매핑하기 위해 변환
+    public static int charToInt(char c) {
+        if('a' <= c && c <= 'z') c -= 6;
+        return c - 65;
+    }
+
+    @Test
+    public void test9() {
+        Task t0 = new Task("t0", 5);
+        Task t1 = new Task("t1", 10);
+        Task t2 = new Task("t2", 2);
+        Task t3 = new Task("t3", 8);
+        Task t4 = new Task("t4", 3);
+        Task t5 = new Task("t5", 6);
+        Task t6 = new Task("t6", 7);
+        Task t7 = new Task("t7", 3);
+        Task t8 = new Task("t8", 5);
+        Task t9 = new Task("t9", 4);
+        Task t10 = new Task("t10", 2);
+        Task t11 = new Task("t11", 3);
+        Task t12 = new Task("t12", 11);
+
+
+        t1.addPredecessor(t0);
+        t2.addPredecessor(t1);
+        t3.addPredecessor(t2);
+        t4.addPredecessor(t1);
+        t5.addPredecessor(t4);
+        t6.addPredecessor();
+        t7.addPredecessor(t6);
+        t8.addPredecessor(t7);
+        t9.addPredecessor();
+        t10.addPredecessor(t9);
+        t11.addPredecessor(t10);
+        t12.addPredecessor(t3, t5, t8, t11);
+
+        Task[] tasks = new Task[]{
+                t0, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12
+        };
+
+        Project project = new Project(tasks);
+        int res = project.findMaxBonusCount("t12");
+        assert res == 10;
+
+    }
 
     @Test
     public void test4() {
         {
             Task a = new Task("A", 3);
-            Task b = new Task("B", 5);
-            Task c = new Task("C", 3);
-            Task d = new Task("D", 2);
-            Task e = new Task("E", 1);
-            Task f = new Task("F", 2);
-            Task g = new Task("G", 6);
-            Task h = new Task("H", 8);
-            Task i = new Task("I", 2);
-            Task j = new Task("J", 4);
-            Task k = new Task("K", 2);
-            Task l = new Task("L", 8);
-            Task m = new Task("M", 7);
-            Task n = new Task("N", 1);
-            Task o = new Task("O", 1);
-            Task p = new Task("P", 6);
-            Task ms1 = new Task("ms1", 6);
-            Task ms2 = new Task("ms2", 4);
+            Task b = new Task("B", 1);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 8);
 
-            c.addPredecessor(b);
-            d.addPredecessor(a);
 
-            ms1.addPredecessor(a, c);
-
-            e.addPredecessor(c);
-            f.addPredecessor(g);
-            g.addPredecessor(e);
-
-            i.addPredecessor(h);
-            j.addPredecessor(ms1);
-
-            k.addPredecessor(j);
-            n.addPredecessor(k);
-            m.addPredecessor(n);
-            l.addPredecessor(m);
-
-            p.addPredecessor(i, j);
-            o.addPredecessor(j);
-
-            ms2.addPredecessor(o, p);
+            d.addPredecessor(a, b, c);
 
             Task[] tasks = new Task[]{
-                    a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, ms1, ms2
+                    a, b, c, d
             };
 
             Project project = new Project(tasks);
 
-            int manMonths1 = project.findTotalManMonths("ms1");
-            assert (manMonths1 == 17);
-
-            int manMonths2 = project.findTotalManMonths("ms2");
-            assert (manMonths2 == 42);
-
-            int minDuration1 = project.findMinDuration("ms1");
-            assert (minDuration1 == 14);
-
-            int minDuration2 = project.findMinDuration("ms2");
-            assert (minDuration2 == 28);
-
-            int bonusCount1 = project.findMaxBonusCount("ms1");
-            assert (bonusCount1 == 6);
-
-            int bonusCount2 = project.findMaxBonusCount("ms2");
-            assert (bonusCount2 == 4);
+            int bonusCount1 = project.findMaxBonusCount("D");
+            assert (bonusCount1 == 3);
         }
 
 
@@ -128,6 +195,13 @@ public class Program {
     public void test1() {
 
         {
+            Task[] tasks = createTasksMaximumFlowSquare();
+            Project project = new Project(tasks);
+            int maximum = project.findMaxBonusCount("O");
+            int a = 1;
+        }
+
+        {
             Task[] tasks = createTasksMaximumFlow2();
             Project project = new Project(tasks);
             int maximum = project.findMaxBonusCount("6");
@@ -144,28 +218,28 @@ public class Program {
         {
             Task[] tasks = createTasksMultiMilestone();
             Project project = new Project(tasks);
-            int maximum = project.findMinDuration("I");
+            int maximum = project.findMaxBonusCount("I");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks3();
             Project project = new Project(tasks);
-            int maximum = project.findMinDuration("G");
+            int maximum = project.findMaxBonusCount("G");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasksSample();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("6");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks23();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("3");
+            int manMonths1 = project.findMaxBonusCount("3");
             int a = 1;
         }
 
@@ -180,21 +254,14 @@ public class Program {
             Task[] tasks = new Task[]{b, c, a};
 
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("C");
             int aa = 1;
         }
 
         {
             Task[] tasks = createTasks();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("E");
-            int a = 1;
-        }
-
-        {
-            Task[] tasks = createTasks();
-            Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("E");
             int a = 1;
         }
 
@@ -202,7 +269,7 @@ public class Program {
 
             Task[] tasks = createTasks8_2loop();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("B");
             int a = 1;
         }
 
@@ -210,21 +277,21 @@ public class Program {
 
             Task[] tasks = createTasks8_3loop();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks2();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("D");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks3();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
@@ -232,28 +299,28 @@ public class Program {
         {
             Task[] tasks = createTasks4();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks5();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("Q");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks6();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks8_4loop();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
@@ -261,7 +328,7 @@ public class Program {
         {
             Task[] tasks = createTaskscycleErrorloop();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("8");
             int a = 1;
         }
 
@@ -269,14 +336,14 @@ public class Program {
         {
             Task[] tasks = createTasks22();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("G");
             int a = 1;
         }
 
         {
             Task[] tasks = createTasks23();
             Project project = new Project(tasks);
-            int manMonths1 = project.findTotalManMonths("ms1");
+            int manMonths1 = project.findMaxBonusCount("5");
             int a = 1;
         }
     }
@@ -343,33 +410,33 @@ public class Program {
     }
 
     private static Task[] createTasks3() {
-        Task a = new Task("A", 1);
-        Task b = new Task("B", 2);
-        Task c = new Task("C", 3);
+        Task a = new Task("A", 12);
+        Task b = new Task("B", 9);
+        Task c = new Task("C", 6);
         Task d = new Task("D", 1);
-        Task e = new Task("E", 2);
-        Task f = new Task("F", 3);
-        Task g = new Task("G", 1);
-        Task h = new Task("H", 2);
-        Task i = new Task("I", 3);
-        Task j = new Task("J", 1);
-        Task k = new Task("K", 2);
-        Task l = new Task("L", 3);
-        Task m = new Task("M", 1);
-        Task n = new Task("N", 2);
-        Task o = new Task("O", 3);
-        Task p = new Task("P", 1);
-        Task q = new Task("Q", 2);
-        Task r = new Task("R", 3);
-        Task s = new Task("S", 1);
+        Task e = new Task("E", 17);
+        Task f = new Task("F", 33);
+        Task g = new Task("G", 50);
+        Task h = new Task("H", 13);
+        Task i = new Task("I", 12);
+        Task j = new Task("J", 8);
+        Task k = new Task("K", 7);
+        Task l = new Task("L", 5);
+        Task m = new Task("M", 9);
+        Task n = new Task("N", 16);
+        Task o = new Task("O", 19);
+        Task p = new Task("P", 21);
+        Task q = new Task("Q", 11);
+        Task r = new Task("R", 14);
+        Task s = new Task("S", 18);
 
-        Task t = new Task("T", 1);
-        Task u = new Task("U", 2);
-        Task v = new Task("V", 2);
-        Task w = new Task("W", 1);
-        Task x = new Task("X", 2);
-        Task y = new Task("Y", 3);
-        Task z = new Task("Z", 3);
+        Task t = new Task("T", 12);
+        Task u = new Task("U", 7);
+        Task v = new Task("V", 5);
+        Task w = new Task("W", 7);
+        Task x = new Task("X", 8);
+        Task y = new Task("Y", 18);
+        Task z = new Task("Z", 21);
 
 
         b.addPredecessor(a);
@@ -1049,7 +1116,7 @@ public class Program {
         Task f = new Task("F", 1);
         Task g = new Task("G", 1);
         Task h = new Task("H", 1);
-        Task i = new Task("I", 1);
+        Task i = new Task("I", 10);
         Task j = new Task("J", 1);
         Task k = new Task("K", 1);
 
@@ -1070,7 +1137,7 @@ public class Program {
         Task b = new Task("B", 5);
         Task c = new Task("C", 3);
         Task d = new Task("D", 4);
-        Task s = new Task("S", 2);
+        Task s = new Task("S", 12);
         Task t = new Task("T", 6);
 
         a.addPredecessor(s);
@@ -1103,6 +1170,47 @@ public class Program {
 
         Task[] tasks = new Task[]{
                 a, b, c, d, e, f, g
+        };
+
+        return tasks;
+    }
+
+    private static Task[] createTasksMaximumFlowSquare() {
+        Task a = new Task("A", 20);
+        Task b = new Task("B", 15);
+        Task c = new Task("C", 17);
+        Task d = new Task("D", 11);
+        Task e = new Task("E", 16);
+        Task f = new Task("F", 12);
+        Task g = new Task("G", 15);
+        Task h = new Task("H", 16);
+        Task i = new Task("I", 13);
+        Task j = new Task("J", 7);
+        Task k = new Task("K", 9);
+        Task l = new Task("L", 10);
+        Task m = new Task("M", 18);
+        Task n = new Task("N", 14);
+        Task o = new Task("O", 23);
+        Task p = new Task("P", 20);
+
+
+        b.addPredecessor(a);
+        c.addPredecessor(b, d);
+        e.addPredecessor(a);
+        f.addPredecessor(b, e, g);
+        g.addPredecessor(c, h);
+        h.addPredecessor(d);
+        i.addPredecessor(e);
+        j.addPredecessor(i, f);
+        k.addPredecessor(j, g, l);
+        l.addPredecessor(h);
+        m.addPredecessor(i);
+        n.addPredecessor(m, j, o);
+        o.addPredecessor(k, p);
+        p.addPredecessor(l);
+
+        Task[] tasks = new Task[]{
+                a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p
         };
 
         return tasks;
