@@ -24,9 +24,66 @@ public class Program {
     static final int MAX_SIZE = 52;
     static int N, maxFlow, S, T = 25, aPath[], capacity[][], flow[][];
     static Queue<Integer> queue;
+
+    private static void testPerm(int j, final ArrayList<Task> tasks, final ArrayList<Task> perm, final boolean[] taken) {
+        if (j == 5 && perm.size() != 5) {
+            return;
+        }
+
+        if (perm.size() == 5) {
+
+            Task[] temp = new Task[5];
+            for (int i = 0; i < temp.length; ++i) {
+                temp[i] = perm.get(i);
+            }
+
+            Project project = new Project(temp);
+
+            int res = project.findMaxBonusCount("E");
+
+            if (res != 4) {
+                for (int i = 0; i < perm.size(); ++i) {
+                    System.out.print(perm.get(i).getTitle());
+                }
+            }
+
+            assert res == 4;
+        }
+
+        for (int i = 0; i < tasks.size(); ++i) {
+            if (!taken[i]) {
+                taken[i] = true;
+                perm.add(tasks.get(i));
+                testPerm(j + 1, tasks, perm, taken);
+                perm.remove(perm.size() - 1);
+                taken[i] = false;
+            }
+        }
+    }
     public static void main(String[] args) throws IOException {
 
     }
+
+    @Test
+    public void oakmura() {
+        Task a = new Task("A", 5);
+        Task b = new Task("B", 2);
+        Task c = new Task("C", 2);
+        Task d = new Task("D", 9);
+        Task e = new Task("E", 10);
+
+        c.addPredecessor(a, b);
+        d.addPredecessor(b, c);
+        e.addPredecessor(c, d);
+
+        ArrayList<Task> tasks = new ArrayList<>(Arrays.asList(a, b, c, d, e));
+        ArrayList<Task> perm = new ArrayList<>();
+        boolean[] taken = new boolean[5];
+
+        testPerm(0, tasks, perm, taken);
+    }
+
+
 
     @Test
     public void testWhite() {
@@ -206,6 +263,34 @@ public class Program {
 
     @Test
     public void test4() {
+
+
+
+        {
+            Task a = new Task("A", 2);
+            Task b = new Task("B", 1);
+            Task c = new Task("C", 3);
+            Task d = new Task("D", 5);
+            Task e = new Task("E", 7);
+            Task f = new Task("F", 2);
+            Task g = new Task("G", 11);
+
+            b.addPredecessor(a);
+            c.addPredecessor(b);
+            d.addPredecessor(c);
+
+            f.addPredecessor(b, e);
+            g.addPredecessor(d, f);
+
+            Task[] tasks = new Task[]{
+                    a, b, c, d, e, f, g
+            };
+            Project project = new Project(tasks);
+
+            int bonusCount1 = project.findMaxBonusCount("G");
+            assert (bonusCount1 == 3);
+        }
+
         {
             Task a = new Task("A", 3);
             Task b = new Task("B", 1);
@@ -430,7 +515,56 @@ public class Program {
         }
 
 
+        // 대칭검사 캡쳐본의 아랫그래프
+        {
+            Task a = new Task("A", 7);
+            Task b = new Task("B", 1);
+            Task c = new Task("C", 4);
+            Task d = new Task("D", 3);
+            Task e = new Task("E", 3);
+            Task f = new Task("F", 2);
+            Task g = new Task("G", 10);
 
+            b.addPredecessor(a);
+            c.addPredecessor(b, e);
+            e.addPredecessor(d);
+            f.addPredecessor(e);
+            g.addPredecessor(c, f);
+
+            Task[] test = new Task[]{b, a, c, d, e, f, g};
+
+            Project project = new Project(test);
+            int maxBonusCount = project.findMaxBonusCount("G");
+            assert (maxBonusCount == 4);
+        }
+
+    }
+
+    @Test
+    public void test11() {
+        Task a = new Task("A", 2);
+        Task b = new Task("B", 1);
+        Task c = new Task("C", 3);
+        Task d = new Task("D", 5);
+        Task e = new Task("E", 7);
+        Task f = new Task("F", 2);
+        Task g = new Task("G", 11);
+        Task h = new Task("H", 7);
+
+        b.addPredecessor(a);
+        c.addPredecessor(b);
+        d.addPredecessor(c);
+
+        f.addPredecessor(d, e, h);
+        g.addPredecessor(d, f);
+
+        Task[] tasks = new Task[]{
+                a, b, c, d, e, f, g, h
+        };
+        Project project = new Project(tasks);
+
+        int bonusCount1 = project.findMaxBonusCount("G");
+        assert (bonusCount1 == 3);
     }
     @Test
     public void test2() {

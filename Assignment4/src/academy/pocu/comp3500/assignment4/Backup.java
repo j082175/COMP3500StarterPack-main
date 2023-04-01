@@ -4,7 +4,6 @@ import academy.pocu.comp3500.assignment4.project.Task;
 
 import java.net.NetworkInterface;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -39,7 +38,7 @@ public final class Backup {
 
         /////////////////
         this.tasks = tasks;
-        adjacencyList = new List[tasks.length];
+        // adjacencyList = new List[tasks.length];
         int count = 0;
 
         for (Task task : tasks) {
