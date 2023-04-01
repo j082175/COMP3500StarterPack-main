@@ -173,6 +173,25 @@ public class Program {
             assert (bonusCount1 == 3);
         }
 
+        {  // 0
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(a, b);
+            d.addPredecessor(b, c);
+            e.addPredecessor(c, d);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
 
     }
     @Test
