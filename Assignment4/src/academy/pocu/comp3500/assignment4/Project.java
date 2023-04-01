@@ -639,7 +639,7 @@ public final class Project {
                 }
             }
 
-            for (Task neighbor : next.getPredecessors()) {
+/*            for (Task neighbor : next.getPredecessors()) {
                 if (distances.containsKey(neighbor.getTitle())) {
                     queue.add(neighbor);
 
@@ -658,7 +658,7 @@ public final class Project {
                     }
 
                 }
-            }
+            }*/
         }
 
         return -1;
