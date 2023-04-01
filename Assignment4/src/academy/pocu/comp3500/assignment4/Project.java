@@ -68,20 +68,22 @@ public final class Project {
         int totalFlux = 0;
 
         for (int i = 0; i < startTask.size(); i++) {
+            while (true) {
+                HashMap<String, Integer> distances = new HashMap<>();
+                int result = findShortestDistance(startTask.get(i), task, distances);
+                if (result == -1) {
+                    break;
+                }
 
-            HashMap<String, Integer> distances = new HashMap<>();
-            int result = findShortestDistance(startTask.get(i), task, distances);
-            if (result == -1) {
-                continue;
+                // 최솟값찾기
+                int min = findMinimum(startTask.get(i), task, distances);
+
+                int result2 = reviseGraph(startTask.get(i), task, distances, min);
+
+                totalFlux += min;
+                int a = 1;
             }
 
-            // 최솟값찾기
-            int min = findMinimum(startTask.get(i), task, distances);
-
-            int result2 = reviseGraph(startTask.get(i), task, distances, min);
-
-            totalFlux += min;
-            int a = 1;
 
         }
 
@@ -670,47 +672,51 @@ public final class Project {
 
         queue.add(s);
         while (!queue.isEmpty()) {
-            Task next = queue.remove();
-            int distance = distances.get(next.getTitle());
+            Task currentTask = queue.remove();
+            int distance = distances.get(currentTask.getTitle());
 
-            if (next.getTitle().equals(d)) {
+            if (currentTask.getTitle().equals(d)) {
                 return distance;
             }
 
-            for (Task neighbor : graph.get(next)) {
+            for (Task neighbor : graph.get(currentTask)) {
                 if (distances.containsKey(neighbor.getTitle())) {
                     queue.add(neighbor);
 
 
-                    if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+                    if (frontedge.get(currentTask.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(currentTask.getTitle()).get(neighbor.getTitle()) > 0) {
 
-                        if (min <= frontedge.get(next.getTitle()).get(neighbor.getTitle())) {
-                            frontedge.get(next.getTitle()).put(neighbor.getTitle(), frontedge.get(next.getTitle()).get(neighbor.getTitle()) - min);
-                            backedge.get(neighbor.getTitle()).put(next.getTitle(), backedge.get(neighbor.getTitle()).get(next.getTitle()) + min);
+                        if (min <= frontedge.get(currentTask.getTitle()).get(neighbor.getTitle())) {
 
+                            for (Task next : graph.get(currentTask)) {
+                                frontedge.get(currentTask.getTitle()).put(next.getTitle(), frontedge.get(currentTask.getTitle()).get(next.getTitle()) - min);
+                                backedge.get(next.getTitle()).put(currentTask.getTitle(), backedge.get(next.getTitle()).get(currentTask.getTitle()) + min);
+                            }
 
                         } else {
 
-                            frontedge.get(next.getTitle()).put(neighbor.getTitle(), frontedge.get(next.getTitle()).get(neighbor.getTitle()) - frontedge.get(next.getTitle()).get(neighbor.getTitle()));
-                            backedge.get(neighbor.getTitle()).put(next.getTitle(), backedge.get(neighbor.getTitle()).get(next.getTitle()) + frontedge.get(next.getTitle()).get(neighbor.getTitle()));
-
+                            for (Task next : graph.get(currentTask)) {
+                                frontedge.get(currentTask.getTitle()).put(next.getTitle(), frontedge.get(currentTask.getTitle()).get(next.getTitle()) - frontedge.get(currentTask.getTitle()).get(next.getTitle()));
+                                backedge.get(next.getTitle()).put(currentTask.getTitle(), backedge.get(next.getTitle()).get(currentTask.getTitle()) + frontedge.get(currentTask.getTitle()).get(next.getTitle()));
+                            }
                         }
 
 
-                    } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+                    } else if (backedge.get(currentTask.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(currentTask.getTitle()).get(neighbor.getTitle()) > 0) {
 
-                        if (min < backedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                        if (min < backedge.get(currentTask.getTitle()).get(neighbor.getTitle())) {
 
-                            backedge.get(next.getTitle()).put(neighbor.getTitle(), backedge.get(next.getTitle()).get(neighbor.getTitle()) - min);
-                            frontedge.get(neighbor.getTitle()).put(next.getTitle(), frontedge.get(neighbor.getTitle()).get(next.getTitle()) + min);
-
+                            for (Task next : graph.get(currentTask)) {
+                                backedge.get(currentTask.getTitle()).put(next.getTitle(), backedge.get(currentTask.getTitle()).get(next.getTitle()) - min);
+                                frontedge.get(next.getTitle()).put(currentTask.getTitle(), frontedge.get(next.getTitle()).get(currentTask.getTitle()) + min);
+                            }
 
                             break;
                         } else {
-
-                            backedge.get(next.getTitle()).put(neighbor.getTitle(), backedge.get(next.getTitle()).get(neighbor.getTitle()) - backedge.get(next.getTitle()).get(neighbor.getTitle()));
-                            frontedge.get(neighbor.getTitle()).put(next.getTitle(), frontedge.get(neighbor.getTitle()).get(next.getTitle()) + backedge.get(next.getTitle()).get(neighbor.getTitle()));
-
+                            for (Task next : graph.get(currentTask)) {
+                                backedge.get(currentTask.getTitle()).put(next.getTitle(), backedge.get(currentTask.getTitle()).get(next.getTitle()) - backedge.get(currentTask.getTitle()).get(next.getTitle()));
+                                frontedge.get(next.getTitle()).put(currentTask.getTitle(), frontedge.get(next.getTitle()).get(currentTask.getTitle()) + backedge.get(currentTask.getTitle()).get(next.getTitle()));
+                            }
                         }
 
                     }

@@ -181,14 +181,17 @@ public class Program {
 
         Project project = new Project(tasks);
 
-        //int minDuration2 = project.findMinDuration("ms2");
-        //assert (minDuration2 == 32);
-
         int bonusCount1 = project.findMaxBonusCount("ms1");
         assert (bonusCount1 == 6);
 
         int bonusCount2 = project.findMaxBonusCount("ms2");
         assert (bonusCount2 == 6);
+
+        tasks = createTasksE4();
+        project = new Project(tasks);
+
+        int bonusCount3 = project.findMaxBonusCount("12");
+        int a = 1;
     }
 
     @Test
@@ -1211,6 +1214,40 @@ public class Program {
 
         Task[] tasks = new Task[]{
                 a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p
+        };
+
+        return tasks;
+    }
+
+    private static Task[] createTasksE4() {
+        Task a = new Task("0", 5);
+        Task b = new Task("1", 10);
+        Task c = new Task("2", 2);
+        Task d = new Task("3", 8);
+        Task e = new Task("4", 3);
+        Task f = new Task("5", 6);
+        Task g = new Task("6", 7);
+        Task h = new Task("7", 3);
+        Task i = new Task("8", 5);
+        Task j = new Task("9", 4);
+        Task k = new Task("10", 2);
+        Task l = new Task("11", 3);
+        Task m = new Task("12", 11);
+
+        b.addPredecessor(a);
+        c.addPredecessor(b);
+        d.addPredecessor(c);
+        e.addPredecessor(b);
+        f.addPredecessor(e);
+        h.addPredecessor(g);
+        i.addPredecessor(h);
+        k.addPredecessor(j);
+        l.addPredecessor(k);
+        m.addPredecessor(d, f, i, l);
+
+
+        Task[] tasks = new Task[]{
+                a, b, c, d, e, f, g, h, i, j, k, l, m
         };
 
         return tasks;
