@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Program {
@@ -24,66 +25,143 @@ public class Program {
     static int N, maxFlow, S, T = 25, aPath[], capacity[][], flow[][];
     static Queue<Integer> queue;
     public static void main(String[] args) throws IOException {
-        // write your code here
-        capacity = new int[MAX_SIZE][MAX_SIZE];
-        flow = new int[MAX_SIZE][MAX_SIZE];
 
-        N = Integer.parseInt(br.readLine());
-        for(int i = 0; i < N; i++) {
-            st = new StringTokenizer(br.readLine());
-            int start = charToInt(st.nextToken().charAt(0));
-            int end = charToInt(st.nextToken().charAt(0));
-            int weight = Integer.parseInt(st.nextToken());
-            // 여기서는 그냥 연결이기 때문에 무향 그래프라서 양방향으로 웨이트를 둘 다 더해줌
-            capacity[start][end] += weight;
-            // capacity[end][start] += weight;
-        }
-
-        queue = new LinkedList<>();
-        aPath = new int[MAX_SIZE];
-        // 더 이상 증가경로가 없을 때 까지 반복
-        while(true) {
-            // 큐, 증가경로 초기화
-            queue.clear();
-            Arrays.fill(aPath, -1);
-            aPath[S] = S;
-            queue.add(S);
-
-            // BFS로 최단거리 증가경로 찾기
-            while(!queue.isEmpty() && aPath[T] == -1) {
-                int from = queue.poll();
-                for(int to = 0; to < MAX_SIZE; to++) {
-                    // 유량이 흐를 수 있으면서, 아직 방문하지 않았다면
-                    if(capacity[from][to] > flow[from][to] && aPath[to] == -1) {
-                        queue.add(to);
-                        aPath[to] = from;
-                    }
-                }
-            }
-
-            // 경로가 없으면 종료
-            if(aPath[T] == -1) break;
-
-            // 찾은 증가 경로의 r(u,v)의 최솟값 (최소 잔여 용량)을 찾음
-            int flowAmount = Integer.MAX_VALUE;
-            for(int i = T; i != S; i = aPath[i])
-                flowAmount = Math.min(capacity[aPath[i]][i] - flow[aPath[i]][i], flowAmount);
-
-            for(int i = T; i != S; i = aPath[i]) {
-                flow[aPath[i]][i] += flowAmount; // 경로들에 유량 흘러줌
-                flow[i][aPath[i]] -= flowAmount; // 유량의 대칭성으로 반대 경로에 - 유량 흘림
-            }
-
-            maxFlow += flowAmount;
-        }
-
-        System.out.println(maxFlow);
     }
 
-    // 문자를 인덱스로 매핑하기 위해 변환
-    public static int charToInt(char c) {
-        if('a' <= c && c <= 'z') c -= 6;
-        return c - 65;
+    @Test
+    public void testWhite() {
+        {
+            Task a = new Task("A", 4);
+            Task b = new Task("B", 10);
+            Task c = new Task("C", 8);
+            Task d = new Task("D", 3);
+            Task e = new Task("E", 2);
+            b.addPredecessor(a);
+            c.addPredecessor(b);
+            d.addPredecessor(c);
+            e.addPredecessor(d);
+            Task[] tasks = new Task[]{
+                    a, b, c, d, e
+            };
+
+            Project project = new Project(tasks);
+            int bonusCount1 = project.findMaxBonusCount("E");
+            assert (bonusCount1 == 2);
+        }
+
+        {
+            Task a = new Task("A", 2);
+            Task b = new Task("B", 1);
+            Task c = new Task("C", 3);
+            Task d = new Task("D", 5);
+            Task e = new Task("E", 7);
+            Task f = new Task("F", 10);
+            Task g = new Task("G", 11);
+
+            b.addPredecessor(a);
+            c.addPredecessor(b);
+            d.addPredecessor(c);
+
+            f.addPredecessor(b, e);
+            g.addPredecessor(d, f);
+
+            Task[] tasks = new Task[]{
+                    a, b, c, d, e, f, g
+            };
+            Project project = new Project(tasks);
+
+            int bonusCount1 = project.findMaxBonusCount("G");
+            assert (bonusCount1 == 8);
+
+            bonusCount1 = project.findMaxBonusCount("F");
+            assert (bonusCount1 == 8);
+
+            bonusCount1 = project.findMaxBonusCount("C");
+            assert (bonusCount1 == 1);
+
+            bonusCount1 = project.findMaxBonusCount("A");
+            assert (bonusCount1 == 2);
+        }
+
+        {
+            Task a = new Task("A", 7);
+            Task b = new Task("B", 4);
+            Task c = new Task("C", 6);
+            Task d = new Task("D", 10);
+            Task f = new Task("F", 5);
+            Task g = new Task("G", 3);
+            Task h = new Task("H", 8);
+
+            f.addPredecessor(a, b);
+            c.addPredecessor(b);
+            g.addPredecessor(c, f);
+            h.addPredecessor(a, f);
+            d.addPredecessor(g, h);
+
+            Task[] tasks = new Task[]{
+                    a, b, c, d, f, g, h
+            };
+            Project project = new Project(tasks);
+
+            int bonusCount1 = project.findMaxBonusCount("D");
+            assert (bonusCount1 == 10);
+            bonusCount1 = project.findMaxBonusCount("H");
+            assert (bonusCount1 == 8);
+            bonusCount1 = project.findMaxBonusCount("G");
+            assert (bonusCount1 == 3);
+        }
+        {
+            //케로
+            for (int i = 0; i < 100; ++i) {
+                Task[] tasks = createTasks111(i);
+
+                Project project = new Project(tasks);
+
+                int bonusCount1 = project.findMaxBonusCount("5");
+
+                if (bonusCount1 != 6) {
+                    System.err.println(String.format("%d, %d", i, bonusCount1));
+                }
+            }
+        }
+
+    }
+
+    private static Task[] createTasks111(int seed) {
+        Task task0 = new Task("0", 8);
+        Task task1 = new Task("1", 3);
+        Task task2 = new Task("2", 8);
+        Task task3 = new Task("3", 8);
+        Task task4 = new Task("4", 3);
+        Task task5 = new Task("5", 8);
+
+        task1.addPredecessor(task0);
+        task2.addPredecessor(task1, task4);
+        task3.addPredecessor(task0);
+
+        task4.addPredecessor(task3, task1);
+        task5.addPredecessor(task2, task4);
+
+        Task[] tasks = new Task[]{
+                task0, task1, task2, task3, task4, task5
+        };
+
+        shuffle(seed, tasks);
+
+        return tasks;
+    }
+
+    private static void shuffle(int seed, final Task[] array) {
+        Random rand = new Random(seed);
+
+        for (int i = array.length - 1; i > 0; --i) {
+            int j = rand.nextInt(i + 1);
+
+            Task temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+
     }
 
     @Test
@@ -193,6 +271,166 @@ public class Program {
             assert (project.findMaxBonusCount("E") == 4);
         }
 
+        {  // 1
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(b, a);
+            d.addPredecessor(b, c);
+            e.addPredecessor(c, d);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 2
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(a, b);
+            d.addPredecessor(c, b);
+            e.addPredecessor(c, d);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 3
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(b, a);
+            d.addPredecessor(c, b);
+            e.addPredecessor(c, d);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 4
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(a, b);
+            d.addPredecessor(b, c);
+            e.addPredecessor(d, c);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 5
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(b, a);
+            d.addPredecessor(b, c);
+            e.addPredecessor(d, c);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 6
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(a, b);
+            d.addPredecessor(c, b);
+            e.addPredecessor(d, c);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {  // 7
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(b, a);
+            d.addPredecessor(c, b);
+            e.addPredecessor(d, c);
+
+            Task[] test = new Task[]{a, b, c, d, e};
+
+            Project project = new Project(test);
+            assert (project.findMaxBonusCount("E") == 4);
+
+            test = new Task[]{b, a, c, d, e};
+            assert (project.findMaxBonusCount("E") == 4);
+        }
+
+        {
+            Task a = new Task("A", 5);
+            Task b = new Task("B", 2);
+            Task c = new Task("C", 2);
+            Task d = new Task("D", 9);
+            Task e = new Task("E", 10);
+
+            c.addPredecessor(b, a);
+            d.addPredecessor(c, b);
+            e.addPredecessor(d, c);
+
+            Task[] test = new Task[]{b, a, c, d, e};
+
+            Project project = new Project(test);
+            int maxBonusCount = project.findMaxBonusCount("E");
+            assert (maxBonusCount == 4);
+        }
+
+
+
     }
     @Test
     public void test2() {
@@ -210,6 +448,7 @@ public class Program {
         project = new Project(tasks);
 
         int bonusCount3 = project.findMaxBonusCount("12");
+        assert (bonusCount3 == 10);
         int a = 1;
     }
 
