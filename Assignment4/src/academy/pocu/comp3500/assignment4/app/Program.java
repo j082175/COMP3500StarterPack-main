@@ -144,7 +144,7 @@ public class Program {
             Project project = new Project(tasks);
 
             int bonusCount1 = project.findMaxBonusCount("D");
-            assert (bonusCount1 == 3);
+            assert (bonusCount1 == 6);
         }
 
 

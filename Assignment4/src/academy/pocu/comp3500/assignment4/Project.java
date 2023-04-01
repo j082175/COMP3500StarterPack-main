@@ -614,6 +614,7 @@ public final class Project {
     }
 
     private int findShortestDistance(Task s, String d, HashMap<String, Integer> distances) {
+        HashMap<Task, Task> history = new HashMap<>();
         Queue<Task> queue = new LinkedList<>();
         int min = Integer.MAX_VALUE;
         queue.add(s);
@@ -624,7 +625,15 @@ public final class Project {
 
             if (next.getTitle().equals(d)) {
 
-                HashMap<String, Integer> newDistances = new HashMap<>();
+                distances.clear();
+                Task t = next;
+                while (t != null) {
+                    distances.put(t.getTitle(), 0);
+                    t = history.get(t);
+                    int a = 1;
+                }
+
+/*                HashMap<String, Integer> newDistances = new HashMap<>();
                 newDistances.put(next.getTitle(), distances.get(next.getTitle()));
                 while (next.getPredecessors().size() != 0) {
                     for (int i = 0; i < next.getPredecessors().size(); i++) {
@@ -642,7 +651,7 @@ public final class Project {
                 while (iter.hasNext()) {
                     var a = iter.next();
                     distances.put(a.getKey(), a.getValue());
-                }
+                }*/
 
 
                 return distance;
@@ -650,6 +659,7 @@ public final class Project {
 
             for (Task neighbor : graph.get(next)) {
                 if (!distances.containsKey(neighbor.getTitle())) {
+                    history.put(neighbor, next);
 
                     if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
                         queue.add(neighbor);
