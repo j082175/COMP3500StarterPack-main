@@ -4,6 +4,7 @@ import academy.pocu.comp3500.assignment4.project.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,8 @@ public final class Project {
         for (Task task : tasks) {
             for (Task predecessor : task.getPredecessors()) {
                 graph.get(predecessor).add(task);
-                frontedge.get(task.getTitle()).put(predecessor.getTitle(), predecessor.getEstimate());
-                backedge.get(predecessor.getTitle()).put(task.getTitle(), 0);
+                frontedge.get(predecessor.getTitle()).put(task.getTitle(), predecessor.getEstimate());
+                backedge.get(task.getTitle()).put(predecessor.getTitle(), 0);
             }
         }
     }
@@ -64,25 +65,42 @@ public final class Project {
     }
 
     public int findMaxBonusCount(final String task) {
-        Map<String, Map<String, Integer>> backedge1 = new HashMap<>(backedge);
-        Map<String, Map<String, Integer>> frontedge1 = new HashMap<>(frontedge);
+        int totalFlux = 0;
 
+        for (int i = 0; i < startTask.size(); i++) {
 
-/*        Iterator<String> iter1 = backedge.keySet().iterator();
-        while (iter1.hasNext()) {
-            backedge1.put(iter1.next(), new HashMap<>());
-            Iterator<String> iter11 = backedge.get(iter1.next()).keySet().iterator();
-            while (iter11.hasNext()) {
-                backedge1.get(iter1.next()).putAll(backedge.get(iter1.next()));
+            HashMap<String, Integer> distances = new HashMap<>();
+            int result = findShortestDistance(startTask.get(i), task, distances);
+            if (result == -1) {
+                continue;
             }
+
+            // 최솟값찾기
+            int min = findMinimum(startTask.get(i), task, distances);
+
+            int result2 = reviseGraph(startTask.get(i), task, distances, min);
+
+            totalFlux += min;
+            int a = 1;
 
         }
 
-        Iterator<String> iter2 = frontedge.keySet().iterator();
-        while (iter2.hasNext()) {
-            frontedge1.put(iter2.next(), new HashMap<>());
-            frontedge1.get(iter2.next()).putAll(frontedge.get(iter2.next()));
-        }*/
+        if (hashMap.get(task).getEstimate() < totalFlux) {
+            totalFlux = hashMap.get(task).getEstimate();
+        }
+
+        for (Task task2 : tasks) {
+            for (Task predecessor : task2.getPredecessors()) {
+                frontedge.get(predecessor.getTitle()).put(task2.getTitle(), predecessor.getEstimate());
+                backedge.get(task2.getTitle()).put(predecessor.getTitle(), 0);
+            }
+        }
+
+        return totalFlux;
+
+
+/*        Map<String, Map<String, Integer>> backedge1 = new HashMap<>(backedge);
+        Map<String, Map<String, Integer>> frontedge1 = new HashMap<>(frontedge);
 
         int min = this.hashMap.get(task).getEstimate();
 
@@ -105,9 +123,9 @@ public final class Project {
             frontedge.put(task2.getTitle(), new HashMap<>());
         }
 
-/*        for (Task task : tasks) {
+*//*        for (Task task : tasks) {
             graph.put(task, new ArrayList<>());
-        }*/
+        }*//*
         for (Task task2 : tasks) {
             for (Task predecessor : task2.getPredecessors()) {
                 frontedge.get(task2.getTitle()).put(predecessor.getTitle(), predecessor.getEstimate());
@@ -115,7 +133,7 @@ public final class Project {
             }
         }
 
-        return sum;
+        return sum;*/
     }
 
     private static boolean isInCycle(Map<Task, List<Task>> graph, Task title) {
@@ -550,5 +568,156 @@ public final class Project {
         }
 
         return min;
+    }
+
+    private int findMinimum(Task s, String d, HashMap<String, Integer> distances) {
+        Queue<Task> queue = new LinkedList<>();
+        int min = Integer.MAX_VALUE;
+        queue.add(s);
+
+        while (!queue.isEmpty()) {
+            Task next = queue.remove();
+
+            if (next.getTitle().equals(d)) {
+
+                if (min > next.getEstimate()) {
+                    min = next.getEstimate();
+                }
+                return min;
+            }
+
+            for (Task neighbor : graph.get(next)) {
+                if (distances.containsKey(neighbor.getTitle())) {
+                    queue.add(neighbor);
+
+                    if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+
+                        if (min > frontedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                            min = frontedge.get(next.getTitle()).get(neighbor.getTitle());
+                        }
+
+                    } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+
+                        if (min > backedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                            min = backedge.get(next.getTitle()).get(neighbor.getTitle());
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private int findShortestDistance(Task s, String d, HashMap<String, Integer> distances) {
+        Queue<Task> queue = new LinkedList<>();
+        int min = Integer.MAX_VALUE;
+        queue.add(s);
+        distances.put(s.getTitle(), 0);
+        while (!queue.isEmpty()) {
+            Task next = queue.remove();
+            int distance = distances.get(next.getTitle());
+
+            if (next.getTitle().equals(d)) {
+
+                HashMap<String, Integer> newDistances = new HashMap<>();
+                newDistances.put(next.getTitle(), distances.get(next.getTitle()));
+                while (next.getPredecessors().size() != 0) {
+                    for (int i = 0; i < next.getPredecessors().size(); i++) {
+                        if (distances.containsKey(next.getPredecessors().get(i).getTitle())) {
+                            newDistances.put(next.getPredecessors().get(i).getTitle(), distances.get(next.getPredecessors().get(i).getTitle()));
+                            next = next.getPredecessors().get(i);
+                            break;
+                        }
+                    }
+
+                }
+
+                distances.clear();
+                Iterator<Map.Entry<String, Integer>> iter = newDistances.entrySet().iterator();
+                while (iter.hasNext()) {
+                    var a = iter.next();
+                    distances.put(a.getKey(), a.getValue());
+                }
+
+
+                return distance;
+            }
+
+            for (Task neighbor : graph.get(next)) {
+                if (!distances.containsKey(neighbor.getTitle())) {
+
+                    if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+                        queue.add(neighbor);
+                        distances.put(neighbor.getTitle(), distance + 1);
+
+                    } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+                        queue.add(neighbor);
+                        distances.put(neighbor.getTitle(), distance + 1);
+                    }
+
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private int reviseGraph(Task s, String d, HashMap<String, Integer> distances, int min) {
+        Queue<Task> queue = new LinkedList<>();
+
+        queue.add(s);
+        while (!queue.isEmpty()) {
+            Task next = queue.remove();
+            int distance = distances.get(next.getTitle());
+
+            if (next.getTitle().equals(d)) {
+                return distance;
+            }
+
+            for (Task neighbor : graph.get(next)) {
+                if (distances.containsKey(neighbor.getTitle())) {
+                    queue.add(neighbor);
+
+
+                    if (frontedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && frontedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+
+                        if (min <= frontedge.get(next.getTitle()).get(neighbor.getTitle())) {
+                            frontedge.get(next.getTitle()).put(neighbor.getTitle(), frontedge.get(next.getTitle()).get(neighbor.getTitle()) - min);
+                            backedge.get(neighbor.getTitle()).put(next.getTitle(), backedge.get(neighbor.getTitle()).get(next.getTitle()) + min);
+
+
+                        } else {
+
+                            frontedge.get(next.getTitle()).put(neighbor.getTitle(), frontedge.get(next.getTitle()).get(neighbor.getTitle()) - frontedge.get(next.getTitle()).get(neighbor.getTitle()));
+                            backedge.get(neighbor.getTitle()).put(next.getTitle(), backedge.get(neighbor.getTitle()).get(next.getTitle()) + frontedge.get(next.getTitle()).get(neighbor.getTitle()));
+
+                        }
+
+
+                    } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+
+                        if (min < backedge.get(next.getTitle()).get(neighbor.getTitle())) {
+
+                            backedge.get(next.getTitle()).put(neighbor.getTitle(), backedge.get(next.getTitle()).get(neighbor.getTitle()) - min);
+                            frontedge.get(neighbor.getTitle()).put(next.getTitle(), frontedge.get(neighbor.getTitle()).get(next.getTitle()) + min);
+
+
+                            break;
+                        } else {
+
+                            backedge.get(next.getTitle()).put(neighbor.getTitle(), backedge.get(next.getTitle()).get(neighbor.getTitle()) - backedge.get(next.getTitle()).get(neighbor.getTitle()));
+                            frontedge.get(neighbor.getTitle()).put(next.getTitle(), frontedge.get(neighbor.getTitle()).get(next.getTitle()) + backedge.get(next.getTitle()).get(neighbor.getTitle()));
+
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 }
