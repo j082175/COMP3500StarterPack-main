@@ -37,7 +37,7 @@ public class BallBoy {
         int nearestDistance = Integer.MAX_VALUE;
 
         for (Point candidate : candidates) {
-            final int distance = getSquaredDistanceTo(current, candidate);
+            final int distance = getDistance(current, candidate);
             if (distance < nearestDistance) {
                 nearestDistance = distance;
                 nearestPoint = candidate;
@@ -47,7 +47,7 @@ public class BallBoy {
         return nearestPoint;
     }
 
-    public static int getSquaredDistanceTo(Point p1, Point p2) {
+    public static int getDistance(Point p1, Point p2) {
         int dx = p1.getX() - p2.getX();
         int dy = p1.getY() - p2.getY();
         return dx * dx + dy * dy;
