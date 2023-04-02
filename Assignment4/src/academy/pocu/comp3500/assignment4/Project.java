@@ -126,19 +126,13 @@ public final class Project {
         int sum = 0;
         int result = 0;
         while (true) {
-            // result = findShortestDistance(this.hashMap.get(task), graph, frontedge1, backedge1);
-            int index = 0;
-            result = searchOnlyDiscoveredBackwardMinFlux(hashMap.get(task), min, frontedge, backedge, index);
+            result = searchOnlyDiscoveredBackwardMinFlux(hashMap.get(task), min, frontedge, backedge);
             if (result == Integer.MAX_VALUE || result == 0) {
                 break;
             } else {
                 min -= result;
                 sum += result;
-                ++index;
 
-/*                if (index >= startTask.size()) {
-                    break;
-                }*/
             }
         }
 
@@ -481,14 +475,14 @@ public final class Project {
         return -1;
     }
 
-    public int searchOnlyDiscoveredBackwardMinFlux(Task task, int min, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int index) {
+    public int searchOnlyDiscoveredBackwardMinFlux(Task task, int min, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge) {
 
-        int result = searchOnlyDiscoveredBackwardMinFluxRecursive(task, frontedge, backedge, min, task, graph, new boolean[]{false}, index);
+        int result = searchOnlyDiscoveredBackwardMinFluxRecursive(task, frontedge, backedge, min, task, graph, new boolean[]{false});
 
         return result;
     }
 
-    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd, int index) {
+    public int searchOnlyDiscoveredBackwardMinFluxRecursive(Task task, Map<String, Map<String, Integer>> frontedge, Map<String, Map<String, Integer>> backedge, int min, Task root, Map<Task, List<Task>> graph, boolean[] isEnd) {
         //discovered.put(task, 0);
 
 /*        Task taskResult = task;
@@ -534,7 +528,7 @@ public final class Project {
                     min = frontedge.get(next.getTitle()).get(neighbor.getTitle());
                 }
 
-                int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd, index);
+                int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
                 if (result1 == -1) {
                     return -1;
                 } else if (result1 == Integer.MAX_VALUE) {
@@ -562,13 +556,13 @@ public final class Project {
                 }
 
 
-            } else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
+            } /*else if (backedge.get(next.getTitle()).containsKey(neighbor.getTitle()) && backedge.get(next.getTitle()).get(neighbor.getTitle()) > 0) {
 
                 if (min > backedge.get(next.getTitle()).get(neighbor.getTitle())) {
                     min = backedge.get(next.getTitle()).get(neighbor.getTitle());
                 }
 
-                int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd, index);
+                int result1 = searchOnlyDiscoveredBackwardMinFluxRecursive(neighbor, frontedge, backedge, min, root, graph, isEnd);
                 if (result1 == -1) {
                     return -1;
                 } else if (result1 == Integer.MAX_VALUE) {
@@ -595,7 +589,7 @@ public final class Project {
                 }
 
 
-            }
+            }*/
 
         }
 
@@ -711,23 +705,23 @@ public final class Project {
                 for (Task before : next.getPredecessors()) {
 
 
-                        if (backedge.get(next.getTitle()).containsKey(before.getTitle()) && backedge.get(next.getTitle()).get(before.getTitle()) > 0) {
-                            queue.add(before);
-                            distances.put(before.getTitle(), distance + 1);
+                    if (backedge.get(next.getTitle()).containsKey(before.getTitle()) && backedge.get(next.getTitle()).get(before.getTitle()) > 0) {
+                        queue.add(before);
+                        distances.put(before.getTitle(), distance + 1);
 
-                            for (Task after : graph.get(next)) {
-                                if (!distances.containsKey(after.getTitle())) {
-                                    history.put(after, next);
-                                    queue.add(after);
-                                    distances.put(after.getTitle(), distance + 1);
-                                }
+                        for (Task after : graph.get(next)) {
+                            if (!distances.containsKey(after.getTitle())) {
+                                history.put(after, next);
+                                queue.add(after);
+                                distances.put(after.getTitle(), distance + 1);
                             }
+                        }
 
-                            // 백엣지로 갈때만 프론트를 즉시 수정해보자한번
+                        // 백엣지로 갈때만 프론트를 즉시 수정해보자한번
 /*                        for (Task after : graph.get(before)) {
                             frontedge.get(before.getTitle()).put(after.getTitle(), frontedge.get(before.getTitle()).get(after.getTitle()) + backedge.get(next.getTitle()).get(before.getTitle()));
                         }*/
-                        }
+                    }
 
                 }
             }
